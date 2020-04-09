@@ -2,8 +2,8 @@ import util
 import engine
 import ui
 import game_board
+import time
 
-# pip install keyboard
 
 PLAYER_ICON = '@'
 PLAYER_START_X = 3
@@ -32,26 +32,53 @@ def main():
     #          3. Hall of flame
     #          4. About\n''') 
     # For now just prototype of menu
-    my_board = game_board.Board(BOARD_WIDTH, BOARD_HEIGHT)
+    my_board = game_board.Board(BOARD_WIDTH, BOARD_HEIGHT, PLAYER_ICON)
     my_board.create_board()
     print(my_board.game_board_in_class)
-    x = 2
-    y = 3
-    sign_on_map = 'M'
-    my_board.update_board(x, y, sign_on_map)
-    my_board.print_board()
+    x = 0
+    y = 0
+    # player_position
+    # sign_on_map = 'X'
+    # my_board.update_board(x, y)
+    # my_board.print_board()
+
+    while True:
+        # if my_board.pos_x is None:
+        #     sign_on_map = ''
+        my_board.print_board()
+        my_board.remove_player_track()
+        if util.key_pressed() == 'p':
+            exit(0)
+        if util.key_pressed() == 'w':
+            x -= 1
+            my_board.update_board(x, y)
+            print('UPUPUP')
+            
+        elif util.key_pressed() == 's':
+            x += 1
+            my_board.update_board(x, y)
+            print('DOWN')
+            
+        elif util.key_pressed() == 'a':
+            y -= 1
+            my_board.update_board(x, y)
+            print('LEFT')
+            
+        elif util.key_pressed() == 'd':
+            y += 1
+            my_board.update_board(x, y)
+            print('RIGHT')
+
+        
+        util.clear_screen()
+
+
+
+
+
+
     # print(my_board.game_board_in_class)
 
-    # if keyboard.on_press_key('w', lambda _:print("You pressed p")):
-    #     print('Dzialam przysicnalem WWWWWWW')
-    # if keyboard.is_pressed('s'):
-    #     print('Dzialam przysicnalem ssssssss')
-    # if keyboard.is_pressed('a'):
-    #     print('Dzialam przysicnalem aaaaaaa')
-    # if keyboard.is_pressed('d'):
-    #     print('Dzialam przysicnalem ddddddd')
-    # player = create_player()
-    # board = engine.create_board(BOARD_WIDTH, BOARD_HEIGHT)
 
     # util.clear_screen()
     # is_running = True

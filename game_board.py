@@ -1,14 +1,29 @@
 class Board:
-    def __init__(self, width, height):
+    def __init__(self, width, height, p_sign):
         self.width = width
         self.height = height
+        self.pos_x = -1
+        self.pos_y = -1
+        self.player_sign = p_sign
 
-    def create_board(self):
+    def create_board(self): # this maybe can go to the __init__
         self.game_board_in_class = [['0'] * self.width for i in range(self.height)]
-        self.player = 'X'
+        # self.game_board_in_class = [['0'] * self.width if i != 0 or i != self.height else ['0'] * (self.width+1) 
+        #                             for i in range(self.height)]
+        
 
-    def update_board(self, x, y, sign_on_map):
-        self.game_board_in_class[x][y] = sign_on_map
+
+    def update_board(self, pos_x, pos_y):
+        self.game_board_in_class[pos_x][pos_y] = self.player_sign
+        self.pos_x = pos_x
+        self.pos_y = pos_y
+        # self.game_board_in_class[x][y] = sign_on_map
+       
+
+    def remove_player_track(self):
+        # print(type(self.pos_x))
+        self.game_board_in_class[self.pos_x][self.pos_y] = '0'
+
 
     def print_board(self):
         overscore = "\u203e"
@@ -22,7 +37,7 @@ class Board:
         middle_fileds = ''
         for i, list_of_fields in enumerate(self.game_board_in_class):
             if i == 0:
-                middle_fileds += f"{' '*6}{i+1}.{' '*3}|{self.player}|"
+                middle_fileds += f"{' '*6}{i+1}.{' '*3}|{self.player_sign}|"
             elif i == 1:
                 middle_fileds += f"{' '*6}{i+1}.{' '*3} {overscore}|"
             else:
@@ -42,6 +57,7 @@ class Board:
                 middle_fileds += '|\n'
 
         print(middle_fileds, sep='')
+        # self.bo
 
 
         # BOTTOM
