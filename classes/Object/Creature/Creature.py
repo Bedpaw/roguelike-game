@@ -23,27 +23,31 @@ class Creature(MyObject):
                 end_move = True
 
     def is_alive(self):
-        if self.hp >= 0:
+        if self.hp > 0:
             return True
         else:
             self.delete_from_board()
             return False
 
-    def attack(self, target):
+    def print_hp(self):
+        if self.hp < 0:
+            self.hp = 0
+        print(self.name + ": " + str(self.hp) + "/" + str(self.max_hp) + " HP " + "\n")
 
+    def attack(self, target):
+        print(self.name + " attack!")
         # check for dodge
         if random_true(target.agility):
             print(target.name + " dodged " + self.name + "'s attack!")
 
         # check for critical attack
         elif random_true(self.luck):
-            print(self.name + " critical strike with double damage! ")
+            print(self.name + " critical strike with double damage!")
             target.hp -= 2 * self.strength
 
         # normal attack
         else:
-            print(self.name + " attack!")
             target.hp -= self.strength
-        print(target.name + " : " + str(target.hp) + " HP")
-        return target.is_alive()
+
+        pass
 
