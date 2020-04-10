@@ -36,7 +36,7 @@ class Board:
         # MIDDLE
         for i, list_of_fields in enumerate(self.game_board_in_class):
             if i == 0:
-                middle_fileds = f"{' '*6}{1}.{' '*4}|"
+                middle_fileds = f"{' '*6}{1}.{' '*5}"
             elif i == 1:
                 middle_fileds += ''
             elif i == 2:
