@@ -15,6 +15,7 @@ class Troll(Monster):
 class Arnold(Monster):
     strength = 20
     agility = 50
+    luck = 100
 
     on_die_message = "I will be back"
 

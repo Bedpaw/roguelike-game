@@ -53,8 +53,19 @@ class Hero(Creature):
         :return: pass
         """
         self.exp += exp
-        print("You have got " + str(exp) + " exp")
+        print("\nYou have got " + str(exp) + " exp.")
         if exp >= self.exp_to_next_level:
             self.level_up()
-        print("Exp to next level: " + str(self.exp_to_next_level - exp))
         pass
+
+    def start_fight_message(self):
+        Colored(self.colon_name() + self.on_fight_message).cprint(color=self.color_in_battle)
+
+    def special_attack(self, target):
+        """
+        Instant kill enemy [only for test]
+        :param target:[object] enemy to kill
+        :return: pass
+        """
+        target.hp = 0
+        Colored(self.name + " is stupid cheater...").cprint(color=self.color_in_battle)
