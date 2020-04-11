@@ -83,8 +83,8 @@ def battle(hero, monster, battle_mode="AUTOMATE_FIGHT"):
     pass
 
 
-# test [IMMEDIATE_FIGHT, AUTOMATE_FIGHT, MANUAL_FIGHT]
-battle(hero, Arnold1, "IMMEDIATE_FIGHT")
+# test [IMMEDIATE_FIGHT, AUTOMATE_FIGHT, 2MANUAL_FIGHT]
+battle(hero, Arnold1, "MANUAL_FIGHT")
 # battle(hero, Troll)
 # battle(hero, Arnold2)
 # print(hero.strength, hero.exp)
