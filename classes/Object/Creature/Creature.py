@@ -1,16 +1,22 @@
 from classes.Object.Object import MyObject
 from utils.random_utils import random_move, random_true
+from utils.Colored import Colored
 
 
 class Creature(MyObject):
     """
 
     """
+
     hp = 100
     max_hp = 100
     strength = 5  # Damage points by attack
     agility = 10  # Chances to dodge [ % ]
     luck = 10  # Chances to critical strike [ % ]
+    color_in_battle = "black"
+
+    def colon_name(self):
+        return self.name + ": "
 
     def move(self):
         end_move = False
@@ -32,17 +38,26 @@ class Creature(MyObject):
     def print_hp(self):
         if self.hp < 0:
             self.hp = 0
-        print(self.name + ": " + str(self.hp) + "/" + str(self.max_hp) + " HP " + "\n")
+
+        hp_left_prec = (self.hp / self.max_hp) * 100
+        hp_message = self.colon_name() + str(self.hp) + "/" + str(self.max_hp) + " HP " + "\n"
+
+        if hp_left_prec >= 60:
+            Colored(hp_message).cprint(color="green")
+        elif hp_left_prec <= 30:
+            Colored(hp_message).cprint(color="red", attrs="B")
+        else:
+            Colored(hp_message).cprint(color="yellow")
 
     def attack(self, target):
-        print(self.name + " attack!")
+        Colored(self.name + " attack!").cprint(color=self.color_in_battle)
         # check for dodge
         if random_true(target.agility):
-            print(target.name + " dodged " + self.name + "'s attack!")
+            Colored(target.name + " dodged " + self.name + "'s attack!").cprint(color=target.color_in_battle)
 
         # check for critical attack
         elif random_true(self.luck):
-            print(self.name + " critical strike with double damage!")
+            Colored(self.name + " critical strike with double damage!").cprint(color="red", attrs="U")
             target.hp -= 2 * self.strength
 
         # normal attack

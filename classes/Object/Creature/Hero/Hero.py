@@ -1,4 +1,5 @@
 from classes.Object.Creature.Creature import Creature
+from utils.Colored import Colored
 
 
 class Hero(Creature):
@@ -9,6 +10,10 @@ class Hero(Creature):
     hp = 400
     max_hp = 400
     type_of = "Hero"
+    color_in_battle = "green"
+    inventory = {
+        "coins": 100,
+    }
     on_fight_message = "Time to stop this creature!"
 
     def level_up(self):
