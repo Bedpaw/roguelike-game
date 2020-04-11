@@ -9,11 +9,17 @@ class Board:
     pos_x = 0
     pos_y = 0
 
+    # monsters_objects = [spider]
 
     def update_board(self, pos_x, pos_y):
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.game_board_in_class[pos_x][pos_y] = self.player_sign
+
+    # def monsters_pos():
+    #     pass
+
+
 
 
        

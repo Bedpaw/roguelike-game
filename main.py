@@ -30,8 +30,6 @@ def create_player():
 def main():
 
     my_board = game_board.Board(BOARD_WIDTH, BOARD_HEIGHT, PLAYER_ICON)
-    # x = 
-    # y = 
     while True:
 
         my_board.print_board()
