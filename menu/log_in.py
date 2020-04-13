@@ -1,11 +1,6 @@
-
-def main():
-
-    # start game ANSI GRAPH !
-    print("WELCOME IN <GAME_NAME>\n")
-    # Log in
+def log_in():
     password_correct = False
-    save_folder = None
+    player_name = None
     while not password_correct:
         player_name = input("Please provide your name: ").upper()
 
@@ -24,21 +19,15 @@ def main():
             if user_password == password:
                 password_correct = True
                 # saves/$player_name$ already exist
-                saves_folder = player_name
             else:
                 print("Your password is incorrect")
         else:
             # new player
-            user_password = input("Hello again!\n"
+            user_password = input("Hello!\n"
                                   "Please provide your password\n"
                                   "Password: ")
             # write players name and password to saves/players.csv
             # create folder with player name in saves
             password_correct = True
-            saves_folder = player_name
 
-    # GO TO MENU with saves_folder as a param
-
-
-if __name__ == '__main__':
-    main()
+    return player_name
