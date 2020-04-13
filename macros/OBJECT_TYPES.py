@@ -1,0 +1,2 @@
+HERO = "HERO"
+MONSTER = "MONSTER"

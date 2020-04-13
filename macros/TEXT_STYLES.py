@@ -1,0 +1,3 @@
+BOLD = "B"
+UNDERLINE = "U"
+REVERSE = "R"

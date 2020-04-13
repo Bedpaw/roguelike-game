@@ -1,5 +1,7 @@
 from classes.Object.Creature.Creature import Creature
-from utils.Colored import Colored
+from macros.COLORS import *
+from utils.decorations import cprint
+from macros import MOVES_TYPES, OBJECT_TYPES
 
 
 class Hero(Creature):
@@ -9,8 +11,12 @@ class Hero(Creature):
     strength = 50
     hp = 400
     max_hp = 400
-    type_of = "Hero"
-    color_in_battle = "green"
+
+    type_of = OBJECT_TYPES.HERO
+    move_type = MOVES_TYPES.MANUAL
+    color_on_board = COLOR.GREEN
+    color_in_battle = COLOR.GREEN
+
     inventory = {
         "coins": 100,
     }
@@ -25,8 +31,8 @@ class Hero(Creature):
         """
         self.level += 1
         self.exp_to_next_level = self.exp + self.exp_to_next_level * 1.3
+        print(f"You have received {self.level} level!")
 
-        print("You have received " + str(self.level) + " level!")
         print("Which skills do you want to improve?")
         skill_to_improve = None
         while skill_to_improve not in [1, 2, 3, 4]:
@@ -53,13 +59,13 @@ class Hero(Creature):
         :return: pass
         """
         self.exp += exp
-        print("\nYou have got " + str(exp) + " exp.")
+        print(f'\nYou have got {exp} exp.')
         if exp >= self.exp_to_next_level:
             self.level_up()
         pass
 
     def start_fight_message(self):
-        Colored(self.colon_name() + self.on_fight_message).cprint(color=self.color_in_battle)
+        cprint(f'{self.name}: {self.on_fight_message}', self.color_in_battle)
 
     def special_attack(self, target):
         """
@@ -68,4 +74,4 @@ class Hero(Creature):
         :return: pass
         """
         target.hp = 0
-        Colored(self.name + " is stupid cheater...").cprint(color=self.color_in_battle)
+        cprint(f'{self.name} is stupid cheater...', self.color_in_battle)

@@ -1,10 +1,11 @@
 from classes.Object.Creature.Monster.Monster import Monster
+from macros import MOVES_TYPES
 
 
 class Troll(Monster):
     strength = 20
     hp = 200
-
+    move_type = MOVES_TYPES.RANDOM
     exp = 100
     loot = {
         "coins": 150,

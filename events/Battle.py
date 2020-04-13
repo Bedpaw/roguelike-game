@@ -1,19 +1,12 @@
 import time
 from classes.Object.Creature.Hero.Hero import Hero
-from classes.Object.Creature.Monster.Monsters import Monster, Troll, Arnold
-from utils.Colored import Colored
-
-hero = Hero("Andrzej", "X", 1, 1)
-Troll = Troll("Troll", "T", 1, 2)
-Arnold1 = Arnold("Arni", "O", 1, 1)
-Arnold2 = Arnold("Arni", "O", 1, 1)
-
-IMMEDIATE_FIGHT = 0
-AUTOMATE_FIGHT = 1
-MANUAL_FIGHT = 2
+from classes.Object.Creature.Monster.Monsters import Troll, Arnold
+from utils.decorations import cprint
+from macros import BATTLE_MODES
+from macros.COLORS import *
 
 
-def battle(hero, monster, battle_mode="AUTOMATE_FIGHT"):
+def battle(hero, monster, battle_mode=BATTLE_MODES.AUTOMATE_FIGHT):
     """
 
     :param hero:[object]
@@ -27,11 +20,11 @@ def battle(hero, monster, battle_mode="AUTOMATE_FIGHT"):
         :param wait_time:[float] amount of time to wait in seconds
         :return: pass
         """
-        if battle_mode == "AUTOMATE_FIGHT":
+        if battle_mode == BATTLE_MODES.AUTOMATE_FIGHT:
             time.sleep(wait_time)
 
     def hero_move():
-        if battle_mode == "MANUAL_FIGHT":
+        if battle_mode == BATTLE_MODES.MANUAL_FIGHT:
             hero_attack = None
             while hero_attack not in [1, 2]:
                 hero_attack = int(input('[1] Attack \n'
@@ -45,17 +38,17 @@ def battle(hero, monster, battle_mode="AUTOMATE_FIGHT"):
             hero.attack(monster)
 
     # Battle start messages
-    Colored("\nBattle start! " + hero.name + " vs " + monster.name + '\n').cprint("magenta")
+    cprint(f"\nBattle start! {hero.name} vs {monster.name}\n", COLOR.PURPLE)
     hero.start_fight_message()
     monster.start_fight_message()
-    print("")
+    print("")   # \n
 
     # Battle
     round_counter = 0
     while monster.is_alive():
         wait(1)
         round_counter += 1
-        Colored("Round: " + str(round_counter)).cprint("magenta")
+        cprint(f"Round: {round_counter}", COLOR.PURPLE)
         wait(1)
 
         hero_move()
@@ -83,8 +76,7 @@ def battle(hero, monster, battle_mode="AUTOMATE_FIGHT"):
     pass
 
 
-# test [IMMEDIATE_FIGHT, AUTOMATE_FIGHT, 2MANUAL_FIGHT]
-battle(hero, Arnold1, "MANUAL_FIGHT")
-# battle(hero, Troll)
-# battle(hero, Arnold2)
-# print(hero.strength, hero.exp)
+# hero = Hero("Andrzej", "X", 1, 1)
+# Arnold1 = Arnold("Arni", "O", 1, 1)
+# battle(hero, Arnold1, BATTLE_MODES.IMMEDIATE_FIGHT)
+

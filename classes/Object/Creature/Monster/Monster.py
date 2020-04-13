@@ -1,25 +1,24 @@
 from classes.Object.Creature.Creature import Creature
-import time
-from utils.Colored import Colored
+from utils.decorations import cprint
+from macros import OBJECT_TYPES
+from macros.COLORS import *
 
 
 class Monster(Creature):
-    type_of = "Monster"
+    type_of = OBJECT_TYPES.MONSTER
+    color_on_board = COLOR.RED
+    color_in_battle = COLOR.RED
+    on_fight_message = "You have no chance with me! "
+    on_die_message = "Argghr.."
 
-    color_in_battle = "red"
-    on_fight_message = "You have no chance with me! "  # print, when fight start
-    on_die_message = "Argghr.."  # print, when hp < 0
-
-    def on_defeat(self):
-        Colored(self.name + " has been defeated!").cprint(color="white", bg_color="red", attrs="B")
-        time.sleep(0.5)
-        Colored(self.colon_name() + self.on_die_message).cprint(color=self.color_in_battle)
-
-    def start_fight_message(self):
-        Colored(self.colon_name() + self.on_fight_message).cprint(color=self.color_in_battle)
-
-    exp = 30  # experience points for Hero, who kill monster
+    exp = 30
     loot = {
         "coins": 10
     }
 
+    def on_defeat(self):
+        cprint(f'{self.name} has been defeated!', ERROR)
+        cprint(f'{self.name}: {self.on_fight_message}', self.color_in_battle)
+
+    def start_fight_message(self):
+        cprint(f'{self.name}: {self.on_fight_message}', self.color_in_battle)
