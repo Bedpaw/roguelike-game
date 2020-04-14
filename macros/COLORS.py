@@ -4,7 +4,7 @@ class STYLES:
     DISABLE = '\033[02m'
     UNDERLINE = '\033[04m'
     REVERSE = '\033[07m'
-    STRIKETHROUGH= '\033[09m'
+    STRIKETHROUGH = '\033[09m'
     INVISIBLE = '\033[08m'
 
 

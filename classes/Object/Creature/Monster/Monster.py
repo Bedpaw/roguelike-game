@@ -18,7 +18,7 @@ class Monster(Creature):
 
     def on_defeat(self):
         cprint(f'{self.name} has been defeated!', ERROR)
-        cprint(f'{self.name}: {self.on_fight_message}', self.color_in_battle)
+        cprint(f'{self.name}: {self.on_die_message}', self.color_in_battle)
 
     def start_fight_message(self):
         cprint(f'{self.name}: {self.on_fight_message}', self.color_in_battle)
