@@ -20,7 +20,7 @@ def validate_move_out_of_border(key_press, my_board):
         else:
             return True
 
-    if key_press == 'a':        
+    if key_press == 'a':
         for item in my_board.game_board_in_class[1:-1]:
             if my_board.pos_y == 0:
                 print('You are not allowed to use A key.')
