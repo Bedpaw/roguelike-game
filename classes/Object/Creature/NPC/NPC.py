@@ -1,49 +1,82 @@
-from classes.Object.Creature.Creature import Creature
-from macros import MOVES_TYPES, BATTLE_MODES
+from classes.Object.Creature.Monster.Monster import Monster
+from events.Battle import battle
 from macros.COLORS import *
 from utils.decorations import cprint
-from classes.Object.Creature.Hero.Hero import Hero
-from classes.Object.Creature.Monster.Monsters import Arnold
-from events.Battle import battle
 from utils.validation import int_input
 
+# tests
+from classes.Object.Creature.Hero.Hero import Hero
+from classes.Object.Creature.Monster.Monsters import Arnold
 
-class NPC(Creature):
-    move_type = MOVES_TYPES.STAY
+
+class NPC(Monster):
     in_conversation_color = COLOR.PURPLE
 
+    conversation_folder_path = '../../../../db/conversations/'
+    start_dialog = conversation_folder_path + 'example1.txt'
     __dialog_index = 0
-    __dialogs_path = ['test.txt', 'test3.txt']
+    __dialogs_path = [start_dialog]
+
     on_die_message = "Stop, you won, you can pass..."
     on_fight_message = "I warned you..."
 
     def on_meet(self, hero):
-        dialog_path = self.__dialogs_path[self.__dialog_index]
-        dialogs = read_dialog_from_file(dialog_path)
-        conversation_effects = self.__conversation(dialogs, hero)
+        """
+        Function to out if hero meet NPC
+        :param hero:
+        :return:pass
+        """
+        conversation_effects = self.__conversation(self.__dialog_path(), hero)
         self.__do_after_conversation(conversation_effects, hero)
+        pass
+
+    def __dialog_path(self):
+        """
+        Basic version: read and return as a list lines from txt files:
+        This function should be overwritten in child class if you want to change dialog path despite of some conditions
+        :return:[list] indentation_store
+        """
+        dialog_path = self.__dialogs_path[self.__dialog_index]
+        return read_dialog_from_file(dialog_path)
 
     def __do_after_conversation(self, func, hero):
+        """
+        Run function despite of conversation result
+        :param func:STRING: returned from txt.file string interpretation of functions
+        :param hero: that take part in conversation with NPC
+        :return:pass
+        """
         if func == "BATTLE":
             battle(hero, self)
         if func == "TRADE":
             self.__trade(hero)
-
-    def __color_option(self, option):
-        color = COLOR.WHITE
-        if "BATTLE" in option:
-            color = COLOR.RED
-        elif "END" in option:
-            color = COLOR.LIGHTGREY
-        elif "TRADE" in option:
-            color = COLOR.GREEN
-        return color
+        pass
 
     def __trade(self, hero):
         cprint(f'{self.name} that\'s my best items', COLOR.WHITE, BG_COLOR.GREEN)
         # To implement
 
     def __conversation(self, indentation_store, hero):
+        """
+        :param indentation_store:
+        :param hero:
+        :return:
+        """
+
+        def color_option(option):
+            """
+            Change line color in conversation
+            :param option:
+            :return:
+            """
+            color = COLOR.WHITE
+            if "BATTLE" in option:
+                color = COLOR.RED
+            elif "END" in option:
+                color = COLOR.LIGHTGREY
+            elif "TRADE" in option:
+                color = COLOR.GREEN
+            return color
 
         ends_index = []
         next_header_options = []
@@ -61,7 +94,7 @@ class NPC(Creature):
                     if "&" in option:
                         ends_index.append(j)
                         functions_to_output.append(option.split('&')[1])
-                    color = self.__color_option(option)
+                    color = color_option(option)
                     if j in next_header_options or i == 1:
                         cprint(option, color)
             # HEADERS
@@ -96,7 +129,7 @@ def read_dialog_from_file(text_file):
     headers text
     option always start with [1], [2], [3] etc..
     &... in headers (except line 1) you have to write which options of next indentation are connected with this header
-    &... for options that end dialog
+    &... for options that end dialog -> this string will be returned from dialog function
 
     EXAMPLE:
     Stop don't move or I will kill you!
@@ -113,9 +146,11 @@ def read_dialog_from_file(text_file):
           [1] option &END                                       <- 3 !!!!!
 
 
-    :return:list of lists: [
-    [all lines with 0 indentation]
-    [all lines with 1 indentation
+    :return:lines from text_file:list of lists: [
+                            [string, string, string...]
+                            [all lines with 0 indentation]
+                            [all lines with 1 indentation]
+                            etc...
                             ]
     """
     def longest_indentation_in_line():
@@ -147,7 +182,7 @@ def read_dialog_from_file(text_file):
         return indentation_store
 
 
-path = 'test.txt'
+path = '../../../../db/conversations/example1.txt'
 guard = NPC("Guard", "A", 1, 1)
 monster = Arnold("Guard", "A", 2, 2)
 hero = Hero("Andrzej", "A", 3, 4)
