@@ -15,16 +15,17 @@ class Creature(MyObject):
     color_in_battle = STYLES.RESET
     move_type = "RANDOM_STRAIGHT"
 
-    def move(self):
+    def move(self, params=None):
         """
         Make creature move, comments below
+        :params:any: params for move function
         :return: pass
         """
         # End move == True, when generated position is valid to move
         end_move = False
         while not end_move:
             # Generate creature position change despite of creature move_type
-            position_change_x, position_change_y = Move.run_move_function(self.move_type)
+            position_change_x, position_change_y = Move.run_move_function(self.move_type, params)
 
             # Calculate where would be creature after move
             position_to_check_x = self.position_x + position_change_x

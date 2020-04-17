@@ -1,8 +1,9 @@
 import time
+from utils.decorations import cprint
+from macros.COLORS import *
 
 
 def validate_move_out_of_border(key_press, my_board):
-    
     if key_press == 'w':
         if my_board.pos_x == 1 or (my_board.pos_y == 0 and my_board.pos_x == 0):
             print('You are not allowed to use W key.')
@@ -30,13 +31,39 @@ def validate_move_out_of_border(key_press, my_board):
     if key_press == 'd':
         if my_board.pos_x == 0 and my_board.pos_y == 0:
             return True
-        
-        if my_board.pos_y == my_board.width-1 and my_board.pos_x == my_board.height:
+
+        if my_board.pos_y == my_board.width - 1 and my_board.pos_x == my_board.height:
             return True
 
         for item in my_board.game_board_in_class[1:-1]:
-            if my_board.pos_y == my_board.width-1:
+            if my_board.pos_y == my_board.width - 1:
                 print('You are not allowed to use D key.')
                 time.sleep(0.8)
                 return False
         return True
+
+
+def check_int(s):
+    if s[0] in ('-', '+'):
+        return s[1:].isdigit()
+    return s.isdigit()
+
+
+def int_input(text_input, number_of_options=None, options=None, ):
+    if options is None:
+        options = []
+    valid = False
+    while not valid:
+        s = input(text_input)
+        if check_int(s):
+            s = int(s)
+            if options or number_of_options:
+                if s in options or 0 < s <= number_of_options:
+                    valid = True
+                else:
+                    cprint("INPUT OUT OF RANGE", ERROR)
+            else:
+                valid = True
+        else:
+            cprint("INPUT IS NOT INT", ERROR)
+    return s

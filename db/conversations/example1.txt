@@ -1,0 +1,10 @@
+Stop don't move or I will kill you!
+  [1] Slow down, let's talk...
+    I don't have time for talking, what do you want? &012
+      [1] Why are you so angry?
+        I have to stay here all day long, when all my friends drinking beer in pub. &0
+          [1] Hmm... maybe I have some idea... &END
+      [2] Me neither! Get out from my way! &BATTLE
+      [3] OK, I won't waste your time! &END
+  [2] Get out from my way! &BATTLE
+  [3] Ok, ok, chill out &END

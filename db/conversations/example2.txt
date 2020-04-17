@@ -1,0 +1,6 @@
+Hi, Im Alladin
+  [1] Hi, I'm HERO
+    I have something to sell, do you want to buy? &01
+      [1] YES &TRADE
+      [2] NO &END
+  [2] Bye &END
