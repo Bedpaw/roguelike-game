@@ -21,21 +21,18 @@ class Creature(MyObject):
         :return: pass
         """
         # End move == True, when generated position is valid to move
-        end_move = False
-        while not end_move:
+        # end_move = False
+        # while not end_move:
             # Generate creature position change despite of creature move_type
-            position_change_x, position_change_y = Move.run_move_function(self.move_type)
+        position_change_x, position_change_y = Move.run_move_function(self.move_type)
 
-            # Calculate where would be creature after move
-            position_to_check_x = self.position_x + position_change_x
-            position_to_check_y = self.position_y + position_change_y
+        # Calculate where would be creature after move
+        position_to_check_x = self.position_x + position_change_x
+        position_to_check_y = self.position_y + position_change_y
 
             # If new position is free -> move there
-            if self.Board.check_move_possibility(self, position_to_check_x, position_to_check_y):
-                self.position_x = position_to_check_x
-                self.position_y = position_to_check_y
-                end_move = True
-            pass
+        return position_to_check_x, position_to_check_y
+            
 
     def is_alive(self):
         """
