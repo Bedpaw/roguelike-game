@@ -2,9 +2,10 @@ from random import choice
 from utils.random_utils import random_true
 
 
-def run_move_function(move_type):
+def run_move_function(move_type, params):
     """
     Call function, which will return creature position change on map
+    :param params: [any] params for move function
     :param move_type:[string] move type defined for each creature
     :return: function call, which return [position_change_x, position_change_y]
     """
@@ -15,8 +16,10 @@ def run_move_function(move_type):
         "STAY": stay,  # (0, 0)
         'RANDOM': random_move,  # STRAIGHT + DIAGONAL + STAY
     }
-
-    return move_functions[move_type]()
+    if params is not None:
+        return move_functions[move_type](params)
+    else:
+        return move_functions[move_type]()
 
 
 def manual(key):
