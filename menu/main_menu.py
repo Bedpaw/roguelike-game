@@ -15,3 +15,10 @@ def run_main_menu(player_name):
     # if 1 or 2
     # game_engine(user_choice)
 
+
+def welcome_image():
+    with open ("default.txt", "r") as f:
+        f.read()
+        print(f)
+
+welcome_image()
