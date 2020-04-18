@@ -18,7 +18,7 @@ def run_main_menu(player_name):
 
 def welcome_image():
     with open ("default.txt", "r") as f:
-        f.read()
-        print(f)
+        for row in f:
+            cprint((row[:-1]), BG_COLOR.WHITE, COLOR.DARKGREY, STYLES.BOLD)
 
 welcome_image()
