@@ -7,14 +7,18 @@ from macros.COLORS import *
 
 
 class Creature(MyObject):
-    hp = 100
-    max_hp = 100
-    strength = 5  # Damage points by attack
-    agility = 10  # Chances to dodge [ % ]
-    luck = 10  # Chances to critical strike [ % ]
+    def __init__(self, name, symbol_on_map, position_x, position_y,
+                 strength=5, hp=100, max_hp=100, agility=10, luck=10,
+                 color_in_battle=STYLES.RESET, move_type=MOVES_TYPES.STAY):
 
-    color_in_battle = STYLES.RESET
-    move_type = MOVES_TYPES.STAY
+        super().__init__(name, symbol_on_map, position_x, position_y)
+        self.strength = strength
+        self.hp = hp
+        self.max_hp = max_hp
+        self.agility = agility
+        self.luck = luck
+        self.move_type = move_type
+        self.color_in_battle = color_in_battle
 
     def move(self, params=None):
         """

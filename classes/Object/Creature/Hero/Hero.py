@@ -2,25 +2,61 @@ from classes.Object.Creature.Creature import Creature
 from macros.COLORS import *
 from utils.decorations import cprint
 from macros import MOVES_TYPES, OBJECT_TYPES
+from utils.validation import int_input
 
 
 class Hero(Creature):
-    level = 1
-    exp = 0
-    exp_to_next_level = 100
-    strength = 50
-    hp = 400
-    max_hp = 400
+    def __init__(self, name, symbol_on_map, position_x, position_y,
+                 strength=50,
+                 hp=400,
+                 max_hp=400,
+                 agility=10,
+                 luck=10,
+                 color_in_battle=COLOR.GREEN,
+                 move_type=MOVES_TYPES.MANUAL,
+                 level=1,
+                 exp=0,
+                 exp_to_next_level=100):
+        super().__init__(name, symbol_on_map, position_x, position_y,
+                         strength, hp, max_hp, agility, luck)
+        self.color_in_battle = color_in_battle
+        self.move_type = move_type
+        self.level = level
+        self.exp = exp
+        self.exp_to_next_level = exp_to_next_level
 
     type_of = OBJECT_TYPES.HERO
-    move_type = MOVES_TYPES.MANUAL
     color_on_board = COLOR.RED
-    color_in_battle = COLOR.GREEN
 
     inventory = {
         "coins": 100,
     }
     on_fight_message = "Time to stop this creature!"
+
+    def skill_improv(self):
+        return {
+            "1": {
+                "name": "Strength",
+                "skill": self.strength,
+                "amount": 10,
+            },
+            "2": {
+                "name": "Health",
+                "skill": self.hp,
+                "skill2": self.max_hp,
+                "amount": 30,
+            },
+            "3": {
+                "name": "Agility",
+                "skill": self.agility,
+                "amount": 5,
+            },
+            "4": {
+                "name": "Luck",
+                "skill": self.luck,
+                "amount": 5,
+            }
+        }
 
     def level_up(self):
         """
