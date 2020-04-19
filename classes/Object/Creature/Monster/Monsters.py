@@ -16,7 +16,7 @@ class Troll(Monster):
 
 class Arnold(Monster):
     strength = 20
-    exp = 10000
+    exp = 1000
     agility = 50
     luck = 100
 

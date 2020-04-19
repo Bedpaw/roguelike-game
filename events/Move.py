@@ -29,13 +29,13 @@ def manual(key):
     :return:[list]: [change_position_x, change_position_y]
     """
     if key == "w":
-        return [0, 1]
-    if key == "s":
-        return [0, -1]
-    if key == "a":
         return [-1, 0]
-    if key == "d":
+    if key == "s":
         return [1, 0]
+    if key == "a":
+        return [0, -1]
+    if key == "d":
+        return [0, 1]
 
 
 def random_straight():

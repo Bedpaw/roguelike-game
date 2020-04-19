@@ -11,7 +11,6 @@ BOARD_HEIGHT = 8
 
 
 def main():
-
     my_board = GameBoard.Board(BOARD_WIDTH, BOARD_HEIGHT, Hero('Pawel', '@', 0, 0))
     while True:
         my_board.update_board()
@@ -19,10 +18,9 @@ def main():
         my_board.get_user_choice()
         my_board.move_monsters()
         clear_screen()
-    
-
+        print(my_board.pos_x)   # up down
+        print(my_board.pos_y)   # right left
 
 
 if __name__ == '__main__':
     main()
-
