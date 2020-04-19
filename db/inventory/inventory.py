@@ -7,7 +7,6 @@ from utils import decorations
 def print_inventory():
     pass
 
-
 def add_item():
     pass
 

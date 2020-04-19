@@ -1,11 +1,13 @@
 from utils.decorations import cprint
 from macros.COLORS import *
 from game_engine import game_engine
+from utils import data_manager
 
 
 def run_main_menu(player_name):
     # Logo?
     # clear screen
+
     cprint(f'Welcome {player_name}!\n', COLOR.YELLOW)
     print("[1] PLAY NEW GAME\n"
           "[2] LOAD GAME\n")
