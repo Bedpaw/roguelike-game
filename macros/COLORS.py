@@ -1,3 +1,5 @@
+# import rhinoscriptsytnax as rs
+
 class STYLES:
     RESET = '\033[0m'
     BOLD = '\033[01m'
@@ -10,6 +12,7 @@ class STYLES:
 
 class COLOR:
     WHITE = '\033[30m'
+    # WHITE = rs.CreateColor(255, 255, 255)
     RED = '\033[31m'
     GREEN = '\033[32m'
     ORANGE = '\033[33m'
@@ -27,7 +30,7 @@ class COLOR:
 
 
 class BG_COLOR:
-    WHITE = '\033[40m'
+    WHITE = '\033[107m'
     RED = '\033[41m'
     GREEN = '\033[42m'
     ORANGE = '\033[43m'

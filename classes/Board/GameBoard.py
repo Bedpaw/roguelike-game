@@ -1,7 +1,11 @@
 from macros import OBJECT_TYPES, BATTLE_MODES
 from classes.Object.Creature.Monster.Monsters import *
 from utils import key_service
+import time
+from utils.decorations import cprint
+from macros.COLORS import *
 from events.Battle import battle
+from classes.Board.Fields import Field
 
 
 class Board:
@@ -14,15 +18,16 @@ class Board:
         self.pos_x = hero.position_x
         self.pos_y = hero.position_y
         #--------------------------------
-        self.game_board_in_class = [[self.player_sign]] + [['0'] * self.width for i in range(self.height)] + [['0']]
+        self.game_board_in_class = [[self.player_sign]] + [[Field()] * self.width for i in range(self.height)] + [[Field()]]
         self.game_board_in_class[self.pos_x][self.pos_y] = self.player_sign
 
 
     monsters = [Troll('Wojtek', 'W', 2, 2), Arnold('Pati', 'P', 4, 4)]
 
     def update_board(self):
+        self.make_empty_list()
         self.add_monster_to_board()
-        self.game_board_in_class[self.pos_x][self.pos_y] = self.player_sign
+        self.game_board_in_class[self.pos_x][self.pos_y] = self.hero
     
     def move_monsters(self):
         
@@ -37,45 +42,28 @@ class Board:
             
 
     def make_empty_list(self):
-        self.game_board_in_class = [[self.player_sign]] + [['0'] * self.width for i in range(self.height)] + [['0']]
-        for i, monster in enumerate(self.monsters):
-            if not monster.is_on_board:
-                del self.monsters[i]
-      
-        self.update_board()
+        self.game_board_in_class = [[Field()]] + [[Field()] * self.width for i in range(self.height)] + [[Field()]]
+
 
     def add_monster_to_board(self):
         for monster in self.monsters:
-            self.game_board_in_class[monster.position_x][monster.position_y] = monster.symbol_on_map
+            self.game_board_in_class[monster.position_x][monster.position_y] = monster
 
     def check_move_possibility(self, caller, positionX, positionY):
-        # position is where i want to move:
-        # caller is monster/Hero who call this function
-
-        # caller.type = "Monster"
-        # return False if monster, item or wall
-        # start fight if Hero, return True
-        # else True
-        # if caller.type_of == OBJECT_TYPES.MONSTER:
-
-
-        # caller.type = "Hero"
-        # return False if wall
-        # start fight if monster, return True
-        # add item to Hero inventory if item, return True
-        # else True
-
+        
         if caller.type_of == OBJECT_TYPES.HERO:
-            for monster in self.monsters:
+            
+            for i, monster in enumerate(self.monsters):
                 if monster.position_x == positionX and monster.position_y == positionY:
+
                     battle(caller, monster, BATTLE_MODES.IMMEDIATE_FIGHT)
+                    if not monster.is_on_board:
+                        del self.monsters[i]
                     return True
-        # print(self.pos_x, self.pos_y)
-        if positionX < 1 or positionY < 0:
+        if positionX < 1 or positionY < 0 or positionX > self.width-1:
             return False
         else:
             return True
-        # return True
 
     def get_user_choice(self):
         valid_key = False
@@ -88,12 +76,13 @@ class Board:
                     if key_pressed == 'd':
                         y_y = self.pos_y + 1
                         if self.pos_x == 0 and self.pos_y == 0:
-                            # self.check_move_possibility(self.hero, y_y, self.pos_y)
                             self.pos_x += 1
-                        
-                        elif self.check_move_possibility(self.hero, y_y, self.pos_y):
                             valid_key = True
+                        
+                        elif self.check_move_possibility(self.hero, y_y, self.pos_x):
+                            
                             self.pos_y = y_y
+                            valid_key = True
 
                     elif key_pressed == 'w':
                         x_x = self.pos_x - 1
@@ -114,57 +103,37 @@ class Board:
                             self.pos_x = x_x
 
 
-    def remove_player_track(self):
-        # print(type(self.pos_x))
-        self.game_board_in_class[self.pos_x][self.pos_y] = '0'
-
-
     def print_board(self):
-        overscore = "\u203e"
-        print(self.game_board_in_class)
-        # TOP
-
-        letters_position = f"{' '*14}"
-        for item in range(self.width):
-            letters_position += chr(65 + item % 26)
-        print('\n', letters_position + '\n', f"{' '*12}{'_'*(self.width+3)}", sep='')
+        # overscore = "\u203e"
 
         # MIDDLE
         for i, list_of_fields in enumerate(self.game_board_in_class):
             if i == 0:
-                middle_fileds = f"{' '*6}{1}.{' '*5}"
-            elif i == 1:
-                middle_fileds += ''
-            elif i == 2:
-                middle_fileds += f"\n{' '*6}{i}.{' '*4}{overscore}|"
-
-            elif i == len(self.game_board_in_class)-1:
+                middle_fileds = f"{' '*5}"
+            elif i == 1 or i == self.height+1:
                 middle_fileds += ''
             else:
-                middle_fileds += f"{' '* (7 - len(str(i)))}{i}.{' ' * 5}|"
+                middle_fileds += f"\n{' '* 6}"
             
             for field in list_of_fields:
-
-                if field == '0':
-                    middle_fileds += ' '
+                # print(field)
+                if field.symbol_on_map == '0':
+                    middle_fileds += BG_COLOR.GREEN + ' ' + STYLES.RESET
                 else:
-                    middle_fileds += field
+                    middle_fileds += BG_COLOR.GREEN + field.color_on_board + field.symbol_on_map + STYLES.RESET
             
-            if i == 0:
-                middle_fileds += ''
-            elif i == 1:
-                middle_fileds += '|'
-            elif i == len(self.game_board_in_class)-3:
-                middle_fileds += '|_\n'
-            elif i == len(self.game_board_in_class)-2:
-                middle_fileds += ''
-            elif i == len(self.game_board_in_class)-1:
-                middle_fileds += ''
+   
+            # elif i == len(self.game_board_in_class)-3:
+            #     middle_fileds += '|_\n'
+            # elif i == len(self.game_board_in_class)-2:
+            #     middle_fileds += ''
+            # elif i == len(self.game_board_in_class)-1:
+            #     middle_fileds += ''
 
-            else:
-                middle_fileds += '|\n'
+            # else:
+            #     middle_fileds += '|\n'
 
         print(middle_fileds, sep='')
 
         # BOTTOM
-        print(f"{' '*13}{overscore*(self.width+3)}\n")
+        # print(f"{' '*13}{overscore*(self.width+3)}\n")

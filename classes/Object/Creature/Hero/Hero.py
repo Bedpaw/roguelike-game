@@ -14,7 +14,7 @@ class Hero(Creature):
 
     type_of = OBJECT_TYPES.HERO
     move_type = MOVES_TYPES.MANUAL
-    color_on_board = COLOR.GREEN
+    color_on_board = COLOR.RED
     color_in_battle = COLOR.GREEN
 
     inventory = {

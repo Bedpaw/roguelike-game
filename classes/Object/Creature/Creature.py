@@ -2,6 +2,7 @@ from classes.Object.Object import MyObject
 from utils.random_utils import random_true
 from utils.decorations import cprint
 from events import Move
+from macros import MOVES_TYPES
 from macros.COLORS import *
 
 
@@ -13,7 +14,7 @@ class Creature(MyObject):
     luck = 10  # Chances to critical strike [ % ]
 
     color_in_battle = STYLES.RESET
-    move_type = "RANDOM_STRAIGHT"
+    move_type = MOVES_TYPES.STAY
 
     def move(self, params=None):
         """
