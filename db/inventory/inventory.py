@@ -7,8 +7,9 @@ from utils import decorations
 def print_inventory():
     pass
 
-def add_item():
-    pass
 
 def show_exp_and_lvl():
+    pass
+
+def show inventory():
     pass
