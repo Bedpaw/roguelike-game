@@ -70,9 +70,10 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.AUTOMATE_FIGHT):
             break
 
     # Battle end
+    cprint(f'You have got {monster.exp} exp.', SUCCESS)
+    input("\nPress enter to exit fight report...\n")
     hero.get_exp(monster.exp)
     # hero.add_items(monster.loot) TODO: to implement
-    # input("\nPress any button to exit fight report...")
     pass
 
 

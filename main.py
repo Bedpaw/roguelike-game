@@ -1,4 +1,3 @@
-from utils import key_service, validation
 from classes.Board import GameBoard
 from classes.Object.Creature.Hero.Hero import Hero
 from utils.utils import clear_screen

@@ -66,26 +66,25 @@ class Hero(Creature):
         :return: pass
         """
         self.level += 1
-        self.exp_to_next_level = self.exp + self.exp_to_next_level * 1.3
-        print(f"You have received {self.level} level!")
+        self.exp_to_next_level = self.exp + int(self.exp_to_next_level * 1.3)
+        cprint(f"You have received {self.level} level!", SUCCESS)
 
-        print("Which skills do you want to improve?")
-        skill_to_improve = None
-        while skill_to_improve not in [1, 2, 3, 4]:
-            skill_to_improve = int(input("[1] Strength + 10\n"
-                                         "[2] Health + 30\n"
-                                         "[3] Agility +5\n"
-                                         "[4] Luck +5\n"
-                                         "Pick a number: "))
-        if skill_to_improve == 1:
-            self.strength += 10
-        elif skill_to_improve == 2:
-            self.hp += 30
-            self.max_hp += 30
-        elif skill_to_improve == 3:
-            self.agility += 5
-        elif skill_to_improve == 4:
-            self.luck += 5
+        skill_to_improve = int_input("Which skill do you want to improve?\n"
+                                     "[1] Strength + 10\n"
+                                     "[2] Health + 30\n"
+                                     "[3] Agility + 5\n"
+                                     "[4] Luck + 5\n"
+                                     "Pick a number: ", 4)
+        print(self.strength)
+        for k, v in self.skill_improv().items():
+            if k == str(skill_to_improve):
+                print(v["skill"])
+                v["skill"] += v["amount"]  # TODO: TO NIE DZIAŁA!!
+                if "skill2" in v:
+                    v["skill2"] += v["amount"]
+
+        if self.exp > self.exp_to_next_level:
+            self.level_up()
         pass
 
     def get_exp(self, exp):
@@ -94,10 +93,11 @@ class Hero(Creature):
         :param exp:[int]: exp to add for hero
         :return: pass
         """
-        self.exp += exp
-        print(f'\nYou have got {exp} exp.')
-        if exp >= self.exp_to_next_level:
+        exp_to_next_level = self.exp_to_next_level - self.exp
+        if exp > exp_to_next_level:
+            exp -= exp_to_next_level
             self.level_up()
+            self.get_exp(exp)
         pass
 
     def start_fight_message(self):
