@@ -19,7 +19,9 @@ def main():
         my_board.get_user_choice()
         my_board.move_monsters()
         clear_screen()
-        
+    
+
+
 
 if __name__ == '__main__':
     main()

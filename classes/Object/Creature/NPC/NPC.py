@@ -12,7 +12,7 @@ from classes.Object.Creature.Monster.Monsters import Arnold
 class NPC(Monster):
     in_conversation_color = COLOR.PURPLE
 
-    conversation_folder_path = '../../../../db/conversations/'
+    conversation_folder_path = 'db/conversations/'
     start_dialog = conversation_folder_path + 'example1.txt'
     __dialog_index = 0
     __dialogs_path = [start_dialog]
@@ -182,9 +182,9 @@ def read_dialog_from_file(text_file):
         return indentation_store
 
 
-path = '../../../../db/conversations/example1.txt'
-guard = NPC("Guard", "A", 1, 1)
-monster = Arnold("Guard", "A", 2, 2)
-hero = Hero("Andrzej", "A", 3, 4)
+# path = '../../../../db/conversations/example1.txt'
+# guard = NPC("Guard", "A", 1, 1)
+# monster = Arnold("Guard", "A", 2, 2)
+# hero = Hero("Andrzej", "A", 3, 4)
 
-guard.on_meet(hero)
+# guard.on_meet(hero)

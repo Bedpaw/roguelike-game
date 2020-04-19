@@ -6,6 +6,7 @@ from utils.decorations import cprint
 from macros.COLORS import *
 from events.Battle import battle
 from classes.Board.Fields import Field
+from classes.Object.Creature.NPC.NPC import NPC
 
 
 class Board:
@@ -23,10 +24,12 @@ class Board:
 
 
     monsters = [Troll('Wojtek', 'W', 2, 2), Arnold('Pati', 'P', 4, 4)]
+    npc = [NPC('Guard', 'S', 4, 0)]
 
     def update_board(self):
         self.make_empty_list()
-        self.add_monster_to_board()
+        self.add_object_to_board(self.monsters)
+        self.add_object_to_board(self.npc)
         self.game_board_in_class[self.pos_x][self.pos_y] = self.hero
     
     def move_monsters(self):
@@ -45,25 +48,41 @@ class Board:
         self.game_board_in_class = [[Field()]] + [[Field()] * self.width for i in range(self.height)] + [[Field()]]
 
 
-    def add_monster_to_board(self):
-        for monster in self.monsters:
-            self.game_board_in_class[monster.position_x][monster.position_y] = monster
+    def add_object_to_board(self, object_items):
+        for item in object_items:
+            self.game_board_in_class[item.position_x][item.position_y] = item
 
     def check_move_possibility(self, caller, positionX, positionY):
-        
-        if caller.type_of == OBJECT_TYPES.HERO:
-            
-            for i, monster in enumerate(self.monsters):
-                if monster.position_x == positionX and monster.position_y == positionY:
+        # Idea for making one for for checking everything instead for loops do it by checking proper value in given caller
 
-                    battle(caller, monster, BATTLE_MODES.IMMEDIATE_FIGHT)
-                    if not monster.is_on_board:
-                        del self.monsters[i]
-                    return True
         if positionX < 1 or positionY < 0 or positionX > self.width-1:
             return False
         else:
+            if caller.type_of == OBJECT_TYPES.HERO:
+
+                for i, monster in enumerate(self.monsters):
+                    if monster.position_x == positionX and monster.position_y == positionY:
+
+                        battle(caller, monster, BATTLE_MODES.IMMEDIATE_FIGHT)
+                        if not monster.is_on_board:
+                            del self.monsters[i]
+                        return True
+                for i, one_npc in enumerate(self.npc):
+                    if one_npc.position_x == positionX and one_npc.position_y == positionY:
+                        one_npc.on_meet(self.hero)
+                        # battle(caller, npc, BATTLE_MODES.IMMEDIATE_FIGHT)
+                        # if not monster.is_on_board:
+                        #     del self.monsters[i]
+                        return True
+            elif caller.type_of == OBJECT_TYPES.MONSTER:
+                if self.pos_x == positionX and self.pos_y == positionY:
+                    battle(self.hero, caller, BATTLE_MODES.IMMEDIATE_FIGHT)
+
+            # monster vs npc validation
+            # item in the feature(monster i hero)
             return True
+
+
 
     def get_user_choice(self):
         valid_key = False
