@@ -19,6 +19,7 @@ class MyObject:
         self.position_x = position_x
         self.position_y = position_y
 
+    field_move_possible = True
     Board = BoardMock()
     is_on_board = True
 

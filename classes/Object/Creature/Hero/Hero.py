@@ -11,6 +11,8 @@ class Hero(Creature):
     strength = 50
     hp = 400
     max_hp = 400
+    field_color = COLOR.BLUE
+
 
     type_of = OBJECT_TYPES.HERO
     move_type = MOVES_TYPES.MANUAL

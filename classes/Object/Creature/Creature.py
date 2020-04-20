@@ -15,6 +15,7 @@ class Creature(MyObject):
 
     color_in_battle = STYLES.RESET
     move_type = MOVES_TYPES.STAY
+    field_color = BG_COLOR.CYAN
 
     def move(self, params=None):
         """

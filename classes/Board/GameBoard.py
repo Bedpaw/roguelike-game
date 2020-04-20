@@ -1,14 +1,15 @@
 from macros import OBJECT_TYPES, BATTLE_MODES
 from classes.Object.Creature.Monster.Monsters import *
 from utils import key_service
-import time
-from utils.decorations import cprint
 from macros.COLORS import *
 from events.Battle import battle
-from classes.Board.Fields import Field
+from classes.Board.Fields import *
 from classes.Object.Creature.NPC.NPC import NPC
+# from classes.Board.Map_Draw.test_draw import get_background_color
+import time
 
 
+# print('tutaj dzialam', get_background_color('classes/Board/Map_Draw/level1_map.txt'))
 class Board:
     def __init__(self, width, height, hero):
         self.width = width
@@ -19,9 +20,13 @@ class Board:
         self.pos_x = hero.position_x
         self.pos_y = hero.position_y
         #--------------------------------
-        self.game_board_in_class = [[self.player_sign]] + [[Field()] * self.width for i in range(self.height)] + [[Field()]]
-        self.game_board_in_class[self.pos_x][self.pos_y] = self.player_sign
+        self.game_board_in_class = [[self.hero]] + get_background_color('classes/Board/Map_Draw/level1_map.txt') + [[Field()]]
+        # print(self.game_board_in_class)
+        # print([[hero]] + get_background_color('classes/Board/Map_Draw/level1_map.txt') + [[Field()]])
+            # [[self.player_sign]] + [[Field()] * self.width for i in range(self.height)] + [[Field()]]
+        self.game_board_in_class[self.pos_x][self.pos_y] = self.hero
 
+    # filling = get_background_color('classes/Board/Map_Draw/level1_map.txt')
 
     monsters = [Troll('Wojtek', 'W', 2, 2), Arnold('Pati', 'P', 4, 4)]
     npc = [NPC('Guard', 'S', 4, 0)]
@@ -43,10 +48,12 @@ class Board:
                     monster.position_y = y
                     valid = True
             
-
+    # def fill_field_with_background(self):
+        # for fill in filling:
+        # print(self.filling)
     def make_empty_list(self):
-        self.game_board_in_class = [[Field()]] + [[Field()] * self.width for i in range(self.height)] + [[Field()]]
-
+        self.game_board_in_class = [[Field()]] + get_background_color('classes/Board/Map_Draw/level1_map.txt') + [[Field()]]
+        # self.fill_field_with_background()
 
     def add_object_to_board(self, object_items):
         for item in object_items:
@@ -56,6 +63,8 @@ class Board:
         # Idea for making one for for checking everything instead for loops do it by checking proper value in given caller
 
         if positionX < 1 or positionY < 0 or positionX > self.width-1:
+            return False
+        elif self.game_board_in_class[positionX][positionY].field_move_possible == False:
             return False
         else:
             if caller.type_of == OBJECT_TYPES.HERO:
@@ -133,15 +142,15 @@ class Board:
                 middle_fileds += ''
             else:
                 middle_fileds += f"\n{' '* 6}"
-            
+            # print('TUTAJ JESTEM', self.game_board_in_class)
             for field in list_of_fields:
                 # print(field)
-                if field.symbol_on_map == '0':
-                    middle_fileds += BG_COLOR.GREEN + ' ' + STYLES.RESET
-                else:
-                    middle_fileds += BG_COLOR.GREEN + field.color_on_board + field.symbol_on_map + STYLES.RESET
-            
-   
+                # if field.symbol_on_map:
+                middle_fileds += field.field_color + ' ' + STYLES.RESET
+                # else:
+                #     middle_fileds += BG_COLOR.BLUE + field.color_on_board + field.symbol_on_map + STYLES.RESET
+
+
             # elif i == len(self.game_board_in_class)-3:
             #     middle_fileds += '|_\n'
             # elif i == len(self.game_board_in_class)-2:

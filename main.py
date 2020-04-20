@@ -8,7 +8,7 @@ PLAYER_START_X = 3
 PLAYER_START_Y = 3
 
 BOARD_WIDTH = 15
-BOARD_HEIGHT = 8
+BOARD_HEIGHT = 10
 
 
 def main():
@@ -26,4 +26,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
