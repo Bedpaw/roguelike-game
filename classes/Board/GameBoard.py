@@ -23,12 +23,11 @@ class Board:
         self.game_board_in_class = [[self.hero]] + get_background_color('classes/Board/Map_Draw/level1_map.txt') + [[Field()]]
         # print(self.game_board_in_class)
         # print([[hero]] + get_background_color('classes/Board/Map_Draw/level1_map.txt') + [[Field()]])
-            # [[self.player_sign]] + [[Field()] * self.width for i in range(self.height)] + [[Field()]]
         self.game_board_in_class[self.pos_x][self.pos_y] = self.hero
 
     # filling = get_background_color('classes/Board/Map_Draw/level1_map.txt')
 
-    monsters = [Troll('Wojtek', 'W', 2, 2), Arnold('Pati', 'P', 4, 4)]
+    monsters = [Troll('Wojtek', 'W', 3, 3), Arnold('Pati', 'P',  5, 4)]
     npc = [NPC('Guard', 'S', 4, 0)]
 
     def update_board(self):
