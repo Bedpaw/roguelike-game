@@ -19,6 +19,7 @@ class NPC(Monster):
 
     on_die_message = "Stop, you won, you can pass..."
     on_fight_message = "I warned you..."
+    field_color = BG_COLOR.BLUE
 
     def on_meet(self, hero):
         """

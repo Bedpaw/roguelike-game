@@ -6,16 +6,7 @@ from utils.validation import int_input
 
 
 class Hero(Creature):
-<<<<<<< HEAD
-    level = 1
-    exp = 0
-    exp_to_next_level = 100
-    strength = 50
-    hp = 400
-    max_hp = 400
-    field_color = COLOR.BLUE
 
-=======
     def __init__(self, name, symbol_on_map, position_x, position_y,
                  strength=50,
                  hp=400,
@@ -34,8 +25,8 @@ class Hero(Creature):
         self.level = level
         self.exp = exp
         self.exp_to_next_level = exp_to_next_level
->>>>>>> 2b2a61c7ebe4e7b4ee2761e1f5e7afd903a44ecd
 
+    field_color = COLOR.BLUE
     type_of = OBJECT_TYPES.HERO
     color_on_board = COLOR.RED
 

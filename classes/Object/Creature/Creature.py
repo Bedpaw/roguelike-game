@@ -11,20 +11,18 @@ class Creature(MyObject):
                  strength=5, hp=100, max_hp=100, agility=10, luck=10,
                  color_in_battle=STYLES.RESET, move_type=MOVES_TYPES.STAY):
 
-
-    color_in_battle = STYLES.RESET
-    move_type = MOVES_TYPES.STAY
-    field_color = BG_COLOR.CYAN
-
         super().__init__(name, symbol_on_map, position_x, position_y)
-            self.strength = strength
-            self.hp = hp
-            self.max_hp = max_hp
-            self.agility = agility
-            self.luck = luck
-            self.move_type = move_type
-            self.color_in_battle = color_in_battle
+        self.strength = strength
+        self.hp = hp
+        self.max_hp = max_hp
+        self.agility = agility
+        self.luck = luck
+        self.move_type = move_type
+        self.color_in_battle = color_in_battle
 
+        color_in_battle = STYLES.RESET
+        move_type = MOVES_TYPES.STAY
+        field_color = BG_COLOR.CYAN
 
     def move(self, params=None):
         """

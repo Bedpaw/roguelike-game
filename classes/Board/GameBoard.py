@@ -144,7 +144,7 @@ class Board:
                 if field.symbol_on_map == '0':
                     middle_fileds += BG_COLOR.GREEN + ' ' + STYLES.RESET
                 else:
-                    middle_fileds += BG_COLOR.GREEN + field.color_on_board + field.symbol_on_map + STYLES.RESET
+                    middle_fileds += BG_COLOR.GREEN + field.field_color + field.symbol_on_map + STYLES.RESET
 
 
             # elif i == len(self.game_board_in_class)-3:
