@@ -14,11 +14,12 @@ class Board:
     def __init__(self, width, height, hero):
         self.width = width
         self.height = height
-        #hero
+        # hero
         self.hero = hero
         self.player_sign = hero.symbol_on_map
         self.pos_x = hero.position_x
         self.pos_y = hero.position_y
+
         #--------------------------------
         self.game_board_in_class = [[self.hero]] + get_background_color('classes/Board/Map_Draw/level1_map.txt') + [[Field()]]
         # print(self.game_board_in_class)
@@ -28,24 +29,30 @@ class Board:
     # filling = get_background_color('classes/Board/Map_Draw/level1_map.txt')
 
     monsters = [Troll('Wojtek', 'W', 3, 3), Arnold('Pati', 'P',  5, 4)]
+
     npc = [NPC('Guard', 'S', 4, 0)]
+    # monsters = []
+    # npc = []
 
     def update_board(self):
         self.make_empty_list()
         self.add_object_to_board(self.monsters)
         self.add_object_to_board(self.npc)
         self.game_board_in_class[self.pos_x][self.pos_y] = self.hero
-    
+        self.hero.position_x = self.pos_x   # DONT TOUCH IT
+        self.hero.position_y = self.pos_y   # DONT TOUCH IT
+
     def move_monsters(self):
-        
+
         for monster in self.monsters:
             valid = False
             while not valid:
                 x, y = monster.move()
                 if self.check_move_possibility(monster, x, y):
-                    monster.position_x = x
-                    monster.position_y = y
+                    monster.position_x = y
+                    monster.position_y = x
                     valid = True
+
             
     # def fill_field_with_background(self):
         # for fill in filling:
@@ -54,14 +61,21 @@ class Board:
         self.game_board_in_class = [[Field()]] + get_background_color('classes/Board/Map_Draw/level1_map.txt') + [[Field()]]
         # self.fill_field_with_background()
 
+
     def add_object_to_board(self, object_items):
         for item in object_items:
             self.game_board_in_class[item.position_x][item.position_y] = item
 
     def check_move_possibility(self, caller, positionX, positionY):
+        """
+        :param caller:Hero or Monster
+        :param positionX:VERTICAL ^
+        :param positionY:HORIZONTAL <->
+        :return: True if move is possible, False if it isn't
+        """
         # Idea for making one for for checking everything instead for loops do it by checking proper value in given caller
 
-        if positionX < 1 or positionY < 0 or positionX > self.width-1:
+        if positionX < 1 or positionY < 0 or positionY > self.width - 1 or positionX > self.height:
             return False
         elif self.game_board_in_class[positionX][positionY].field_move_possible == False:
             return False
@@ -90,45 +104,27 @@ class Board:
             # item in the feature(monster i hero)
             return True
 
-
-
     def get_user_choice(self):
-        valid_key = False
+        valid_key = False   # change to True if key is valid AND move is possible
         while not valid_key:
             key_pressed = key_service.key_pressed()
+
             if key_pressed in ['w', 's', 'a', 'd', 'p']:
                 if key_pressed == 'p':
                     exit(0)
+
+                # Move from first gate
+                elif key_pressed == 'd' and self.pos_x == 0 and self.pos_y == 0:
+                    self.pos_x += 1
+                    valid_key = True
+
                 else:
-                    if key_pressed == 'd':
-                        y_y = self.pos_y + 1
-                        if self.pos_x == 0 and self.pos_y == 0:
-                            self.pos_x += 1
-                            valid_key = True
-                        
-                        elif self.check_move_possibility(self.hero, y_y, self.pos_x):
-                            
-                            self.pos_y = y_y
-                            valid_key = True
+                    new_x_pos, new_y_pos = self.hero.move(key_pressed)  # hero.move trick to work with Y, X cords
 
-                    elif key_pressed == 'w':
-                        x_x = self.pos_x - 1
-                        if self.check_move_possibility(self.hero, x_x, self.pos_y):
-                            valid_key = True
-                            self.pos_x = x_x
-                        
-                    elif key_pressed == 'a':
-                        y_y = self.pos_y - 1
-                        if self.check_move_possibility(self.hero, self.pos_x, y_y):
-                            valid_key = True
-                            self.pos_y = y_y
-
-                    elif key_pressed == 's':
-                        x_x = self.pos_x + 1
-                        if self.check_move_possibility(self.hero, x_x, self.pos_y):
-                            valid_key = True
-                            self.pos_x = x_x
-
+                    if self.check_move_possibility(self.hero, new_x_pos, new_y_pos):
+                        self.pos_x = new_x_pos
+                        self.pos_y = new_y_pos
+                        valid_key = True
 
     def print_board(self):
         # overscore = "\u203e"
@@ -136,18 +132,19 @@ class Board:
         # MIDDLE
         for i, list_of_fields in enumerate(self.game_board_in_class):
             if i == 0:
-                middle_fileds = f"{' '*5}"
-            elif i == 1 or i == self.height+1:
+                middle_fileds = f"{' ' * 5}"
+            elif i == 1 or i == self.height + 1:
                 middle_fileds += ''
             else:
-                middle_fileds += f"\n{' '* 6}"
-            # print('TUTAJ JESTEM', self.game_board_in_class)
+
+                middle_fileds += f"\n{' ' * 6}"
+
             for field in list_of_fields:
                 # print(field)
-                # if field.symbol_on_map:
-                middle_fileds += field.field_color + ' ' + STYLES.RESET
-                # else:
-                #     middle_fileds += BG_COLOR.BLUE + field.color_on_board + field.symbol_on_map + STYLES.RESET
+                if field.symbol_on_map == '0':
+                    middle_fileds += BG_COLOR.GREEN + ' ' + STYLES.RESET
+                else:
+                    middle_fileds += BG_COLOR.GREEN + field.color_on_board + field.symbol_on_map + STYLES.RESET
 
 
             # elif i == len(self.game_board_in_class)-3:
