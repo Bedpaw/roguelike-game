@@ -27,6 +27,8 @@ class COLOR:
     LIGHTBLUE = '\033[94m'
     PINK = '\033[95m'
     LIGHTCYAN = '\033[96m'
+    BROWN = ''
+    DARKGREEN = ''
 
 
 class BG_COLOR:
