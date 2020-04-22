@@ -6,7 +6,8 @@ from macros.COLORS import *
 
 class Item:
 
-    def __init__(self, is_on_board, positionX, positionY, symbol, exp, hp, strength):
+    def __init__(self, name, is_on_board, positionX, positionY, symbol, exp, hp, strength):
+        self.name = name
         self.is_on_board = is_on_board
         self.positionX = positionX
         self.positionY = positionY

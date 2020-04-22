@@ -1,17 +1,24 @@
 from classes.Object.Item.Item import Item
 
 
-class gloves(item):
+class gloves(Item):
+
     pass
 
-class helmet(item):
+class helmet(Item):
     pass
 
-class sword(item):
+class sword(Item):
     pass
 
-class armor(item):
+class armor(Item):
     pass
 
-class belt(item):
+class belt(Item):
+    pass
+
+class healing_potion(Item):
+    pass
+
+class mana(Item):
     pass
