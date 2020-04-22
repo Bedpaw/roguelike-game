@@ -2,33 +2,39 @@ from classes.Object.Object import MyObject
 from utils.decorations import cprint
 from macros import OBJECT_TYPES
 from macros.COLORS import *
+from random import random
 
 
-class Item:
+class Item():
 
-    def __init__(self, name, is_on_board, positionX, positionY, symbol, exp, hp, strength):
+    def __init__(self, name, hp, strength):
         self.name = name
-        self.is_on_board = is_on_board
-        self.positionX = positionX
-        self.positionY = positionY
-        self.symbol = symbol
-        self.exp = exp
         self.hp = hp
         self.strength = strength
 
-
     """
-    is_on_board = T/F
-    positionX
-    positionY
-    appear_on_board
     take_item
-    delete_item
-    symbol = *
-    exp = how much exp is giving to hero
     hp = how much hp is giving
     strength = how much strength is giving
     """
 
-    def is_on_board(self):
 
+class Treasure(MyObject):
+
+    message_in_field = cprint(f"You have found {MyObject.__name__}")
+    is_locked = ""
+    positionX = 1
+    positionY = 1
+
+    is_on_board = True
+
+    pass
+    """
+    is_on_board = T/F
+    positionX
+    positionY
+    is_locked
+    message
+    """
+    def which_item_in(self): # losuje item z dostępnych
+        pass

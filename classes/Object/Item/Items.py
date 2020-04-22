@@ -22,3 +22,6 @@ class healing_potion(Item):
 
 class mana(Item):
     pass
+
+class key(Item):
+    pass
