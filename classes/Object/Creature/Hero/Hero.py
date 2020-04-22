@@ -25,38 +25,32 @@ class Hero(Creature):
         self.exp = exp
         self.exp_to_next_level = exp_to_next_level
 
+        self.skill_improv = {
+                "1": {
+                    "skill": "strength",
+                    "amount": 10,
+                },
+                "2": {
+                    "skill": "hp",
+                    "skill2": "max_hp",
+                    "amount": 30,
+                },
+                "3": {
+                    "skill": "agility",
+                    "amount": 5,
+                },
+                "4": {
+                    "skill": "luck",
+                    "amount": 5,
+                }
+            }
     type_of = OBJECT_TYPES.HERO
-    color_on_board = COLOR.RED
+    color_on_board = STYLES.BOLD + COLOR.RED
 
     inventory = {
         "coins": 100,
     }
     on_fight_message = "Time to stop this creature!"
-
-    def skill_improv(self):
-        return {
-            "1": {
-                "name": "Strength",
-                "skill": self.strength,
-                "amount": 10,
-            },
-            "2": {
-                "name": "Health",
-                "skill": self.hp,
-                "skill2": self.max_hp,
-                "amount": 30,
-            },
-            "3": {
-                "name": "Agility",
-                "skill": self.agility,
-                "amount": 5,
-            },
-            "4": {
-                "name": "Luck",
-                "skill": self.luck,
-                "amount": 5,
-            }
-        }
 
     def level_up(self):
         """
@@ -75,16 +69,12 @@ class Hero(Creature):
                                      "[3] Agility + 5\n"
                                      "[4] Luck + 5\n"
                                      "Pick a number: ", 4)
-        print(self.strength)
-        for k, v in self.skill_improv().items():
-            if k == str(skill_to_improve):
-                print(v["skill"])
-                v["skill"] += v["amount"]  # TODO: TO NIE DZIAŁA!!
-                if "skill2" in v:
-                    v["skill2"] += v["amount"]
 
-        if self.exp > self.exp_to_next_level:
-            self.level_up()
+        for k, v in self.skill_improv.items():
+            if k == str(skill_to_improve):
+                self.__setattr__(v["skill"], v["amount"] + self.__getattribute__(v["skill"]))
+                if "skill2" in v:
+                    self.__setattr__(v["skill2"], v["amount"] + self.__getattribute__(v["skill2"]))
         pass
 
     def get_exp(self, exp):
@@ -94,14 +84,16 @@ class Hero(Creature):
         :return: pass
         """
         exp_to_next_level = self.exp_to_next_level - self.exp
-        if exp > exp_to_next_level:
+        if exp >= exp_to_next_level:
             exp -= exp_to_next_level
             self.level_up()
             self.get_exp(exp)
+        else:
+            self.exp += exp
         pass
 
     def start_fight_message(self):
-        cprint(f'{self.name}: {self.on_fight_message}', self.color_in_battle)
+        cprint(f'{self.name}: {self.on_fight_message}', self.color_in_battle, end_enter=1)
 
     def special_attack(self, target):
         """
@@ -111,3 +103,4 @@ class Hero(Creature):
         """
         target.hp = 0
         cprint(f'{self.name} is stupid cheater...', self.color_in_battle)
+
