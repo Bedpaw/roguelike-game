@@ -12,6 +12,11 @@ class Wall():
     field_color = COLORS.BG_COLOR.LIGHTGREY
     field_move_possible = False
 
+class River():
+    symbol_on_map = '~'
+    field_color = COLORS.BG_COLOR.BLUE
+    field_move_possible = True
+
 map_file = 'classes/Board/Map_drawing/level1_map.txt'
 # map_file2 = 'class'
 
@@ -28,6 +33,8 @@ def get_background_color(map_file_name=map_file):
                     row_of_fields.append(Field())
                 elif elem == '-':
                     row_of_fields.append(Wall())
+                elif elem == '~':
+                    row_of_fields.append(River())
             list_of_all_fields.append(row_of_fields)
         # print(full_map_list)
     return list_of_all_fields
