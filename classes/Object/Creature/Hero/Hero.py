@@ -1,12 +1,12 @@
 from classes.Object.Creature.Creature import Creature
 from macros.COLORS import *
-from utils.decorations import cprint
+from utils.decorations import cprint, ctext
 from macros import MOVES_TYPES, OBJECT_TYPES
 from utils.validation import int_input
 
 
 class Hero(Creature):
-    def __init__(self, name, symbol_on_map, position_x, position_y,
+    def __init__(self, name="Set_me_name", symbol_on_map="@", position_x=0, position_y=0,
                  strength=50,
                  hp=400,
                  max_hp=400,

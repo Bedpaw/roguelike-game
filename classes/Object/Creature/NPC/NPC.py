@@ -1,6 +1,7 @@
 from classes.Object.Creature.Monster.Monster import Monster
 from events.Battle import battle
 from macros.COLORS import *
+from macros import MOVES_TYPES
 from utils.decorations import cprint
 from utils.validation import int_input
 

@@ -1,28 +1,17 @@
-from mock.Board_mock import BoardMock
+from utils.random_utils import random_id
 
 
 class MyObject:
-    """
-    Object:
-    name:
-    symbol_on_map = "X" # items and hero CAPS, monsters lowercase
-    position_x = 1
-    position_y = 3
-    is_on_board = Boolean
-    delete_from_board()
-    create_on_board()  ????
-    """
 
-    def __init__(self, name, symbol_on_map, position_x, position_y):
+    def __init__(self, name="Set_me_name", symbol_on_map="M", position_x=-1, position_y=-1):
         self.name = name
         self.symbol_on_map = symbol_on_map
         self.position_x = position_x
         self.position_y = position_y
+        self.id = random_id()
 
-    Board = BoardMock()
     is_on_board = True
 
     def delete_from_board(self):
         self.is_on_board = False
-
 

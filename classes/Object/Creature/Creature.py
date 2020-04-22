@@ -7,9 +7,10 @@ from macros.COLORS import *
 
 
 class Creature(MyObject):
-    def __init__(self, name, symbol_on_map, position_x, position_y,
+    def __init__(self, name="Set_me_name", symbol_on_map="M", position_x=-1, position_y=-1,
                  strength=5, hp=100, max_hp=100, agility=10, luck=10,
-                 color_in_battle=STYLES.RESET, move_type=MOVES_TYPES.STAY):
+                 color_in_battle=STYLES.RESET,
+                 move_type=MOVES_TYPES.RANDOM):
 
         super().__init__(name, symbol_on_map, position_x, position_y)
         self.strength = strength
@@ -26,7 +27,8 @@ class Creature(MyObject):
         :params:any: params for move function
         :return: pass
         """
-        # while not end_move:
+
+        # Generate move vector -> example [0, 1]
         position_change_x, position_change_y = Move.run_move_function(self.move_type, params)
 
         # Calculate where would be creature after move
@@ -53,7 +55,6 @@ class Creature(MyObject):
 
         hp_left_prec = (self.hp / self.max_hp) * 100
         hp_message = f'{self.name}: {self.hp}/{self.max_hp} HP\n'
-
         if hp_left_prec >= 60:
             cprint(hp_message, COLOR.GREEN)
         elif hp_left_prec <= 30:
@@ -64,16 +65,16 @@ class Creature(MyObject):
     def attack(self, target):
         cprint(f'{self.name} attack!', self.color_in_battle)
 
-        # check for dodge
+        # Check for dodge
         if random_true(target.agility):
             cprint(f'{target.name} dodged {self.name}\'s attack!', target.color_in_battle)
 
-        # check for critical attack
+        # Check for critical attack
         elif random_true(self.luck):
             cprint(f'{self.name} critical strike with double damage!', COLOR.RED, STYLES.BOLD)
             target.hp -= 2 * self.strength
 
-        # normal attack
+        # Normal attack
         else:
             target.hp -= self.strength
         pass
