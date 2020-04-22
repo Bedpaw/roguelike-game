@@ -1,6 +1,7 @@
 from macros import OBJECT_TYPES, BATTLE_MODES
 from classes.Object.Creature.Monster.Monsters import *
-from utils import key_service
+from classes.Object.Creature.Hero.Hero import Hero
+from utils import key_service, data_manager
 import time
 from utils.decorations import cprint
 from macros.COLORS import *
@@ -13,6 +14,7 @@ class Board:
     def __init__(self, width, height, hero):
         self.width = width
         self.height = height
+        self.name = "LAS TROLLI"
         # hero
         self.hero = hero
         self.player_sign = hero.symbol_on_map
@@ -22,19 +24,23 @@ class Board:
         self.game_board_in_class = [[self.player_sign]] + [[Field()] * self.width for i in range(self.height)] + [
             [Field()]]
         self.game_board_in_class[self.pos_x][self.pos_y] = self.player_sign
+        self.load_objects_from_db()
 
-    monsters = [Troll('Wojtek', 'W', 2, 2), Arnold('Pati', 'P', 4, 4)]
-    npc = [NPC('Guard', 'S', 4, 0)]
-    # monsters = []
-    # npc = []
+    monsters = []
+    npc = []
+    # Troll('Wojtek', 'W', 2, 2), Troll('Wojtek', 'W', 8, 7),
+    # NPC('Guard', 'S', 4, 0), NPC('Strażnik Sandomierza', 'S', 8, 14)
+    def load_objects_from_db(self):
+        data_manager.load_objects_to_board('db/saves/PAWEL/RESUME_GAME/BOARDS/BOARD0', self)
+
 
     def update_board(self):
         self.make_empty_list()
         self.add_object_to_board(self.monsters)
         self.add_object_to_board(self.npc)
         self.game_board_in_class[self.pos_x][self.pos_y] = self.hero
-        self.hero.position_x = self.pos_x   # DONT TOUCH IT
-        self.hero.position_y = self.pos_y   # DONT TOUCH IT
+        self.hero.position_x = self.pos_x  # DONT TOUCH IT
+        self.hero.position_y = self.pos_y  # DONT TOUCH IT
 
     def move_monsters(self):
 
@@ -43,8 +49,8 @@ class Board:
             while not valid:
                 x, y = monster.move()
                 if self.check_move_possibility(monster, x, y):
-                    monster.position_x = y
-                    monster.position_y = x
+                    monster.position_x = x
+                    monster.position_y = y
                     valid = True
 
     def make_empty_list(self):
@@ -63,35 +69,43 @@ class Board:
         """
         # Idea for making one for for checking everything instead for loops do it by checking proper value in given caller
 
+        # hero/monster -> wall
         if positionX < 1 or positionY < 0 or positionY > self.width - 1 or positionX > self.height:
             return False
         else:
-            if caller.type_of == OBJECT_TYPES.HERO:
-
+            if isinstance(caller, Hero):  # TODO: Change to issubclass when Dwarf, Elf etc ready
+                # hero -> monster
                 for i, monster in enumerate(self.monsters):
-                    if monster.position_x == positionX and monster.position_y == positionY:
-
+                    if monster.position_y == positionY and monster.position_x == positionX:
+                        cprint(f"You attacked {monster.name}!", ERROR, start_enter=1, wait_after=1)
                         battle(caller, monster, BATTLE_MODES.IMMEDIATE_FIGHT)
                         if not monster.is_on_board:
                             del self.monsters[i]
                         return True
+                # hero -> npc
                 for i, one_npc in enumerate(self.npc):
                     if one_npc.position_x == positionX and one_npc.position_y == positionY:
-                        one_npc.on_meet(self.hero)
-                        # battle(caller, npc, BATTLE_MODES.IMMEDIATE_FIGHT)
-                        # if not monster.is_on_board:
-                        #     del self.monsters[i]
-                        return True
-            elif caller.type_of == OBJECT_TYPES.MONSTER:
-                if self.pos_x == positionX and self.pos_y == positionY:
-                    battle(self.hero, caller, BATTLE_MODES.IMMEDIATE_FIGHT)
+                        if one_npc.on_meet(self.hero):  # return True if hero start fight with NPC else False
+                            if not one_npc.is_on_board:
+                                del self.npc[i]
+                                return True
+                        return False
 
-            # monster vs npc validation
+            elif issubclass(type(caller), Monster):
+                # monster -> hero
+                if self.pos_x == positionX and self.pos_y == positionY:
+                    cprint(f'{self.hero.name} has been attacked by {caller.name}!', ERROR, start_enter=1, wait_after=1)
+                    battle(self.hero, caller, BATTLE_MODES.IMMEDIATE_FIGHT)
+                    self.monsters.remove(caller)    # Not sure if this will work with many monsters
+                    return True
+
+                # monster -> npc
+                    # monster vs npc validation
             # item in the feature(monster i hero)
             return True
 
     def get_user_choice(self):
-        valid_key = False   # change to True if key is valid AND move is possible
+        valid_key = False  # change to True if key is valid AND move is possible
         while not valid_key:
             key_pressed = key_service.key_pressed()
 
@@ -105,7 +119,7 @@ class Board:
                     valid_key = True
 
                 else:
-                    new_x_pos, new_y_pos = self.hero.move(key_pressed)  # hero.move trick to work with Y, X cords
+                    new_x_pos, new_y_pos = self.hero.move(key_pressed)  # he
 
                     if self.check_move_possibility(self.hero, new_x_pos, new_y_pos):
                         self.pos_x = new_x_pos

@@ -1,0 +1,1 @@
+{"name": "Wojtek", "symbol_on_map": "W", "position_x": 9, "position_y": 9, "id": "d907a6be1d4047fd8b0bd188eaf1d980", "strength": 10, "hp": 100, "max_hp": 100, "agility": 10, "luck": 10, "move_type": "RANDOM", "color_in_battle": "\u001b[31m", "color_on_board": "\u001b[31m", "exp": 50}
