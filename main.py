@@ -18,8 +18,20 @@ def main():
         my_board.get_user_choice()
         my_board.move_monsters()
         clear_screen()
-        print(my_board.pos_x)   # up down
-        print(my_board.pos_y)   # right left
+
+        #   TEST
+        hero = my_board.hero
+        print(f'STR: {hero.strength},'
+              f' LUCK: {hero.luck},'
+              f' AGL: {hero.agility},'              
+              f' HP: {hero.hp}/{hero.max_hp},'
+              f' Lvl: {hero.level},'
+              f' exp: {hero.exp}/{hero.exp_to_next_level}')
+        print(f'X: {my_board.pos_x}')  # up down
+        print(f'Y: {my_board.pos_y}')  # right left
+        if my_board.monsters:
+            print(f'M_X: {my_board.monsters[0].position_x}')
+            print(f'M_Y: {my_board.monsters[0].position_y}')
 
 
 if __name__ == '__main__':
