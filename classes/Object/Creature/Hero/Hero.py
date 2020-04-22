@@ -44,6 +44,7 @@ class Hero(Creature):
                     "amount": 5,
                 }
             }
+    field_color = BG_COLOR.RED
     type_of = OBJECT_TYPES.HERO
     color_on_board = STYLES.BOLD + COLOR.RED
 
