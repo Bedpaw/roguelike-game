@@ -1,14 +1,75 @@
 from classes.Game.Game import Game
 from classes.Object.Creature.Hero.Hero import Hero
+from classes.Board.GameBoard import Board
+from utils.utils import clear_screen
+from utils.data_manager import *
 
 
-def game_engine(user_choice):
-    if user_choice == 1:    # new game
-        game = Game()
-        hero = game.create_hero()   # maybe this function shouldn't be in class Game?
-    else:
-        print("IN PROGRESS")    # load game data from files
+def create_hero():
+    """
+    Create hero, chose class, name etc from user inputs
+    :return:[object] hero
+    """
+    hero = Hero("Strażnik Torunia", "@", 0, 0)  # mock
+    return hero
 
-    board = game.current_board()
 
-    # MAIN GAME LOOP HERE
+def game_engine(user_choice, player_name):
+    path_to_save_hero = f'db/saves/{player_name}/RESUME_GAME/hero.txt'
+    path_to_save_boards = f'db/saves/{player_name}/RESUME_GAME/BOARDS/BOARD'
+    if user_choice == 1:  # new game
+        hero = create_hero()
+        game = Game(player_name, hero)
+        game.create_new_board()
+
+    elif user_choice == 2:  # load game
+        hero = load_object_from_file(path_to_save_hero, Hero)  # first version
+        game = Game(player_name, hero)  # mock
+        game.create_new_board()  # mock
+        print("IN PROGRESS")
+
+    while not game.endgame:
+        board_changed = False
+        my_board = game.current_board()
+
+        while not board_changed and not game.endgame:
+
+            my_board.update_board()
+            print(8 * " " + my_board.name)  # to change
+            my_board.print_board()
+            my_board.get_user_choice()
+            my_board.move_monsters()
+            clear_screen()  # should be right before print boards
+            game.turn_counter += 1
+            #   TEST
+            save_objects_from_board(f'{path_to_save_boards}{game.current_board_index}/', my_board)
+            hero = my_board.hero  # for test shortcut
+
+            if hero.position_x == 8 and hero.position_y == 14:
+                hero.position_x = 0
+                hero.position_y = 0
+                game.next_board()
+                board_changed = True
+            elif hero.position_x == 1 and hero.position_y == 14:
+                hero.position_x = 0
+                hero.position_y = 0
+                game.previous_board()
+                board_changed = True
+
+            print(f'TURN: {game.turn_counter}')
+            print(f'STR: {hero.strength},'
+                  f' LUCK: {hero.luck},'
+                  f' AGL: {hero.agility},'
+                  f' HP: {hero.hp}/{hero.max_hp},'
+                  f' Lvl: {hero.level},'
+                  f' exp: {hero.exp}/{hero.exp_to_next_level}')
+            print(f'X: {my_board.pos_x} Y: {my_board.pos_y}')  # up down / right left
+            if my_board.monsters:
+                print(f'M_X: {my_board.monsters[0].position_x} M_Y: {my_board.monsters[0].position_y}')
+
+    # game loop broken
+    # hero is dead or game won
+    # final screen? # add to highscores
+
+
+game_engine(1, "PAWEL")
