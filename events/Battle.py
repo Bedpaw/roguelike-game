@@ -1,14 +1,12 @@
 import time
-from classes.Object.Creature.Hero.Hero import Hero
-from classes.Object.Creature.Monster.Monsters import Troll, Arnold
 from utils.decorations import cprint
+from utils.validation import int_input
 from macros import BATTLE_MODES
 from macros.COLORS import *
 
 
-def battle(hero, monster, battle_mode=BATTLE_MODES.AUTOMATE_FIGHT):
+def battle(hero, monster, battle_mode=BATTLE_MODES.IMMEDIATE_FIGHT):
     """
-
     :param hero:[object]
     :param monster:[object]
     :param battle_mode:[string]:[IMMEDIATE_FIGHT, AUTOMATE_FIGHT, MANUAL_FIGHT]
@@ -25,23 +23,20 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.AUTOMATE_FIGHT):
 
     def hero_move():
         if battle_mode == BATTLE_MODES.MANUAL_FIGHT:
-            hero_attack = None
-            while hero_attack not in [1, 2]:
-                hero_attack = int(input('[1] Attack \n'
-                                        '[2] Special Attack \n'
-                                        'What should I do master?: '))
-                if hero_attack == 1:
-                    hero.attack(monster)
-                elif hero_attack == 2:
-                    hero.special_attack(monster)
+            hero_attack = int_input('[1] Attack \n'
+                                    '[2] Special Attack \n'
+                                    'What should I do master?: ', number_of_options=2)
+            if hero_attack == 1:
+                hero.attack(monster)
+            elif hero_attack == 2:
+                hero.special_attack(monster)
         else:
             hero.attack(monster)
 
     # Battle start messages
-    cprint(f"\nBattle start! {hero.name} vs {monster.name}\n", COLOR.PURPLE)
+    cprint(f"Battle start! {hero.name} vs {monster.name}", COLOR.PURPLE, start_enter=1, end_enter=1)
     hero.start_fight_message()
     monster.start_fight_message()
-    print("")   # \n
 
     # Battle
     round_counter = 0
@@ -75,9 +70,3 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.AUTOMATE_FIGHT):
     hero.get_exp(monster.exp)
     # hero.add_items(monster.loot) TODO: to implement
     pass
-
-
-# hero = Hero("Andrzej", "X", 1, 1)
-# Arnold1 = Arnold("Arni", "O", 1, 1)
-# battle(hero, Arnold1, BATTLE_MODES.IMMEDIATE_FIGHT)
-
