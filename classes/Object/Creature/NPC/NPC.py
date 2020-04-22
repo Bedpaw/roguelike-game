@@ -1,6 +1,7 @@
 from classes.Object.Creature.Monster.Monster import Monster
 from events.Battle import battle
 from macros.COLORS import *
+from macros import MOVES_TYPES
 from utils.decorations import cprint
 from utils.validation import int_input
 
@@ -10,13 +11,33 @@ from classes.Object.Creature.Monster.Monsters import Arnold
 
 
 class NPC(Monster):
+    conversation_folder_path = 'db/conversations/'
+
+    def __init__(self, name="Set_me_name", symbol_on_map="M", position_x=-1, position_y=-1,
+                 strength=100,
+                 hp=200,
+                 max_hp=200,
+                 agility=10,
+                 luck=0,
+                 color_in_battle=COLOR.RED,
+                 move_type=MOVES_TYPES.STAY,
+                 color_on_board=COLOR.PURPLE,
+                 conversation_file_name='example1.txt',
+                 exp=300,
+
+                 ):
+        super().__init__(name, symbol_on_map, position_x, position_y,
+                         strength, hp, max_hp, agility, luck)
+
+        self.color_in_battle = color_in_battle
+        self.color_on_board = color_on_board
+        self.move_type = move_type
+        self.exp = exp
+        self.start_dialog = self.conversation_folder_path + conversation_file_name
+        self.dialogs_path = [self.start_dialog]
+
     in_conversation_color = COLOR.PURPLE
-
-    conversation_folder_path = '../../../../db/conversations/'
-    start_dialog = conversation_folder_path + 'example1.txt'
-    __dialog_index = 0
-    __dialogs_path = [start_dialog]
-
+    dialog_index = 0
     on_die_message = "Stop, you won, you can pass..."
     on_fight_message = "I warned you..."
 
@@ -27,8 +48,7 @@ class NPC(Monster):
         :return:pass
         """
         conversation_effects = self.__conversation(self.__dialog_path(), hero)
-        self.__do_after_conversation(conversation_effects, hero)
-        pass
+        return self.__do_after_conversation(conversation_effects, hero)
 
     def __dialog_path(self):
         """
@@ -36,7 +56,7 @@ class NPC(Monster):
         This function should be overwritten in child class if you want to change dialog path despite of some conditions
         :return:[list] indentation_store
         """
-        dialog_path = self.__dialogs_path[self.__dialog_index]
+        dialog_path = self.dialogs_path[self.dialog_index]
         return read_dialog_from_file(dialog_path)
 
     def __do_after_conversation(self, func, hero):
@@ -48,9 +68,10 @@ class NPC(Monster):
         """
         if func == "BATTLE":
             battle(hero, self)
+            return True
         if func == "TRADE":
             self.__trade(hero)
-        pass
+        return False
 
     def __trade(self, hero):
         cprint(f'{self.name} that\'s my best items', COLOR.WHITE, BG_COLOR.GREEN)
@@ -100,7 +121,8 @@ class NPC(Monster):
             # HEADERS
             elif i % 2 == 0:
                 number_of_options = len(next_header_options)  # input validation
-                user_choice = int_input(f'{hero.color_on_board}{STYLES.BOLD}{hero.name}: ', number_of_options)
+                user_choice = int_input(f'{hero.color_on_board}{STYLES.BOLD}{hero.name}: {STYLES.RESET}',
+                                        number_of_options)
 
                 # check if user pick function ending conversation
                 if user_choice - 1 in ends_index:
@@ -153,6 +175,7 @@ def read_dialog_from_file(text_file):
                             etc...
                             ]
     """
+
     def longest_indentation_in_line():
         counter = 0
         for char in line:
@@ -181,10 +204,9 @@ def read_dialog_from_file(text_file):
             indentation_store[indentation_index].append(line)
         return indentation_store
 
+# path = '../../../../db/conversations/example1.txt'
+# guard = NPC("Guard", "A", 1, 1)
+# monster = Arnold("Guard", "A", 2, 2)
+# hero = Hero("Andrzej", "A", 3, 4)
 
-path = '../../../../db/conversations/example1.txt'
-guard = NPC("Guard", "A", 1, 1)
-monster = Arnold("Guard", "A", 2, 2)
-hero = Hero("Andrzej", "A", 3, 4)
-
-guard.on_meet(hero)
+# guard.on_meet(hero)

@@ -1,6 +1,4 @@
-
-
-
+from classes.Object.Item.Item import Item
 
 
 class gloves(item):

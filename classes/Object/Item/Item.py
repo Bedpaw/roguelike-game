@@ -6,11 +6,14 @@ from macros.COLORS import *
 
 class Item:
 
-    def __init__(self, is_on_board, positionX, positionY, symbol):
+    def __init__(self, is_on_board, positionX, positionY, symbol, exp, hp, strength):
         self.is_on_board = is_on_board
         self.positionX = positionX
         self.positionY = positionY
         self.symbol = symbol
+        self.exp = exp
+        self.hp = hp
+        self.strength = strength
 
 
     """
@@ -21,6 +24,10 @@ class Item:
     take_item
     delete_item
     symbol = *
+    exp = how much exp is giving to hero
+    hp = how much hp is giving
+    strength = how much strength is giving
     """
 
-    def is_on_board
+    def is_on_board(self):
+

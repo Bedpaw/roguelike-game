@@ -1,4 +1,5 @@
 import random
+import uuid
 
 
 def random_true(chance):
@@ -10,3 +11,7 @@ def random_true(chance):
         return True
     else:
         return False
+
+
+def random_id():
+    return uuid.uuid4().hex

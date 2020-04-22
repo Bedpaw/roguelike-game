@@ -3,10 +3,10 @@ from macros import MOVES_TYPES
 
 
 class Troll(Monster):
-    strength = 20
+    strength = 40
     max_hp = 200
     hp = 200
-    move_type = MOVES_TYPES.STAY
+    move_type = MOVES_TYPES.RANDOM_DIAGONAL
     exp = 100
     loot = {
         "coins": 150,
@@ -15,8 +15,9 @@ class Troll(Monster):
 
 
 class Arnold(Monster):
-    strength = 20
-    exp = 10000
+    move_type = MOVES_TYPES.RANDOM
+    strength = 40
+    exp = 1000
     agility = 50
     luck = 100
 
