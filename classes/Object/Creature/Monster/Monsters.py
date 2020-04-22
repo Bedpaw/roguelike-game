@@ -14,6 +14,7 @@ class Troll(Monster):
         "troll_machete": 1
     }
     field_color = BG_COLOR.BLUE
+    field_move_possible = True
 
 
 class Arnold(Monster):
@@ -22,6 +23,7 @@ class Arnold(Monster):
     agility = 50
     luck = 100
     field_color = BG_COLOR.BLUE
+    field_move_possible = True
 
     on_die_message = "I will be back"
 

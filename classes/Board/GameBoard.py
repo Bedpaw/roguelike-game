@@ -49,8 +49,8 @@ class Board:
             while not valid:
                 x, y = monster.move()
                 if self.check_move_possibility(monster, x, y):
-                    monster.position_x = y
-                    monster.position_y = x
+                    monster.position_x = x
+                    monster.position_y = y
                     valid = True
 
             
