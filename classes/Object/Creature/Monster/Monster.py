@@ -15,7 +15,13 @@ class Monster(Creature):
                  color_in_battle=COLOR.RED,
                  move_type=MOVES_TYPES.RANDOM,
                  color_on_board=COLOR.RED,
-                 exp=50,):
+                 exp=50,
+                 loot=None,
+                 field_color=BG_COLOR.BLUE,
+                 field_move_possible=True,
+                 on_fight_message="You have no chance with me! ",
+                 on_die_message="Argghr..."
+                 ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility, luck)
 
@@ -23,15 +29,14 @@ class Monster(Creature):
         self.color_on_board = color_on_board
         self.move_type = move_type
         self.exp = exp
+        if loot is None:
+            self.loot = {}
+        self.field_color = field_color
+        self.field_move_possible = field_move_possible
+        self.on_fight_message = on_fight_message
+        self.on_die_message = on_die_message
 
-    type_of = OBJECT_TYPES.MONSTER   # probably to delete
-    on_fight_message = "You have no chance with me! "
-    on_die_message = "Argghr..."
-
-    exp = 30
-    loot = {
-        "coins": 10
-    }
+    type_of = OBJECT_TYPES.MONSTER  # probably to delete
 
     def on_defeat(self):
         cprint(f'{self.name} has been defeated!', ERROR)

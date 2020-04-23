@@ -1,32 +1,30 @@
 from classes.Game.Game import Game
-from classes.Object.Creature.Hero.Hero import Hero
-from classes.Board.GameBoard import Board
 from utils.utils import clear_screen
 from utils.data_manager import *
+from games_config.new_game_creator import create_new_game
+from classes.Object.Creature.Hero.Hero import Hero      # eval use it!!!
 
 
-def create_hero():
-    """
-    Create hero, chose class, name etc from user inputs
-    :return:[object] hero
-    """
-    hero = Hero("Strażnik Torunia", "@", 0, 0)  # mock
-    return hero
+def load_game(player_name):
+    game_name = get_game_name(player_name)
+    game_difficulty_level, board_index, hero_class = read_game_config(player_name)
+    path_with_hero_data = f'db/saves/{player_name}/{game_name}/hero.txt'
+
+    hero = load_object_from_file(path_with_hero_data, eval(hero_class))
+    game = Game(player_name=player_name,
+                game_name=game_name,
+                difficulty_level=game_difficulty_level,
+                start_board_index=board_index,
+                hero=hero)
+    load_boards_to_game(game)
+    return game
 
 
 def game_engine(user_choice, player_name):
-    path_to_save_hero = f'db/saves/{player_name}/RESUME_GAME/hero.txt'
-    path_to_save_boards = f'db/saves/{player_name}/RESUME_GAME/BOARDS/BOARD'
-    if user_choice == 1:  # new game
-        hero = create_hero()
-        game = Game(player_name, hero)
-        game.create_new_board()
-
-    elif user_choice == 2:  # load game
-        hero = load_object_from_file(path_to_save_hero, Hero)  # first version
-        game = Game(player_name, hero)  # mock
-        game.create_new_board()  # mock
-        print("IN PROGRESS")
+    if user_choice == 1:
+        game = create_new_game(player_name)
+    elif user_choice == 2:
+        game = load_game(player_name)
 
     while not game.endgame:
         board_changed = False
@@ -41,8 +39,9 @@ def game_engine(user_choice, player_name):
             my_board.move_monsters()
             clear_screen()  # should be right before print boards
             game.turn_counter += 1
+
             #   TEST
-            save_objects_from_board(f'{path_to_save_boards}{game.current_board_index}/', my_board)
+            #save_objects_from_board(f'{path_to_save_boards}{game.current_board_index}/', my_board)
             hero = my_board.hero  # for test shortcut
 
             if hero.position_x == 8 and hero.position_y == 14:
@@ -68,8 +67,8 @@ def game_engine(user_choice, player_name):
                 print(f'M_X: {my_board.monsters[0].position_x} M_Y: {my_board.monsters[0].position_y}')
 
     # game loop broken
-    # hero is dead or game won
+    # hero is dead or game won2
     # final screen? # add to highscores
 
 
-game_engine(1, "PAWEL")
+game_engine(2, "PAWEL")

@@ -1,5 +1,6 @@
 from classes.Object.Creature.Monster.Monster import Monster
 from macros import MOVES_TYPES
+from macros.COLORS import *
 
 
 class Troll(Monster):
@@ -10,8 +11,9 @@ class Troll(Monster):
     exp = 100
     loot = {
         "coins": 150,
-        "troll_machete": 1
     }
+    field_color = BG_COLOR.BLUE
+    field_move_possible = True
 
 
 class Arnold(Monster):
@@ -20,6 +22,8 @@ class Arnold(Monster):
     exp = 1000
     agility = 50
     luck = 100
+    field_color = BG_COLOR.BLUE
+    field_move_possible = True
 
     on_die_message = "I will be back"
 

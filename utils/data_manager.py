@@ -1,6 +1,5 @@
-from classes.Object.Creature.Hero.Hero import *
-from classes.Object.Creature.Monster.Monster import *
-from classes.Object.Creature.Monster.Monsters import *
+from games_config.board_factory import create_new_board
+from classes.Object.Creature.Monster.Monsters import Troll
 from classes.Object.Creature.NPC.NPC import NPC
 import os
 import json
@@ -37,12 +36,15 @@ def save_object_to_file(file_path, obj):
 
 def load_objects_to_board(folder_path, board):
     for filename in os.listdir(folder_path):
+
         if filename.startswith("MONSTER"):
             class_name = get_string_between_symbol("$", filename)
             obj = load_object_from_file(folder_path + "/" + filename, eval(class_name))
             board.monsters.append(obj)
-        if filename.startswith("NPC"):
-            obj = load_object_from_file(folder_path + "/" + filename, NPC)
+
+        elif filename.startswith("NPC"):
+            class_name = get_string_between_symbol("$", filename)
+            obj = load_object_from_file(folder_path + "/" + filename, eval(class_name))
             board.npc.append(obj)
 
 
@@ -51,6 +53,14 @@ def save_objects_from_board(file_path, board):
         save_object_to_file(f'{file_path}MONSTER${monster.__class__.__name__}${monster.id}.txt', monster)
     for npc in board.npc:
         save_object_to_file(f'{file_path}NPC${npc.__class__.__name__}${npc.id}.txt', npc)
+
+
+def load_boards_to_game(game):
+    board_names_list = os.listdir(game.boards_save_path)
+    for i, board_name in enumerate(board_names_list):
+        board = create_new_board(game, board_index=i, loading=True)
+        load_objects_to_board(f'{game.boards_save_path}/{board_name}', board)
+        game.boards.append(board)
 
 
 def get_string_between_symbol(symbol, text):
@@ -71,3 +81,17 @@ def get_string_between_symbol(symbol, text):
             take_letter = not take_letter
     return string_to_return[:-1]     # Remove symbol at end
 
+<<<<<<< HEAD
+=======
+
+def read_game_config(player_name):
+    game_name = get_game_name(player_name)
+    with open(f'db/saves/{player_name}/{game_name}/game_config.txt', 'r') as f:
+        list_of_elements = f.readlines()[1].split(', ')
+        difficulty_level, board_index, hero_class = list_of_elements
+        return int(difficulty_level), int(board_index), hero_class
+
+
+def get_game_name(player_name):
+    return os.listdir(f'db/saves/{player_name}')[0]
+>>>>>>> 451540affe45d1a8d20920395d52563861d1f187

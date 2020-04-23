@@ -6,7 +6,7 @@ from utils.validation import int_input
 
 
 class Hero(Creature):
-    def __init__(self, name="Set_me_name", symbol_on_map="@", position_x=0, position_y=0,
+    def __init__(self, name="Set_me_name", symbol_on_map="@", position_x=-1, position_y=-1,
                  strength=50,
                  hp=400,
                  max_hp=400,
@@ -44,6 +44,7 @@ class Hero(Creature):
                     "amount": 5,
                 }
             }
+    field_color = BG_COLOR.RED
     type_of = OBJECT_TYPES.HERO
     color_on_board = STYLES.BOLD + COLOR.RED
 
@@ -93,7 +94,7 @@ class Hero(Creature):
         pass
 
     def start_fight_message(self):
-        cprint(f'{self.name}: {self.on_fight_message}', self.color_in_battle, end_enter=1)
+        cprint(f'{self.name}: {self.on_fight_message}', self.color_in_battle)
 
     def special_attack(self, target):
         """
