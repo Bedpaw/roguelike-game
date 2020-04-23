@@ -59,6 +59,11 @@ class Treasure(MyObject):
         self.which_item_in_chest(treasure)
 
     def open_treasure(self, hero):
+        """
+        opening chest, choosing item in it
+        this return is giving info to board is field is empty or not
+        """
+
         if self.is_locked:
             cprint("You have found closed chest, do you want to look into? ", INFO)
             answer = int_input("[1] Yes\n[2] No\n", 2)
@@ -66,35 +71,25 @@ class Treasure(MyObject):
                 if hero.is_in_inventory("key"):
                     print(f'You took from chest {self.loot[0].name}')
                     hero.inventory[self.loot[0].item_type] = self.loot[0]
+                    return True
                 else:
                     print(f"You don't have key in your inventory")
+                    return False
             else:
                 cprint("You left closed chest on it\'s place")
-
+                return False
         else:
             cprint("You have found a chest and you've opened it", INFO)
             print(f'You took from chest {self.loot[0].name}')
             hero.inventory[self.loot[0].item_type] = self.loot[0]
+            return True
 
-    """
-    is_on_board = T/F
-    positionX
-    positionY
-    is_locked
-    message
-    """
+
     def which_item_in_chest(self, treasure): # losuje item z dostępnych w grze
         self.loot.append(choice(treasure))
 
 
 
-    def del_treasure(self):
-        is_on_board = False
 
-
-
-
-
-# wchodzi na skrzynke = message (znalazles/zamknieta) =
-chest = Treasure("chest", is_locked=True)
-chest.open_treasure(hero)
+# chest = Treasure("chest", is_locked=True) tworze obiekt z wybranym parametrem
+# chest.open_treasure(hero) wywoluje funkcje z obiektu z parametrem hero
