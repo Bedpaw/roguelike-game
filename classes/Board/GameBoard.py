@@ -1,53 +1,31 @@
-from macros import OBJECT_TYPES, BATTLE_MODES
-from classes.Object.Creature.Monster.Monsters import *
-from utils import key_service, data_manager
-from macros.COLORS import *
-from events.Battle import battle
 from classes.Board.Fields import *
-from utils.decorations import cprint
-from classes.Object.Creature.NPC.NPC import NPC
-# from classes.Board.Map_Draw.test_draw import get_background_color
-import time
+import copy
 from macros import OBJECT_TYPES, BATTLE_MODES
-from classes.Object.Creature.Monster.Monsters import *
-from classes.Object.Creature.Hero.Hero import Hero
-from utils import key_service, data_manager
-import time
+from utils import key_service
 from utils.decorations import cprint
 from macros.COLORS import *
 from events.Battle import battle
 from classes.Board.Fields import Field
-from classes.Object.Creature.NPC.NPC import NPC
 
 
 class Board:
-    def __init__(self, width, height, hero):
+    def __init__(self, board_map, width, height, hero):
         self.width = width
         self.height = height
+        self.board_map = board_map
         # hero
         self.hero = hero
         self.player_sign = hero.symbol_on_map
         self.pos_x = hero.position_x
         self.pos_y = hero.position_y
-        self.load_objects_from_db()
-        
-
         # --------------------------------
-        self.game_board_in_class = [[self.hero]] + get_background_color('classes/Board/Map_drawing/level1_map.txt') + [
-            [Field()]]
-
+        self.game_board_in_class = [[Field()]] + copy.deepcopy(self.board_map) + [[Field()]]
         self.game_board_in_class[self.pos_x][self.pos_y] = self.hero
 
     name = 'stringtest'
-
-
-    # monsters = [Troll('Wojtek', 'W', 3, 3), Arnold('Pati', 'P', 5, 4)]
     monsters = []
     npc = []
-    # npc = [NPC('Guard', 'S', 4, 0)]
-
-    def load_objects_from_db(self):
-        data_manager.load_objects_to_board('db/saves/PAWEL/RESUME_GAME/BOARDS/BOARD0', self)
+    items = []
 
     def update_board(self):
         self.make_empty_list()
@@ -58,7 +36,6 @@ class Board:
         self.hero.position_y = self.pos_y
 
     def move_monsters(self):
-
         for monster in self.monsters:
             valid = False
             while not valid:
@@ -68,10 +45,9 @@ class Board:
                     monster.position_y = y
                     valid = True
 
-
     def make_empty_list(self):
-        self.game_board_in_class = [[Field()]] + get_background_color('classes/Board/Map_drawing/level1_map.txt') + [
-            [Field()]]
+        clear_list = copy.deepcopy(self.board_map)
+        self.game_board_in_class = [[Field()]] + clear_list + [[Field()]]
 
     def add_object_to_board(self, object_items):
         for item in object_items:
