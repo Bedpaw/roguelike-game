@@ -111,7 +111,6 @@ class Board:
 
                 else:
                     new_x_pos, new_y_pos = self.hero.move(key_pressed)  # hero.move trick to work with Y, X cords
-
                     if self.check_move_possibility(self.hero, new_x_pos, new_y_pos):
                         self.pos_x = new_x_pos
                         self.pos_y = new_y_pos

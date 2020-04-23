@@ -11,7 +11,6 @@ class Troll(Monster):
     exp = 100
     loot = {
         "coins": 150,
-        "troll_machete": 1
     }
     field_color = BG_COLOR.BLUE
     field_move_possible = True
