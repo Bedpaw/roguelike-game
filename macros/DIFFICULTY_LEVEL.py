@@ -1,0 +1,4 @@
+IMPOSSIBLE = 2
+HARD = 1.2
+NORMAL = 1
+EASY = 0.8
