@@ -3,10 +3,10 @@ from classes.Board.GameBoard import Board
 from classes.Board.Fields import *
 
 
-def create_new_board(board_index, hero):
+def create_new_board(game, board_index, loading=False):
     map_file = f'games_config/Map_drawing/level{board_index}_map.txt'
 
-    def get_list_of_all_fields(map_file_name=map_file):
+    def get_map(map_file_name=map_file):
         with open(map_file_name, 'r') as f:
             full_map = f.readlines()
             full_map_list = [list(item.strip()) for item in full_map]
