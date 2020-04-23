@@ -1,0 +1,40 @@
+from games_config.Monsters import *
+from classes.Board.GameBoard import Board
+from classes.Board.Fields import *
+
+
+def create_new_board(board_index, hero):
+    map_file = f'games_config/Map_drawing/level{board_index}_map.txt'
+
+    def get_list_of_all_fields(map_file_name=map_file):
+        with open(map_file_name, 'r') as f:
+            full_map = f.readlines()
+            full_map_list = [list(item.strip()) for item in full_map]
+            # print(full_map_list)
+            list_of_all_fields = []
+            for row in full_map_list:
+                row_of_fields = []
+                for i, elem in enumerate(row):
+                    if elem == '0':
+                        row_of_fields.append(Field())
+                    elif elem == '-':
+                        row_of_fields.append(Wall())
+                    elif elem == '~':
+                        row_of_fields.append(River())
+                list_of_all_fields.append(row_of_fields)
+            # print(full_map_list)
+        return list_of_all_fields
+
+    list_of_all_fields = get_list_of_all_fields()
+    BOARD_HIGH = len(list_of_all_fields)
+    BOARD_WIDTH = len(list_of_all_fields[2])
+    board = Board(BOARD_WIDTH, BOARD_HIGH, hero)
+
+    board.monsters = [TROLL, TROLL, SNAKE, GIANT]
+    board.npc = []
+    board.items = []
+
+    return board
+
+
+board = create_new_board(0, )
