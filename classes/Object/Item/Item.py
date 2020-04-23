@@ -36,5 +36,5 @@ class Treasure(MyObject):
     is_locked
     message
     """
-    def which_item_in(self): # losuje item z dostępnych
+    def which_item_in(self): # losuje item z dostępnych w grze
         pass
