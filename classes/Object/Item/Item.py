@@ -2,33 +2,80 @@ from classes.Object.Object import MyObject
 from utils.decorations import cprint
 from macros import OBJECT_TYPES
 from macros.COLORS import *
-from random import random
+from random import *
+from classes.Object.Creature.Hero.Hero import Hero
+from utils.validation import int_input
 
+hero = Hero(name="Franek")
 
 class Item():
 
-    def __init__(self, name, hp, strength):
+    def __init__(self, item_type="sword", name="set_name", hp=0, max_hp=0, strength=0, agility=0, luck=0):
+        self.item_type = item_type
         self.name = name
         self.hp = hp
+        self.max_hp = max_hp
         self.strength = strength
+        self.agility = agility
+        self.luck = luck
 
-    """
-    take_item
-    hp = how much hp is giving
-    strength = how much strength is giving
-    """
 
+    def add_stats(self, hero):
+        hero.strength += self.strength
+        hero.hp += self.hp
+        hero.max_hp += self.max_hp
+        hero.agility += self.agility
+        hero.luck += self.luck
+
+    def add_stats(self, hero):
+        hero.strength -= self.strength
+        hero.hp -= self.hp
+        hero.max_hp -= self.max_hp
+        hero.agility -= self.agility
+        hero.luck -= self.luck
+
+
+gloves = Item(item_type="gloves", name="Magic gloves", agility=5) # ADŻILITI hue hue
+helmet = Item(item_type="helmet", name="Golden helmet", strength=10)
+sword = Item(item_type="sword", name="Sword of Goblins", strength=20)
+armor = Item(item_type="armor", name="King Gordon's armor", strength=25)
+belt = Item(item_type="belf", name="Candy pinky belt", strength=5)
+shield = Item(item_type="shield", name="", agility=5)
+healing_potion = Item(item_type="healing_potion", name="Gummibear potion", max_hp=100)
+mana = Item(item_type="mana", name="Papa smurf mana", luck=10)
+key = Item(item_type="key", name="")
+
+treasure = [gloves, helmet, sword, armor, belt, healing_potion, mana, key]
 
 class Treasure(MyObject):
 
-    message_in_field = cprint(f"You have found {MyObject.__name__}")
-    is_locked = ""
-    positionX = 1
-    positionY = 1
+    def __init__(self, name="Set_me_name", symbol_on_map="$", position_x=-1, position_y=-1, is_locked=False,
+                 message_in_field=""):
 
-    is_on_board = True
+        super().__init__(name, symbol_on_map, position_x, position_y)
+        self.message_in_field = message_in_field
+        self.is_locked = is_locked
+        self.loot = []
+        self.which_item_in_chest(treasure)
 
-    pass
+    def open_treasure(self, hero):
+        if self.is_locked:
+            cprint("You have found closed chest, do you want to look into? ", INFO)
+            answer = int_input("[1] Yes\n[2] No\n", 2)
+            if answer == 1:
+                if hero.is_in_inventory("key"):
+                    print(f'You took from chest {self.loot[0].name}')
+                    hero.inventory[self.loot[0].item_type] = self.loot[0]
+                else:
+                    print(f"You don't have key in your inventory")
+            else:
+                cprint("You left closed chest on it\'s place")
+
+        else:
+            cprint("You have found a chest and you've opened it", INFO)
+            print(f'You took from chest {self.loot[0].name}')
+            hero.inventory[self.loot[0].item_type] = self.loot[0]
+
     """
     is_on_board = T/F
     positionX
@@ -36,5 +83,18 @@ class Treasure(MyObject):
     is_locked
     message
     """
-    def which_item_in(self): # losuje item z dostępnych w grze
-        pass
+    def which_item_in_chest(self, treasure): # losuje item z dostępnych w grze
+        self.loot.append(choice(treasure))
+
+
+
+    def del_treasure(self):
+        is_on_board = False
+
+
+
+
+
+# wchodzi na skrzynke = message (znalazles/zamknieta) =
+chest = Treasure("chest", is_locked=True)
+chest.open_treasure(hero)

@@ -1,9 +1,6 @@
 from classes.Object.Item.Item import Item
 
 
-class gloves(Item):
-
-    pass
 
 class helmet(Item):
     pass
