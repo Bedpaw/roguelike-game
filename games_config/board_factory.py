@@ -25,16 +25,19 @@ def create_new_board(game, board_index, loading=False):
             # print(full_map_list)
         return list_of_all_fields
 
-    list_of_all_fields = get_list_of_all_fields()
-    BOARD_HIGH = len(list_of_all_fields)
-    BOARD_WIDTH = len(list_of_all_fields[2])
-    board = Board(BOARD_WIDTH, BOARD_HIGH, hero)
+    board_map = get_map()
+    board_height = len(board_map)
+    board_width = len(board_map[2])
 
-    board.monsters = [TROLL, TROLL, SNAKE, GIANT]
-    board.npc = []
-    board.items = []
+    board = Board(board_map=board_map,
+                  width=board_width,
+                  height=board_height,
+                  hero=game.hero)
+    if not loading:
+        pass
 
+    # # tu jakaś funkcja, która to poukłada,
+    # board.monsters = [TROLL, TROLL, SNAKE, GIANT]
+    # board.npc = []
+    # board.items = []
     return board
-
-
-board = create_new_board(0, )
