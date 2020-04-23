@@ -1,6 +1,5 @@
-from classes.Object.Creature.Hero.Hero import *
-from classes.Object.Creature.Monster.Monster import *
-from classes.Object.Creature.Monster.Monsters import *
+from games_config.board_factory import create_new_board
+from classes.Object.Creature.Monster.Monsters import Troll
 from classes.Object.Creature.NPC.NPC import NPC
 import os
 import json
