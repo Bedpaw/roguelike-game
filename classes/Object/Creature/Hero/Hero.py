@@ -50,7 +50,8 @@ class Hero(Creature):
 
     inventory = {
         "coins": 100,
-        "key": True
+        "key": True,
+        "gloves": "Magic gloves"
     }
     on_fight_message = "Time to stop this creature!"
 

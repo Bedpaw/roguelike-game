@@ -20,32 +20,74 @@ class Item():
         self.luck = luck
 
 
-    def add_stats(self, hero):
+    def add_power(self, hero):
         hero.strength += self.strength
         hero.hp += self.hp
         hero.max_hp += self.max_hp
         hero.agility += self.agility
         hero.luck += self.luck
 
-    def add_stats(self, hero):
+    def del_power(self, hero):
         hero.strength -= self.strength
         hero.hp -= self.hp
         hero.max_hp -= self.max_hp
         hero.agility -= self.agility
         hero.luck -= self.luck
 
+    @classmethod
+    def gloves(cls):
+        return cls(item_type="gloves", name="Magic gloves", agility=5)
 
-gloves = Item(item_type="gloves", name="Magic gloves", agility=5) # ADŻILITI hue hue
-helmet = Item(item_type="helmet", name="Golden helmet", strength=10)
-sword = Item(item_type="sword", name="Sword of Goblins", strength=20)
-armor = Item(item_type="armor", name="King Gordon's armor", strength=25)
-belt = Item(item_type="belf", name="Candy pinky belt", strength=5)
-shield = Item(item_type="shield", name="", agility=5)
-healing_potion = Item(item_type="healing_potion", name="Gummibear potion", max_hp=100)
-mana = Item(item_type="mana", name="Papa smurf mana", luck=10)
-key = Item(item_type="key", name="")
+    @classmethod
+    def helmet(cls):
+        return cls(item_type="helmet", name="Golden helmet", strength=10)
 
-treasure = [gloves, helmet, sword, armor, belt, healing_potion, mana, key]
+    @classmethod
+    def sword(cls):
+        return cls(item_type="sword", name="Sword of Goblins", strength=20)
+
+    @classmethod
+    def armor(cls):
+        return cls(item_type="armor", name="King Gordon's armor", strength=25)
+
+    @classmethod
+    def belt(cls):
+        return cls(item_type="belf", name="Candy pinky belt", strength=5)
+
+    @classmethod
+    def shield(cls):
+        return cls(item_type="shield", name="", agility=5)
+
+    @classmethod
+    def healing_potion(cls):
+        return cls(item_type="healing_potion", name="Gummibear potion", max_hp=100)
+
+    @classmethod
+    def mana(cls):
+        cls(item_type="mana", name="Papa smurf mana", luck=10)
+
+    @classmethod
+    def key(cls):
+        return cls(item_type="key", name="")
+
+    @classmethod
+    def coins(cls):
+        cls(item_type="coins", name="Golden coins")
+
+    def add_to_inventory(self,hero):
+        pass #TODO
+
+
+treasure = [Item.gloves(), #TODO stworzyć róźne warianty tych itemów
+            Item.helmet(),
+            Item.sword(),
+            Item.armor(),
+            Item.belt(),
+            Item.healing_potion(),
+            Item.mana(),
+            Item.key()
+            Item.coins()
+            ]
 
 class Treasure(MyObject):
 
@@ -55,8 +97,7 @@ class Treasure(MyObject):
         super().__init__(name, symbol_on_map, position_x, position_y)
         self.message_in_field = message_in_field
         self.is_locked = is_locked
-        self.loot = []
-        self.which_item_in_chest(treasure)
+
 
     def open_treasure(self, hero):
         """
@@ -69,8 +110,17 @@ class Treasure(MyObject):
             answer = int_input("[1] Yes\n[2] No\n", 2)
             if answer == 1:
                 if hero.is_in_inventory("key"):
-                    print(f'You took from chest {self.loot[0].name}')
-                    hero.inventory[self.loot[0].item_type] = self.loot[0]
+                    loot = self.which_item_in_chest(treasure)
+                    if loot[0].item_type in hero.inventory:
+                        if "coins" in hero.inventory:
+                            hero.inventory["coins"] += 100
+                        else:
+                            hero.inventory["coins"] = 100
+                        print(f'You have gain 100 coins!')
+
+                    else:
+                        print(f'You took from chest {loot[0].name}')
+                        hero.inventory[loot[0].item_type] = loot[0]
                     return True
                 else:
                     print(f"You don't have key in your inventory")
@@ -86,10 +136,17 @@ class Treasure(MyObject):
 
 
     def which_item_in_chest(self, treasure): # losuje item z dostępnych w grze
-        self.loot.append(choice(treasure))
+        loot = []
+        loot.append(choice(treasure))
+        return loot
 
 
+    def if_in_inventory(self):
+        pass #TODO
+
+    def add_to_inventory(self):
+        pass #TODO
 
 
-# chest = Treasure("chest", is_locked=True) tworze obiekt z wybranym parametrem
-# chest.open_treasure(hero) wywoluje funkcje z obiektu z parametrem hero
+chest = Treasure("chest", is_locked=True) #tworze obiekt z wybranym parametrem
+chest.open_treasure(hero) #wywoluje funkcje z obiektu z parametrem hero

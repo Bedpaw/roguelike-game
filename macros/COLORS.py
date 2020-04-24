@@ -32,7 +32,7 @@ class COLOR:
     BROWN = ""
     DARKGREEN = ''
 
-cprint("ELOELOELO",COLOR.BROWN)
+# cprint("ELOELOELO",COLOR.BROWN)
 # cprint("ELOELOELO",COLOR.ORANGE)
 
 class BG_COLOR:

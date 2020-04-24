@@ -10,7 +10,9 @@ def run_main_menu(player_name):
 
     cprint(f'Welcome {player_name}!\n', COLOR.YELLOW)
     print("[1] PLAY NEW GAME\n"
-          "[2] LOAD GAME\n")
+          "[2] LOAD GAME\n"
+          "[3] ABOUT US\n" #TODO PATI
+          "[4] HIGH SCORES\n") # maybe from db some stats, how many monsters, level, name, type of hero
 
     user_choice = int(input("What do you want to do today?"))
 
@@ -18,9 +20,3 @@ def run_main_menu(player_name):
     # game_engine(user_choice, player_name)
 
 
-def welcome_image():
-    with open ("default.txt", "r") as f:
-        for row in f:
-            cprint((row[:-1]), BG_COLOR.WHITE, COLOR.DARKGREY, STYLES.BOLD)
-
-welcome_image()
