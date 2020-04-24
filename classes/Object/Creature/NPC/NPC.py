@@ -1,6 +1,7 @@
 from classes.Object.Creature.Monster.Monster import Monster
 from events.Battle import battle
 from macros.COLORS import *
+from macros import OBJECT_TYPES
 from macros import MOVES_TYPES
 from utils.decorations import cprint
 from utils.validation import int_input
@@ -42,6 +43,7 @@ class NPC(Monster):
     on_fight_message = "I warned you..."
     field_color = BG_COLOR.BLUE
     field_move_possible = True
+    NPC_type = OBJECT_TYPES.NPC
     # message_in_field -> wiadomosc do printowania z danego obiektu po ruchu hero
     def on_meet(self, hero):
         """

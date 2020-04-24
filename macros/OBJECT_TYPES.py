@@ -1,2 +1,3 @@
 HERO = "HERO"
 MONSTER = "MONSTER"
+NPC = 'NPC'

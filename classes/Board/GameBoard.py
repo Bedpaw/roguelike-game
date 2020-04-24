@@ -6,10 +6,16 @@ from utils.decorations import cprint
 from macros.COLORS import *
 from events.Battle import battle
 from classes.Board.Fields import Field
+from classes.Object.Creature.Hero.Hero import Hero
+from classes.Object.Creature.NPC.NPC import NPC
+from classes.Object.Creature.Monster.Monster import Monster
+
+import time
 
 
 class Board:
-    def __init__(self, board_map, width, height, hero):
+    def __init__(self, game, board_map, width, height, hero):
+        self.game = game
         self.width = width
         self.height = height
         self.board_map = board_map
@@ -21,11 +27,10 @@ class Board:
         # --------------------------------
         self.game_board_in_class = [[Field()]] + copy.deepcopy(self.board_map) + [[Field()]]
         self.game_board_in_class[self.pos_x][self.pos_y] = self.hero
-
-    name = 'stringtest'
-    monsters = []
-    npc = []
-    items = []
+        self.name = "Mongolscy przemytnicy rzeżuchy"
+        self.monsters = []
+        self.npc = []
+        self.treasures = []
 
     def update_board(self):
         self.make_empty_list()
@@ -50,8 +55,8 @@ class Board:
         self.game_board_in_class = [[Field()]] + clear_list + [[Field()]]
 
     def add_object_to_board(self, object_items):
-        for item in object_items:
-            self.game_board_in_class[item.position_x][item.position_y] = item
+        for object_item in object_items:
+            self.game_board_in_class[object_item.position_x][object_item.position_y] = object_item
 
     def check_move_possibility(self, caller, positionX, positionY):
         """
@@ -61,13 +66,13 @@ class Board:
         :return: True if move is possible, False if it isn't
         """
         # Idea for making one for for checking everything instead for loops do it by checking proper value in given caller
-
         if positionX < 1 or positionY < 0 or positionY > self.width - 1 or positionX > self.height:
             return False
         elif self.game_board_in_class[positionX][positionY].field_move_possible == False:
             return False
+
         else:
-            if caller.type_of == OBJECT_TYPES.HERO:
+            if isinstance(caller, Hero):
 
                 for i, monster in enumerate(self.monsters):
                     if monster.position_x == positionX and monster.position_y == positionY:
@@ -81,11 +86,14 @@ class Board:
                         if one_npc.on_meet(self.hero):  # return True if hero start fight with NPC else False
                             if not one_npc.is_on_board:
                                 del self.npc[i]
-                                return True
-                            return False
+                                # return True
+                            return True
 
-            elif caller.type_of == OBJECT_TYPES.MONSTER:
-                if self.pos_x == positionX and self.pos_y == positionY:
+            elif isinstance(caller, Monster):
+                if isinstance(self.game_board_in_class[positionX][positionY], NPC):
+                    return False
+
+                elif self.pos_x == positionX and self.pos_y == positionY:
                     cprint(f'{self.hero.name} has been attacked by {caller.name}!', ERROR, start_enter=1, wait_after=1)
                     battle(self.hero, caller, BATTLE_MODES.IMMEDIATE_FIGHT)
                     self.monsters.remove(caller)    # Not sure if this will work with many monsters
@@ -108,6 +116,15 @@ class Board:
                 elif key_pressed == 'd' and self.pos_x == 0 and self.pos_y == 0:
                     self.pos_x += 1
                     valid_key = True
+                elif self.pos_x == 1 and self.pos_y == 0 and key_pressed == 'a':
+                    if self.game.current_board_index != 0:
+                        self.game.previous_board()
+                        valid_key = True
+
+                elif self.pos_x == self.height and self.pos_y == self.width-1 and key_pressed == 'd':
+                    self.game.next_board()
+                    valid_key = True
+
 
                 else:
                     new_x_pos, new_y_pos = self.hero.move(key_pressed)  # hero.move trick to work with Y, X cords
@@ -131,10 +148,10 @@ class Board:
 
             for field in list_of_fields:
                 # print(field)
-                if field.symbol_on_map == '0':
-                    middle_fileds += BG_COLOR.GREEN + ' ' + STYLES.RESET
-                else:
-                    middle_fileds += field.field_color + field.symbol_on_map + STYLES.RESET
+                # if field.symbol_on_map == '0':
+                #     middle_fileds += BG_COLOR.GREEN + ' ' + STYLES.RESET
+                # else:
+                middle_fileds += field.field_color + field.symbol_on_map + STYLES.RESET
 
             # elif i == len(self.game_board_in_class)-3:
             #     middle_fileds += '|_\n'
