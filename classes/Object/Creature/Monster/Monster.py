@@ -89,24 +89,28 @@ class Monster(Creature):
                    )
 
     @classmethod
-    def rat(cls):
+    def rat(cls, pos_x, pos_y,):
         return cls(name="Rat",
+                   position_x=pos_x,
+                   position_y=pos_y,
+                   move_type=MOVES_TYPES.GUARD_HORIZONTAL,
+                   move_param=[3, [0]],
                    symbol_on_map="R",
                    agility=50,
                    on_fight_message="*pik*pik*")
 
     @classmethod
-    def snake(cls):
-        return cls(name="Rat",
-                   symbol_on_map="R",
-                   agility=50,
-                   on_fight_message="*pik*pik*")
-
-            hp = difficulty_depends(50),
-                max_hp = difficulty_depends(50),
-                strength = difficulty_depends(20),
-                agility = 80,
-                luck = 30,
-                on_fight_message = "sssss",
-                on_die_message = "sssss",
-
+    def snake(cls, pos_x, pos_y, dif_lvl=DIFFICULTY_LEVEL.NORMAL):
+        dif_dep = cls.difficulty_depends  # shortcut only
+        return cls(name="Snake",
+                   position_x=pos_x,
+                   position_y=pos_y,
+                   symbol_on_map="S",
+                   hp=dif_dep(50, dif_lvl),
+                   max_hp=dif_dep(50, dif_lvl),
+                   strength=dif_dep(20, dif_lvl),
+                   agility=80,
+                   luck=30,
+                   on_fight_message="sssss",
+                   on_die_message="sssss",
+                   )

@@ -6,4 +6,4 @@ def create_new_hero():
     # Choose class
     # Some start statistic?
     # Some start item?
-    return Hero("Pawel", "@", -1, -1)  # MOCK
+    return Hero("Pawel", "@", 0, 0)  # MOCK

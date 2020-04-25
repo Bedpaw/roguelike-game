@@ -71,4 +71,4 @@ def game_engine(user_choice, player_name):
     # final screen? # add to highscores
 
 
-game_engine(2, "PAWEL")
+game_engine(1, "PAWEL")

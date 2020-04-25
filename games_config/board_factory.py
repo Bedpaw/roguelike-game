@@ -1,6 +1,7 @@
-from games_config.Monsters import *
+from classes.Object.Creature.Monster.Monsters import Monster
 from classes.Board.GameBoard import Board
 from classes.Board.Fields import *
+from classes.Object.Creature.NPC.NPC import NPC
 
 
 def create_new_board(game, board_index, loading=False):
@@ -34,10 +35,14 @@ def create_new_board(game, board_index, loading=False):
                   height=board_height,
                   hero=game.hero)
     if not loading:
-        pass
 
-    # # tu jakaś funkcja, która to poukłada,
-    # board.monsters = [TROLL, TROLL, SNAKE, GIANT]
-    # board.npc = []
-    # board.items = []
+        board.monsters = [
+            Monster.troll(7, 7, game.difficulty_level),
+            Monster.troll(7, 6, game.difficulty_level),
+            Monster.snake(7, 5, game.difficulty_level),
+            Monster.giant(7, 4, game.difficulty_level),
+            Monster.rat(9, 7)
+        ]
+        board.npc = [NPC("Guard", "G", 1, 3)]
+        board.items = []
     return board
