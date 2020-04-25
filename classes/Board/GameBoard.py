@@ -38,8 +38,13 @@ class Board:
     def move_monsters(self):
         for monster in self.monsters:
             valid = False
+            moves_counter = 0
             while not valid:
-                x, y = monster.move()
+                x, y = monster.move(params=monster.move_param)
+                # Skip move if no valid option in 10 trys
+                moves_counter += 1
+                if moves_counter == 10:
+                    valid = True
                 if self.check_move_possibility(monster, x, y):
                     monster.position_x = x
                     monster.position_y = y
