@@ -11,22 +11,15 @@ def create_new_board(game, board_index, loading=False):
 
     board_height = len(board_map)
     board_width = len(board_map[2])
-    # game.hero.position_x = 0
-    # game.hero.position_y = 0
 
     board = Board(game, board_map=board_map,
                   width=board_width,
                   height=board_height,
                   hero=game.hero)
     if not loading:
-
         board.monsters = [
             Monster.troll(7, 7, game.difficulty_level),
-            Monster.troll(7, 6, game.difficulty_level),
-            Monster.snake(7, 5, game.difficulty_level),
-            Monster.giant(7, 4, game.difficulty_level),
             Monster.rat(9, 7)
-        ]
+         ]
         board.npc = [NPC("Guard", "G", 1, 3)]
-        board.items = []
     return board
