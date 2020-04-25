@@ -3,6 +3,7 @@ from utils.decorations import cprint
 from utils.validation import int_input
 from macros import BATTLE_MODES
 from macros.COLORS import *
+from classes.Object.Item.Item import Item
 
 
 def battle(hero, monster, battle_mode=BATTLE_MODES.IMMEDIATE_FIGHT):
@@ -68,5 +69,5 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.IMMEDIATE_FIGHT):
     cprint(f'You have got {monster.exp} exp.', SUCCESS)
     input("\nPress enter to exit fight report...\n")
     hero.get_exp(monster.exp)
-    # hero.add_items(monster.loot) TODO: to implement
+    Item.add_to_inventory(monster.loot)
     pass

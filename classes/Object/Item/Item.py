@@ -4,7 +4,10 @@ from macros import OBJECT_TYPES
 from macros.COLORS import *
 from random import *
 from classes.Object.Creature.Hero.Hero import Hero
+from classes.Object.Creature.Monster.Monster import Monster
 from utils.validation import int_input
+from events.Battle import battle
+
 
 hero = Hero(name="Franek")
 
@@ -35,58 +38,82 @@ class Item:
         hero.luck -= self.luck
 
     @classmethod
-    def gloves(cls) -> object:
-        return cls(item_type="gloves", name="Magic gloves", agility=5)
+    def gloves(cls, item_type, name, agility):
+        return cls(item_type, name, agility)
 
     @classmethod
-    def helmet(cls):
-        return cls(item_type="helmet", name="Golden helmet", strength=10)
+    def helmet(cls, item_type, name, strength):
+        return cls(item_type, name, strength)
 
     @classmethod
-    def sword(cls):
-        return cls(item_type="sword", name="Sword of Goblins", strength=20)
+    def sword(cls, item_type, name, strength):
+        return cls(item_type, name, strength)
 
     @classmethod
-    def armor(cls):
-        return cls(item_type="armor", name="King Gordon's armor", strength=25)
+    def armor(cls, item_type, name, strength):
+        return cls(item_type, name, strength)
 
     @classmethod
-    def belt(cls):
-        return cls(item_type="belf", name="Candy pinky belt", strength=5)
+    def belt(cls, item_type, name, strength):
+        return cls(item_type, name, strength)
 
     @classmethod
-    def shield(cls):
-        return cls(item_type="shield", name="", agility=5)
+    def shield(cls, item_type, name, agility):
+        return cls(item_type, name, agility)
 
     @classmethod
-    def healing_potion(cls):
-        return cls(item_type="healing_potion", name="Gummibear potion", max_hp=100)
+    def trousers(cls, item_type, name, agility):
+        return cls(item_type, name, agility)
 
     @classmethod
-    def mana(cls):
-        cls(item_type="mana", name="Papa smurf mana", luck=10)
+    def boots(cls, item_type, name, luck):
+        cls(item_type, name, luck)
 
     @classmethod
-    def key(cls):
-        return cls(item_type="key", name="")
+    def healing_potion(cls, item_type, name, max_hp):
+        return cls(item_type, name, max_hp)
 
     @classmethod
-    def coins(cls):
-        cls(item_type="coins", name="Golden coins")
+    def mana(cls, item_type, name, luck):
+        cls(item_type, name, luck)
 
-    def add_to_inventory(self,hero):
-        pass #TODO
+    @classmethod
+    def key(cls, item_type, name):
+        return cls(item_type, name)
+
+    @classmethod
+    def coins(cls, item_type, name): #TODO PAWEŁ - jesli kasy na razie się nie wydaje, liczba może zostać w stringu??
+        cls(item_type, name)
+
+    def add_to_inventory(self, hero):
+        #TODO
+
+        pass
 
 
-treasure = [Item.gloves(), #TODO stworzyć róźne warianty tych itemów
-            Item.helmet(),
-            Item.sword(),
-            Item.armor(),
-            Item.belt(),
-            Item.healing_potion(),
-            Item.mana(),
-            Item.key(),
-            Item.coins()
+treasure = [Item.gloves("gloves", "Magic gloves", 5),
+            Item.gloves("gloves", "Gloves of pain", 8),
+            Item.helmet("helmet", "Odin's horns", 8),
+            Item.helmet("helmet", "Warriors' helmet", 7),
+            Item.sword("sword", "Sword for stinky Trolls", 7),
+            Item.sword("sword", "Ultralight dagger", 6),
+            Item.armor("armor", "Dragon's scales", 15),
+            Item.armor("armor", "Titanium armor", 14),
+            Item.belt("belt", "Snake skin belt", 2),
+            Item.belt("belt", "Karate black belt", 3),
+            Item.trousers("trousers", "King Arthur's pantaloons", 6),
+            Item.trousers("trousers", "Leather trousers", 5),
+            Item.boots("boots", "Boots of luck", 3),
+            Item.boots("boots", "Clover boots", 8),
+            Item.healing_potion("hpotion", "Papa Smurf's healing potion", 50),
+            Item.healing_potion("hpotion", "EXTRA COOL potion", 100),
+            Item.healing_potion("hpotion", "Porter beer + cocaine", 120),
+            Item.healing_potion("hpotion", "Honey and milk", 40),
+            Item.mana("mpotion", "Power is back potion", 10),
+            Item.mana("mpotion", "Gummibear potion", 12),
+            Item.key("key", "steel key"),
+            Item.key("key", "copper key"),
+            Item.coins("coins", "100")
             ]
 
 
@@ -103,6 +130,7 @@ class Treasure(MyObject):
         """
         opening chest, choosing item in it
         this return is giving info to board is field is empty or not
+        if hero has already this item, he gets 100 coins instead
         """
 
         if self.is_locked:
@@ -141,12 +169,6 @@ class Treasure(MyObject):
         return loot
 
 
-    def if_in_inventory(self):
-        pass #TODO
-
-    def add_to_inventory(self):
-        pass #TODO
-
 
 chest = Treasure("chest", is_locked=True) #tworze obiekt z wybranym parametrem
-chest.open_treasure(hero) #wywoluje funkcje z obiektu z parametrem hero
+# chest.open_treasure(hero) #wywoluje funkcje z obiektu z parametrem hero

@@ -63,7 +63,7 @@ class Monster(Creature):
                    move_type=MOVES_TYPES.RANDOM_STRAIGHT,
                    exp=100,
                    loot={
-                       'coins': 150,
+                       "gloves": "Magic gloves",
                    },
                    )
 
