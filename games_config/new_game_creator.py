@@ -1,5 +1,6 @@
 from macros import DIFFICULTY_LEVEL
 from utils.validation import int_input
+from utils.data_manager import *
 from games_config.new_hero_creator import create_new_hero
 from games_config.board_factory import create_new_board
 from classes.Game.Game import Game
@@ -10,7 +11,10 @@ def create_new_game(player_name):
     print('Welcome in our game!')
     # game_name = input('Please input folder name for saves: \n'
     #                   '> ')
-    game_name = "RESUME_GAME"  # MOCK
+    game_name = "PAWEL"  # MOCK
+    create_new_folder(f'db/saves/{player_name}/{game_name}')
+    create_new_folder(f'db/saves/{player_name}/{game_name}/BOARDS')
+    create_new_folder(f'db/saves/{player_name}/{game_name}/BOARDS/BOARD0')
     print('Please choose difficulty level: ')
     choose_difficult = int_input('[1] EASY\n'
                                  '[2] NORMAL\n'

@@ -81,9 +81,6 @@ def get_string_between_symbol(symbol, text):
             take_letter = not take_letter
     return string_to_return[:-1]     # Remove symbol at end
 
-<<<<<<< HEAD
-=======
-
 def read_game_config(player_name):
     game_name = get_game_name(player_name)
     with open(f'db/saves/{player_name}/{game_name}/game_config.txt', 'r') as f:
@@ -92,6 +89,15 @@ def read_game_config(player_name):
         return int(difficulty_level), int(board_index), hero_class
 
 
+def write_game_config(game):
+    with open(game.game_config_path, 'w+') as f:
+        f.write("difficulty_level, current_board_index, hero_class\n"
+                f"{game.difficulty_level}, {game.current_board_index}, {game.hero.__class__.__name__}")
+
+
 def get_game_name(player_name):
     return os.listdir(f'db/saves/{player_name}')[0]
->>>>>>> 451540affe45d1a8d20920395d52563861d1f187
+
+def create_new_folder(path):
+    if not os.path.exists(path):
+        os.mkdir(path)
