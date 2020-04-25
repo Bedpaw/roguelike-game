@@ -96,7 +96,7 @@ class Board:
                             if not one_npc.is_on_board:
                                 del self.npc[i]
                                 return True
-                            return False
+                        return False
 
             elif isinstance(caller, Monster):
                 if isinstance(check_position, NPC) or isinstance(check_position, Monster):
