@@ -9,7 +9,7 @@ def load_game(player_name):
     game_name = get_game_name(player_name)
     game_difficulty_level, board_index, hero_class = read_game_config(player_name)
     path_with_hero_data = f'db/saves/{player_name}/{game_name}/hero.txt'
-
+    print('board index in load game', board_index)
     hero = load_object_from_file(path_with_hero_data, eval(hero_class))
     game = Game(player_name=player_name,
                 game_name=game_name,
@@ -27,10 +27,10 @@ def game_engine(user_choice, player_name):
         game = load_game(player_name)
 
     while not game.endgame:
-        board_changed = False
+        game.board_changed = False
         my_board = game.current_board()
 
-        while not board_changed and not game.endgame:
+        while not game.board_changed and not game.endgame:
 
             my_board.update_board()
             print(8 * " " + my_board.name)  # to change
@@ -43,17 +43,6 @@ def game_engine(user_choice, player_name):
             #   TEST
             #save_objects_from_board(f'{path_to_save_boards}{game.current_board_index}/', my_board)
             hero = my_board.hero  # for test shortcut
-
-            if hero.position_x == 8 and hero.position_y == 14:
-                hero.position_x = 0
-                hero.position_y = 0
-                game.next_board()
-                board_changed = True
-            elif hero.position_x == 1 and hero.position_y == 14:
-                hero.position_x = 0
-                hero.position_y = 0
-                game.previous_board()
-                board_changed = True
 
             print(f'TURN: {game.turn_counter}')
             print(f'STR: {hero.strength},'

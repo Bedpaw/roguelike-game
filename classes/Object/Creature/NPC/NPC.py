@@ -1,6 +1,7 @@
 from classes.Object.Creature.Monster.Monster import Monster
 from events.Battle import battle
 from macros.COLORS import *
+from macros import OBJECT_TYPES
 from macros import MOVES_TYPES
 from utils.decorations import cprint
 from utils.validation import int_input
@@ -41,6 +42,8 @@ class NPC(Monster):
         self.dialog_index = dialog_index
         self.start_dialog = self.conversation_folder_path + conversation_file_name
         self.dialogs_path = [self.start_dialog]
+
+
 
     def on_meet(self, hero):
         """

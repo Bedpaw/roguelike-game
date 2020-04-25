@@ -20,6 +20,7 @@ class Creature(MyObject):
         self.luck = luck
         self.move_type = move_type
         self.color_in_battle = color_in_battle
+    field_move_possible = True
 
     def move(self, params=None):
         """
