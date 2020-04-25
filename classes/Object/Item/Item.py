@@ -8,7 +8,7 @@ from utils.validation import int_input
 
 hero = Hero(name="Franek")
 
-class Item():
+class Item:
 
     def __init__(self, item_type="sword", name="set_name", hp=0, max_hp=0, strength=0, agility=0, luck=0):
         self.item_type = item_type
@@ -35,7 +35,7 @@ class Item():
         hero.luck -= self.luck
 
     @classmethod
-    def gloves(cls):
+    def gloves(cls) -> object:
         return cls(item_type="gloves", name="Magic gloves", agility=5)
 
     @classmethod
@@ -85,9 +85,10 @@ treasure = [Item.gloves(), #TODO stworzyć róźne warianty tych itemów
             Item.belt(),
             Item.healing_potion(),
             Item.mana(),
-            Item.key()
+            Item.key(),
             Item.coins()
             ]
+
 
 class Treasure(MyObject):
 
@@ -97,7 +98,6 @@ class Treasure(MyObject):
         super().__init__(name, symbol_on_map, position_x, position_y)
         self.message_in_field = message_in_field
         self.is_locked = is_locked
-
 
     def open_treasure(self, hero):
         """

@@ -19,7 +19,5 @@ def main():
     run_main_menu(player_name)
 
 
-
-
 if __name__ == '__main__':
     main()
