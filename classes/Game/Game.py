@@ -11,6 +11,7 @@ class Game:
         self.game_name = game_name
         self.save_folder_path = f'db/saves/{player_name}/{self.game_name}'
         self.hero_save_path = f'{self.save_folder_path}/hero.txt'
+        self.game_config_path = f'{self.save_folder_path}/game_config.txt'
         self.boards_save_path = f'{self.save_folder_path}/BOARDS'
         self.boards = []
         self.turn_counter = 0
@@ -18,12 +19,7 @@ class Game:
         self.endgame = False    # to toogle, when hero/final boss dead
         self.counter = 1  # test only
         self.board_changed = False
-    last_map_pos = []
-
-    # def create_new_board(self):
-    #     new_board = GameBoard.Board(self, 15 + self.counter, 8 + self.counter, self.hero)
-    #     self.boards.append(new_board)
-    #     self.counter += 5   # test
+        self.last_map_pos = []
 
     def next_board(self):
         self.current_board_index += 1
@@ -34,13 +30,20 @@ class Game:
         if len(self.boards) <= self.current_board_index:
             self.boards.append(create_new_board(self, self.current_board_index))
 
-
     def previous_board(self):
         self.hero.position_x = self.last_map_pos[0]
-        self.hero.position_y = self.last_map_pos[1]-1
+        self.hero.position_y = self.last_map_pos[1] - 1  # out of range
         self.board_changed = True
         self.current_board_index -= 1
 
     def current_board(self):
         return self.boards[self.current_board_index]
+
+    def save_game(self):
+        for i, board in enumerate(self.boards):
+            create_new_folder(f'{self.boards_save_path}/BOARD{i}')
+            save_objects_from_board(f'{self.boards_save_path}/BOARD{i}/', board)
+        save_object_to_file(self.hero_save_path, self.hero)
+        write_game_config(self)
+
 

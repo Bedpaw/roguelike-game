@@ -33,7 +33,7 @@ def game_engine(user_choice, player_name):
         while not game.board_changed and not game.endgame:
 
             my_board.update_board()
-            print(8 * " " + my_board.name)  # to change
+            print(8 * " " + my_board.name)  # to change :TODO Wojtek, print it in GameBoard
             my_board.print_board()
             my_board.get_user_choice()
             my_board.move_monsters()
@@ -41,7 +41,6 @@ def game_engine(user_choice, player_name):
             game.turn_counter += 1
 
             #   TEST
-            #save_objects_from_board(f'{path_to_save_boards}{game.current_board_index}/', my_board)
             hero = my_board.hero  # for test shortcut
 
             print(f'TURN: {game.turn_counter}')
@@ -57,7 +56,7 @@ def game_engine(user_choice, player_name):
 
     # game loop broken
     # hero is dead or game won2
-    # final screen? # add to highscores
+    # final screen? # add to high scores
 
 
 game_engine(1, "PAWEL")

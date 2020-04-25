@@ -1,2 +1,2 @@
 difficulty_level, current_board_index, hero_class
-1, 0, Hero
+1, 2, Hero
