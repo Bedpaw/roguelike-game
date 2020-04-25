@@ -10,8 +10,6 @@ from classes.Object.Creature.Hero.Hero import Hero
 from classes.Object.Creature.NPC.NPC import NPC
 from classes.Object.Creature.Monster.Monster import Monster
 
-import time
-
 
 class Board:
     def __init__(self, game, board_map, width, height, hero):

@@ -3,7 +3,9 @@ from utils.utils import clear_screen
 from utils.data_manager import *
 from games_config.new_game_creator import create_new_game
 from classes.Object.Creature.Hero.Hero import Hero      # eval use it!!!
-
+from utils.hero_selection import get_user_hero_choice
+# from key_service import *
+import time
 
 def load_game(player_name):
     game_name = get_game_name(player_name)
@@ -24,6 +26,9 @@ def game_engine(user_choice, player_name):
     if user_choice == 1:
         game = create_new_game(player_name)
     elif user_choice == 2:
+        choice = get_user_hero_choice()
+        print(choice)
+        time.sleep(10)
         game = load_game(player_name)
 
     while not game.endgame:
