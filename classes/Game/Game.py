@@ -1,6 +1,7 @@
 from classes.Board import GameBoard
 from classes.Object.Creature.Hero.Hero import Hero
 from games_config.board_factory import create_new_board
+from utils.data_manager import *
 
 
 class Game:

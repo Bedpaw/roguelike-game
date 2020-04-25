@@ -98,12 +98,10 @@ class Board:
                                 return True
                             return False
 
-
             elif isinstance(caller, Monster):
                 if isinstance(check_position, NPC) or isinstance(check_position, Monster):
                     return False
-
-                elif self.pos_x == positionX and self.pos_y == positionY:
+                if self.pos_x == positionX and self.pos_y == positionY:
                     cprint(f'{self.hero.name} has been attacked by {caller.name}!', ERROR, start_enter=1, wait_after=1)
                     battle(self.hero, caller, BATTLE_MODES.IMMEDIATE_FIGHT)
                     self.monsters.remove(caller)  # Not sure if this will work with many monsters
@@ -120,7 +118,10 @@ class Board:
 
             if key_pressed in ['w', 's', 'a', 'd', 'p']:
                 if key_pressed == 'p':
-                    exit(0)
+                    exit()
+                if key_pressed == 'o':
+                    cprint("Game saved...", wait_after=1)
+                    self.game.save_game()
 
                 # Move from first gate
                 elif key_pressed == 'd' and self.pos_x == 0 and self.pos_y == 0:
