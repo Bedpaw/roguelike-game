@@ -29,6 +29,7 @@ class Board:
         self.monsters = []
         self.npc = []
         self.treasures = []
+        self.logo = 'Ziomeczki'
 
     def update_board(self):
         self.make_empty_list()
@@ -133,16 +134,19 @@ class Board:
                         valid_key = True
 
     def print_board(self):
+        # TOP
         border_field = f"{BG_COLOR.BLUE}  {STYLES.RESET}"
-        list_of_rows = [f"{BG_COLOR.BLUE}{' ' * self.width * 3}{STYLES.RESET}",
-                        f"{border_field}{' ' * 2} LOGO\n{border_field}",
-                        f"{border_field}{' ' * 3}Mapa: {self.name}\n{border_field}"]
-        # print(f"{BG_COLOR.BLUE}{' ' * self.width * 3}{STYLES.RESET}")
-        # border_field = f"{BG_COLOR.BLUE}  {STYLES.RESET}"
-        # print(f"{border_field}{' ' * 2} LOGO\n{border_field}")
-        # print(f"{border_field}{' '* 3}Mapa: {self.name}\n{border_field}")
+        top = f"{BG_COLOR.BLUE}{' ' * self.width * 3}{STYLES.RESET}\n"
+        logo = f"{border_field}{' ' * 2}{self.logo}{STYLES.RESET}{' ' * (self.width*3-len(self.logo)-6)}{border_field}\n"
+        map_name = f"{border_field}{' ' * 2}Mapa: {self.name}{STYLES.RESET}{' ' * (self.width*3-len(self.name)-12)}{border_field}"
+        top += logo + map_name
+        print(top)
+
+        # MIDDLE
+        middle_fileds = ''
 
         for i, list_of_fields in enumerate(self.game_board_in_class):
+
             if i == 0:
                 middle_fileds = f"{border_field}{' ' * 5}"
             elif i == 1 or i == self.height + 1:
@@ -156,20 +160,31 @@ class Board:
                     middle_fileds += self.board_map[i-1][j].field_color + field.color_on_board + field.symbol_on_map + STYLES.RESET
                 else:
                     middle_fileds += field.field_color + field.symbol_on_map + STYLES.RESET
-            if i == 1:
-                middle_fileds += f"{' '*2}Nickname: {self.hero.name}"
-            if i == 3:
-                middle_fileds += f"{' '*2}Class: {self.hero.breed}"
-            if i == 4:
-                middle_fileds += f"{' '*2}HP: {self.hero.hp}/{self.hero.max_hp}"
-            if i == 5:
-                middle_fileds += f"{' '*2}MANA: {self.hero.hp}/{self.hero.max_hp}"
-            if i == 6:
-                middle_fileds += f"{' '* 2}EXP: {self.hero.exp}/{self.hero.exp_to_next_level}"
-            if i == 7:
-                middle_fileds += f"{' ' * 2}CORDS: x:{self.hero.position_x} | y:{self.hero.position_y}"
 
-            list_of_fields.append(middle_fileds)
+            additonal_info = ''
+
+            if i == 1:
+                additonal_info = f"{' '*2}Nickname: {self.hero.name}"
+            if i == 3:
+                additonal_info = f"{' '*2}Class: {self.hero.breed}"
+            if i == 4:
+                additonal_info = f"{' '*2}HP: {self.hero.hp}/{self.hero.max_hp}"
+            if i == 5:
+                additonal_info = f"{' '*2}MANA: {self.hero.hp}/{self.hero.max_hp}"
+            if i == 6:
+                additonal_info = f"{' '* 2}EXP: {self.hero.exp}/{self.hero.exp_to_next_level}"
+            if i == 7:
+                additonal_info = f"{' ' * 2}CORDS: x:{self.hero.position_x} | y:{self.hero.position_y}"
+
+            middle_fileds += additonal_info
+            if i is len(self.game_board_in_class) - 1:
+                row_length = self.width * 3 - self.width - 11 - len(additonal_info)
+            else:
+                row_length = self.width * 3 - self.width - 10 - len(additonal_info)
+
+
+            if i not in [0, len(self.game_board_in_class) - 2]:
+                middle_fileds += f"{' '* row_length}{border_field}"
 
 
         print(middle_fileds, sep='')
