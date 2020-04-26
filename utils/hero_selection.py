@@ -1,13 +1,15 @@
 import time
 from macros import COLORS
 from utils.key_service import *
-# from classes.Object.Creature.Hero.Hero_Breed.Knight import Knight
+from classes.Object.Creature.Hero.Hero_Breed.Knight import Knight
+from classes.Object.Creature.Hero.Hero_Breed.Sorcerer import Sorcerer
+from classes.Object.Creature.Hero.Hero_Breed.Palladin import Palladin
 
-# print(key_pressed
+
 choose_hero_type = {
-    "0": [COLORS.COLOR.RED, "Knight", COLORS.STYLES.RESET],
-    "1": [COLORS.COLOR.BLUE,  "Sorcerer", COLORS.STYLES.RESET],
-    "2": [COLORS.COLOR.GREEN,  "Palladin", COLORS.STYLES.RESET]
+    "0": [COLORS.COLOR.RED, "Knight", COLORS.STYLES.RESET, Knight],
+    "1": [COLORS.COLOR.BLUE,  "Sorcerer", COLORS.STYLES.RESET, Sorcerer],
+    "2": [COLORS.COLOR.GREEN,  "Palladin", COLORS.STYLES.RESET, Palladin]
 }
 
 def get_user_hero_choice():
@@ -28,7 +30,8 @@ def get_user_hero_choice():
         elif ord(key) == 119:
             current_key -= 1
         elif ord(key) == 13:
-            return current_key
+            champ_name = input('Please enter your nickname: ')
+            return choose_hero_type[str(current_key)][3](champ_name)
         else:
             print("not [w] or [s] pressed")
             time.sleep(2)

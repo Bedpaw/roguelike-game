@@ -33,7 +33,6 @@ class Bridge():
 
 
 map_file = 'classes/Board/Map_drawing/level1_map.txt'
-# map_file2 = 'class'
 
 symbols_to_txt_draw = {
     '0': Field(),
@@ -54,7 +53,4 @@ def get_map(map_file_name=map_file): #get map
                 if elem in symbols_to_txt_draw:
                     row_of_fields.append(symbols_to_txt_draw[elem])
             list_of_all_fields.append(row_of_fields)
-    # print(list_of_all_fields)
     return list_of_all_fields
-# map_list = get_background_color(map_file)
-# print(map_list)

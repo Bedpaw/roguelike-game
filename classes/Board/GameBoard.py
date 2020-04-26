@@ -132,9 +132,6 @@ class Board:
                         valid_key = True
 
     def print_board(self):
-        # overscore = "\u203e"
-
-        # MIDDLE
         for i, list_of_fields in enumerate(self.game_board_in_class):
             if i == 0:
                 middle_fileds = f"{' ' * 5}"
@@ -144,22 +141,12 @@ class Board:
 
                 middle_fileds += f"\n{' ' * 6}"
 
-            for field in list_of_fields:
-                # print(field)
-                # if field.symbol_on_map == '0':
-                #     middle_fileds += BG_COLOR.GREEN + ' ' + STYLES.RESET
-                # else:
-                middle_fileds += field.field_color + field.symbol_on_map + STYLES.RESET
+            for j, field in enumerate(list_of_fields):
+                if field.symbol_on_map not in symbols_to_txt_draw.keys():
+                    middle_fileds += self.board_map[i-1][j].field_color + field.color_on_board + field.symbol_on_map + STYLES.RESET
+                else:
+                    middle_fileds += field.field_color + field.symbol_on_map + STYLES.RESET
 
-            # elif i == len(self.game_board_in_class)-3:
-            #     middle_fileds += '|_\n'
-            # elif i == len(self.game_board_in_class)-2:
-            #     middle_fileds += ''
-            # elif i == len(self.game_board_in_class)-1:
-            #     middle_fileds += ''
-
-            # else:
-            #     middle_fileds += '|\n'
 
         print(middle_fileds, sep='')
 

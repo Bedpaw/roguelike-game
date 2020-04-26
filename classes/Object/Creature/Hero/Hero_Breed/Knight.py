@@ -5,7 +5,7 @@ from macros import MOVES_TYPES, OBJECT_TYPES
 from utils.validation import int_input
 
 class Knight(Hero):
-    def __init__(self, name="Set_me_name", symbol_on_map="@", position_x=-1, position_y=-1,
+    def __init__(self, name="Set_me_name", symbol_on_map="K", position_x=0, position_y=0,
                  strength=30,
                  hp=400,
                  max_hp=400,
