@@ -12,40 +12,22 @@ class Hero(Creature):
                  hp=400,
                  max_hp=400,
                  agility=10,
-                 luck=10,
                  color_in_battle=COLOR.GREEN,
                  move_type=MOVES_TYPES.MANUAL,
                  level=1,
                  exp=0,
                  exp_to_next_level=100):
         super().__init__(name, symbol_on_map, position_x, position_y,
-                         strength, hp, max_hp, agility, luck)
+                         strength, hp, max_hp, agility)
         self.color_in_battle = color_in_battle
         self.move_type = move_type
         self.level = level
+        self.points_for_level = 0
         self.exp = exp
         self.exp_to_next_level = exp_to_next_level
 
-        self.skill_improv = {
-                "1": {
-                    "skill": "strength",
-                    "amount": 10,
-                },
-                "2": {
-                    "skill": "hp",
-                    "skill2": "max_hp",
-                    "amount": 30,
-                },
-                "3": {
-                    "skill": "agility",
-                    "amount": 5,
-                },
-                "4": {
-                    "skill": "luck",
-                    "amount": 5,
-                }
-            }
-    # field_color = BG_COLOR.RED
+        self.breed = 'Knight'
+
     type_of = OBJECT_TYPES.HERO
     color_on_board = STYLES.BOLD + COLOR.CBLACK
 
@@ -54,30 +36,7 @@ class Hero(Creature):
     }
     on_fight_message = "Time to stop this creature!"
 
-    def level_up(self):
-        """
-        1) Add level
-        2) Set new exp_to_next_level
-        3) Improve hero skills
-        :return: pass
-        """
-        self.level += 1
-        self.exp_to_next_level = self.exp + int(self.exp_to_next_level * 1.3)
-        cprint(f"You have received {self.level} level!", SUCCESS)
 
-        skill_to_improve = int_input("Which skill do you want to improve?\n"
-                                     "[1] Strength + 10\n"
-                                     "[2] Health + 30\n"
-                                     "[3] Agility + 5\n"
-                                     "[4] Luck + 5\n"
-                                     "Pick a number: ", 4)
-
-        for k, v in self.skill_improv.items():
-            if k == str(skill_to_improve):
-                self.__setattr__(v["skill"], v["amount"] + self.__getattribute__(v["skill"]))
-                if "skill2" in v:
-                    self.__setattr__(v["skill2"], v["amount"] + self.__getattribute__(v["skill2"]))
-        pass
 
     def get_exp(self, exp):
         """

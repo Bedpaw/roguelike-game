@@ -29,7 +29,7 @@ class Board:
         self.monsters = []
         self.npc = []
         self.treasures = []
-        self.logo = 'Ziomeczki'
+        self.logo = 'Ziomeczki & ziomale'
 
     def update_board(self):
         self.make_empty_list()
@@ -134,16 +134,11 @@ class Board:
                         valid_key = True
 
     def print_board(self):
-        # TOP
         border_field = f"{BG_COLOR.BLUE}  {STYLES.RESET}"
-        top = f"{BG_COLOR.BLUE}{' ' * self.width * 3}{STYLES.RESET}\n"
-        logo = f"{border_field}{' ' * 2}{self.logo}{STYLES.RESET}{' ' * (self.width*3-len(self.logo)-6)}{border_field}\n"
-        map_name = f"{border_field}{' ' * 2}Mapa: {self.name}{STYLES.RESET}{' ' * (self.width*3-len(self.name)-12)}{border_field}"
-        top += logo + map_name
-        print(top)
 
-        # MIDDLE
-        middle_fileds = ''
+        # MIDDLE LOGIC
+        middle_border = []
+        max_row_length = 0
 
         for i, list_of_fields in enumerate(self.game_board_in_class):
 
@@ -152,8 +147,7 @@ class Board:
             elif i == 1 or i == self.height + 1:
                 middle_fileds += ''
             else:
-
-                middle_fileds += f"\n{border_field}{' ' * 6}"
+                middle_fileds = f"\n{border_field}{' ' * 6}"
 
             for j, field in enumerate(list_of_fields):
                 if field.symbol_on_map not in symbols_to_txt_draw.keys():
@@ -164,31 +158,55 @@ class Board:
             additonal_info = ''
 
             if i == 1:
-                additonal_info = f"{' '*2}Nickname: {self.hero.name}"
+                additonal_info = f"{' '*2}Nickname: {self.hero.name}  "
             if i == 3:
-                additonal_info = f"{' '*2}Class: {self.hero.breed}"
+                additonal_info = f"{' '*2}Class: {self.hero.breed}  "
             if i == 4:
-                additonal_info = f"{' '*2}HP: {self.hero.hp}/{self.hero.max_hp}"
+                additonal_info = f"{' '*2}HP: {self.hero.hp}/{self.hero.max_hp}  "
             if i == 5:
-                additonal_info = f"{' '*2}MANA: {self.hero.hp}/{self.hero.max_hp}"
+                additonal_info = f"{' '*2}MANA: {self.hero.hp}/{self.hero.max_hp}  "
             if i == 6:
-                additonal_info = f"{' '* 2}EXP: {self.hero.exp}/{self.hero.exp_to_next_level}"
+                additonal_info = f"{' '* 2}EXP: {self.hero.exp}/{self.hero.exp_to_next_level}  "
             if i == 7:
                 additonal_info = f"{' ' * 2}CORDS: x:{self.hero.position_x} | y:{self.hero.position_y}"
+                additonal_info += f"{' ' *(6 - len(str(self.hero.position_x)) - len(str(self.hero.position_y)))}"
 
             middle_fileds += additonal_info
+
             if i is len(self.game_board_in_class) - 1:
-                row_length = self.width * 3 - self.width - 11 - len(additonal_info)
+                row_length = self.width + 11 + len(additonal_info)
             else:
-                row_length = self.width * 3 - self.width - 10 - len(additonal_info)
-
-
+                row_length = self.width + 10 + len(additonal_info)
             if i not in [0, len(self.game_board_in_class) - 2]:
-                middle_fileds += f"{' '* row_length}{border_field}"
+                middle_border.append([row_length, middle_fileds])
+
+            if row_length > max_row_length:
+                max_row_length = row_length
+
+        if len(self.name) + 2 > max_row_length:
+            max_row_length = len(self.name) + 2
 
 
-        print(middle_fileds, sep='')
-        # BOTTOM
-        print(f"{border_field}{' ' * (self.width * 3-4)}{border_field}")
-        print(f"{BG_COLOR.BLUE}{' ' * self.width * 3}{STYLES.RESET}")
+        # GENERAL
+        new_empty_line = f"\n{border_field}{' ' * (max_row_length -4)}{border_field}"
+        # TOP PRINT AND LOGIC
+        map_name = f"{border_field}{' ' * 2}Mapa: {self.name}{' ' * (max_row_length - len(self.name) - 12)}{border_field}"
+        top = f"{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}\n"
+        logo = f"{border_field}{' ' * 2}{self.logo}{STYLES.RESET}{' ' * (max_row_length - len(self.logo)-6)}{border_field}\n"
+        top += logo + map_name + new_empty_line
+        print(top)
+
+        # MIDDLE
+        mid = []
+        for i, item in enumerate(middle_border):
+            mid.append(f"{item[1]}{' ' * (max_row_length - item[0])}{border_field}")
+        print(''.join(mid), new_empty_line)
+
+
+        # LAST MESSAGE FROM HERO
+        # TODO
+
+        # BOTTOM PRINT AND LOGIC
+        # print(f"{border_field}{' ' * (max_row_length -4)}{border_field}")
+        print(f"{new_empty_line[1:]}\n{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}")
 
