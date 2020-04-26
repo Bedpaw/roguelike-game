@@ -9,12 +9,13 @@ from classes.Game.Game import Game
 def create_new_game(player_name):
     # GAME HISTORY?
     print('Welcome in our game!')
-    # game_name = input('Please input folder name for saves: \n'
-    #                   '> ')
-    game_name = "PAWEL"  # MOCK
+    game_name = input('Please input folder name for saves: \n'
+                      '> ')
+
     create_new_folder(f'db/saves/{player_name}/{game_name}')
     create_new_folder(f'db/saves/{player_name}/{game_name}/BOARDS')
     create_new_folder(f'db/saves/{player_name}/{game_name}/BOARDS/BOARD0')
+
     print('Please choose difficulty level: ')
     choose_difficult = int_input('[1] EASY\n'
                                  '[2] NORMAL\n'

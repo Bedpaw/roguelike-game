@@ -7,8 +7,8 @@ from utils.validation import int_input
 
 class Hero(Creature):
     def __init__(self, name="Set_me_name", symbol_on_map="@", position_x=-1, position_y=-1,
-                 strength=50,
-                 hp=400,
+                 strength=500,
+                 hp=2000,
                  max_hp=400,
                  agility=10,
                  luck=10,
@@ -24,7 +24,6 @@ class Hero(Creature):
         self.level = level
         self.exp = exp
         self.exp_to_next_level = exp_to_next_level
-
         self.skill_improv = {
                 "1": {
                     "skill": "strength",

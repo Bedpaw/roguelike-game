@@ -10,6 +10,7 @@ from events.Battle import battle
 
 
 hero = Hero(name="Franek")
+monster = Monster(name= "Goblin")
 
 class Item:
 
@@ -85,10 +86,10 @@ class Item:
     def coins(cls, item_type, name): #TODO PAWEŁ - jesli kasy na razie się nie wydaje, liczba może zostać w stringu??
         cls(item_type, name)
 
-    def add_to_inventory(self, hero):
+    def add_to_inventory(self, hero, loot):
+        hero.inventory.update(Monster.loot)
         #TODO
 
-        pass
 
 
 treasure = [Item.gloves("gloves", "Magic gloves", 5),

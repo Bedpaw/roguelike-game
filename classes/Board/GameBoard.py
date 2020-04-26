@@ -116,7 +116,7 @@ class Board:
         while not valid_key:
             key_pressed = key_service.key_pressed()
 
-            if key_pressed in ['w', 's', 'a', 'd', 'p']:
+            if key_pressed in ['w', 's', 'a', 'd', 'p', 'o']:
                 if key_pressed == 'p':
                     exit()
                 if key_pressed == 'o':

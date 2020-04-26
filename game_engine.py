@@ -2,14 +2,14 @@ from classes.Game.Game import Game
 from utils.utils import clear_screen
 from utils.data_manager import *
 from games_config.new_game_creator import create_new_game
-from classes.Object.Creature.Hero.Hero import Hero      # eval use it!!!
+from classes.Object.Creature.Hero.Hero import Hero  # eval use it!!!
+from mock.new_game_creator_mock import create_new_game_mock
 
 
 def load_game(player_name):
     game_name = get_game_name(player_name)
-    game_difficulty_level, board_index, hero_class = read_game_config(player_name)
+    game_difficulty_level, board_index, hero_class = read_game_config(player_name, game_name)
     path_with_hero_data = f'db/saves/{player_name}/{game_name}/hero.txt'
-    print('board index in load game', board_index)
     hero = load_object_from_file(path_with_hero_data, eval(hero_class))
     game = Game(player_name=player_name,
                 game_name=game_name,
@@ -22,14 +22,14 @@ def load_game(player_name):
 
 def game_engine(user_choice, player_name):
     if user_choice == 1:
-        game = create_new_game(player_name)
+        # game = create_new_game(player_name) # !!! <-- Uncomment for full version
+        game = create_new_game_mock()  # !!! <-- Comment for full version
     elif user_choice == 2:
         game = load_game(player_name)
 
     while not game.endgame:
         game.board_changed = False
         my_board = game.current_board()
-
         while not game.board_changed and not game.endgame:
 
             my_board.update_board()
