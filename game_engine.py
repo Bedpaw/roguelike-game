@@ -28,7 +28,6 @@ def game_engine(user_choice, player_name):
     while not game.endgame:
         game.board_changed = False
         my_board = game.current_board()
-
         while not game.board_changed and not game.endgame:
 
             my_board.update_board()
