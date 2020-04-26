@@ -1,6 +1,7 @@
 from classes.Object.Creature.Creature import Creature
 from macros.COLORS import *
 from utils.decorations import cprint, ctext
+from utils.utils import clear_screen
 from macros import MOVES_TYPES, OBJECT_TYPES
 from utils.validation import int_input
 
@@ -104,4 +105,18 @@ class Hero(Creature):
         """
         target.hp = 0
         cprint(f'{self.name} is stupid cheater...', self.color_in_battle)
+
+    def show_stats(self):
+        clear_screen()
+        print(self.name)
+        print(f"   strength: {self.strength}")
+        print("dmg")
+        print(f"   agility: {self.strength}")
+        print("attack speed")
+        print("critical chance")
+        print(f"   stamina: {self.strength}")
+        print("defense")
+        print(f"   energy: {self.strength}")
+        print("Magic dmg")
+
 

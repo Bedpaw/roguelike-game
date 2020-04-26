@@ -106,7 +106,7 @@ class Board:
         while not valid_key:
             key_pressed = key_service.key_pressed()
 
-            if key_pressed in ['w', 's', 'a', 'd', 'p']:
+            if key_pressed in ['w', 's', 'a', 'd', 'p', 'm']:
                 if key_pressed == 'p':
                     exit(0)
 
@@ -122,7 +122,8 @@ class Board:
                 elif self.pos_x == self.height and self.pos_y == self.width-1 and key_pressed == 'd':
                     self.game.next_board()
                     valid_key = True
-
+                elif key_pressed == 'm':
+                    self.hero.show_stats()
 
                 else:
                     new_x_pos, new_y_pos = self.hero.move(key_pressed)  # hero.move trick to work with Y, X cords
@@ -132,23 +133,47 @@ class Board:
                         valid_key = True
 
     def print_board(self):
+        border_field = f"{BG_COLOR.BLUE}  {STYLES.RESET}"
+        list_of_rows = [f"{BG_COLOR.BLUE}{' ' * self.width * 3}{STYLES.RESET}",
+                        f"{border_field}{' ' * 2} LOGO\n{border_field}",
+                        f"{border_field}{' ' * 3}Mapa: {self.name}\n{border_field}"]
+        # print(f"{BG_COLOR.BLUE}{' ' * self.width * 3}{STYLES.RESET}")
+        # border_field = f"{BG_COLOR.BLUE}  {STYLES.RESET}"
+        # print(f"{border_field}{' ' * 2} LOGO\n{border_field}")
+        # print(f"{border_field}{' '* 3}Mapa: {self.name}\n{border_field}")
+
         for i, list_of_fields in enumerate(self.game_board_in_class):
             if i == 0:
-                middle_fileds = f"{' ' * 5}"
+                middle_fileds = f"{border_field}{' ' * 5}"
             elif i == 1 or i == self.height + 1:
                 middle_fileds += ''
             else:
 
-                middle_fileds += f"\n{' ' * 6}"
+                middle_fileds += f"\n{border_field}{' ' * 6}"
 
             for j, field in enumerate(list_of_fields):
                 if field.symbol_on_map not in symbols_to_txt_draw.keys():
                     middle_fileds += self.board_map[i-1][j].field_color + field.color_on_board + field.symbol_on_map + STYLES.RESET
                 else:
                     middle_fileds += field.field_color + field.symbol_on_map + STYLES.RESET
+            if i == 1:
+                middle_fileds += f"{' '*2}Nickname: {self.hero.name}"
+            if i == 3:
+                middle_fileds += f"{' '*2}Class: {self.hero.breed}"
+            if i == 4:
+                middle_fileds += f"{' '*2}HP: {self.hero.hp}/{self.hero.max_hp}"
+            if i == 5:
+                middle_fileds += f"{' '*2}MANA: {self.hero.hp}/{self.hero.max_hp}"
+            if i == 6:
+                middle_fileds += f"{' '* 2}EXP: {self.hero.exp}/{self.hero.exp_to_next_level}"
+            if i == 7:
+                middle_fileds += f"{' ' * 2}CORDS: x:{self.hero.position_x} | y:{self.hero.position_y}"
+
+            list_of_fields.append(middle_fileds)
 
 
         print(middle_fileds, sep='')
-
         # BOTTOM
-        # print(f"{' '*13}{overscore*(self.width+3)}\n")
+        print(f"{border_field}{' ' * (self.width * 3-4)}{border_field}")
+        print(f"{BG_COLOR.BLUE}{' ' * self.width * 3}{STYLES.RESET}")
+

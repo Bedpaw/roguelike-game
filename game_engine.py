@@ -35,7 +35,6 @@ def game_engine(user_choice, player_name):
         while not game.board_changed and not game.endgame:
 
             my_board.update_board()
-            print(8 * " " + my_board.name)  # to change
             my_board.print_board()
             my_board.get_user_choice()
             my_board.move_monsters()
