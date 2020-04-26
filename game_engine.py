@@ -2,7 +2,7 @@ from classes.Game.Game import Game
 from utils.utils import clear_screen
 from utils.data_manager import *
 from games_config.new_game_creator import create_new_game
-from classes.Object.Creature.Hero.Hero import Hero      # eval use it!!!
+from classes.Object.Creature.Hero.Hero import Hero  # eval use it!!!
 from mock.new_game_creator_mock import create_new_game_mock
 
 
@@ -22,8 +22,8 @@ def load_game(player_name):
 
 def game_engine(user_choice, player_name):
     if user_choice == 1:
-        game = create_new_game(player_name) # !!! <-- Uncomment for full version
-        # game = create_new_game_mock()         # !!! <-- Comment for full version
+        # game = create_new_game(player_name) # !!! <-- Uncomment for full version
+        game = create_new_game_mock()  # !!! <-- Comment for full version
     elif user_choice == 2:
         game = load_game(player_name)
 
@@ -59,4 +59,4 @@ def game_engine(user_choice, player_name):
     # final screen? # add to high scores
 
 
-game_engine(2, "PAWEL")
+game_engine(1, "PAWEL")
