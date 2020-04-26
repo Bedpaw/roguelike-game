@@ -1,16 +1,17 @@
 from classes.Object.Object import MyObject
 from utils.decorations import cprint
+from utils.key_service import key_pressed
 from macros import OBJECT_TYPES
 from macros.COLORS import *
 from random import *
 from classes.Object.Creature.Hero.Hero import Hero
 from classes.Object.Creature.Monster.Monster import Monster
 from utils.validation import int_input
-from events.Battle import battle
-
+from events.Battle import *
 
 hero = Hero(name="Franek")
-monster = Monster(name= "Goblin")
+monster = Monster(name="Goblin")
+
 
 class Item:
 
@@ -22,7 +23,6 @@ class Item:
         self.strength = strength
         self.agility = agility
         self.luck = luck
-
 
     def add_power(self, hero):
         hero.strength += self.strength
@@ -37,6 +37,28 @@ class Item:
         hero.max_hp -= self.max_hp
         hero.agility -= self.agility
         hero.luck -= self.luck
+
+    def add_to_inventory(self, hero):
+        hero.inventory.update(monster.loot)
+        # self.add_power(hero)
+        return hero.inventory
+
+    # def use_potion(self, hero):
+    #     if key_pressed() == "p":
+    #         if key_pressed() == "h":
+    #             answer = int_input("Which potion you want to use?/n[1] Healing potion/n[2] Mana power")
+    #             if answer == 1:
+    #                 if self.is_in_inventory():
+    #                     hero.hp + hero.inventory
+
+
+    def is_in_inventory(item, hero):
+        if item in hero.inventory:
+            return True
+        else:
+            return False
+
+
 
     @classmethod
     def gloves(cls, item_type, name, agility):
@@ -68,7 +90,11 @@ class Item:
 
     @classmethod
     def boots(cls, item_type, name, luck):
-        cls(item_type, name, luck)
+        return cls(item_type, name, luck)
+
+    @classmethod
+    def wand(cls, item_type, name, luck):
+        return cls(item_type, name, luck) #TODO MAGIC ITEM
 
     @classmethod
     def healing_potion(cls, item_type, name, max_hp):
@@ -76,20 +102,15 @@ class Item:
 
     @classmethod
     def mana(cls, item_type, name, luck):
-        cls(item_type, name, luck)
+        return cls(item_type, name, luck)
 
     @classmethod
     def key(cls, item_type, name):
         return cls(item_type, name)
 
     @classmethod
-    def coins(cls, item_type, name): #TODO PAWEŁ - jesli kasy na razie się nie wydaje, liczba może zostać w stringu??
-        cls(item_type, name)
-
-    def add_to_inventory(self, hero, loot):
-        hero.inventory.update(Monster.loot)
-        #TODO
-
+    def coins(cls, item_type, name):  # TODO PAWEŁ - jesli kasy na razie się nie wydaje, liczba może zostać w stringu??
+        return cls(item_type, name)
 
 
 treasure = [Item.gloves("gloves", "Magic gloves", 5),
@@ -163,13 +184,12 @@ class Treasure(MyObject):
             hero.inventory[self.loot[0].item_type] = self.loot[0]
             return True
 
-
-    def which_item_in_chest(self, treasure): # losuje item z dostępnych w grze
+    def which_item_in_chest(self, treasure):  # losuje item z dostępnych w grze
         loot = []
         loot.append(choice(treasure))
         return loot
 
 
-
-chest = Treasure("chest", is_locked=True) #tworze obiekt z wybranym parametrem
+chest = Treasure("chest", is_locked=True)  # tworze obiekt z wybranym parametrem
 # chest.open_treasure(hero) #wywoluje funkcje z obiektu z parametrem hero
+# Item.add_to_inventory(monster.loot, hero)

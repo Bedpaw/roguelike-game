@@ -69,5 +69,5 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.IMMEDIATE_FIGHT):
     cprint(f'You have got {monster.exp} exp.', SUCCESS)
     input("\nPress enter to exit fight report...\n")
     hero.get_exp(monster.exp)
-    Item.add_to_inventory(monster.loot)
+    # Item.add_to_inventory(hero, monster)
     pass

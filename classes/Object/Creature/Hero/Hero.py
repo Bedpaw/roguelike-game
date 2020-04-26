@@ -106,10 +106,6 @@ class Hero(Creature):
         target.hp = 0
         cprint(f'{self.name} is stupid cheater...', self.color_in_battle)
 
-    def is_in_inventory(self, item):
-        if item in self.inventory:
-            return True
-        else:
-            return False
+
 
 
