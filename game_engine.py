@@ -9,7 +9,6 @@ def load_game(player_name):
     game_name = get_game_name(player_name)
     game_difficulty_level, board_index, hero_class = read_game_config(player_name)
     path_with_hero_data = f'db/saves/{player_name}/{game_name}/hero.txt'
-    print('board index in load game', board_index)
     hero = load_object_from_file(path_with_hero_data, eval(hero_class))
     game = Game(player_name=player_name,
                 game_name=game_name,
