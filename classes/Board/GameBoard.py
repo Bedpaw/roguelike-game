@@ -124,7 +124,7 @@ class Board:
                     self.game.next_board()
                     valid_key = True
                 elif key_pressed == 'm':
-                    self.hero.show_stats()
+                    self.hero.show_stats_breed()
 
                 else:
                     new_x_pos, new_y_pos = self.hero.move(key_pressed)  # hero.move trick to work with Y, X cords

@@ -2,6 +2,9 @@ from classes.Object.Creature.Hero.Hero import Hero
 from macros.COLORS import COLOR
 from utils.decorations import cprint, ctext
 from macros import MOVES_TYPES, OBJECT_TYPES
+from utils.utils import clear_screen
+
+
 class Palladin(Hero):
     def __init__(self, name="Set_me_name", symbol_on_map="P", position_x=0, position_y=0,
                  strength=20,
@@ -26,17 +29,9 @@ class Palladin(Hero):
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility,
-                         color_in_battle, move_type, level, exp, exp_to_next_level)
+                         color_in_battle, move_type, level, exp, exp_to_next_level,phys_dmg,
+                         luck, doge_chance, defense, stamina, energy, magic_dmg, mana, max_mana)
         self.breed = breed
-        self.phys_dmg = phys_dmg
-        self.luck = luck
-        self.doge_chance = doge_chance
-        self.defense = defense
-        self.stamina = stamina
-        self.energy = energy
-        self.magic_dmg = magic_dmg
-        self.mana = mana
-        self.max_mana = max_mana
 
         # level up attributes
 
@@ -60,3 +55,10 @@ class Palladin(Hero):
             "amount": 5,
         }
     }
+
+    def show_stats_breed(self):
+        clear_screen()
+        print(f"{' '*5}class: {self.breed}")
+        self.stats_info()
+        pass
+

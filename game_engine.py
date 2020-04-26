@@ -45,16 +45,6 @@ def game_engine(user_choice, player_name):
             #save_objects_from_board(f'{path_to_save_boards}{game.current_board_index}/', my_board)
             hero = my_board.hero  # for test shortcut
 
-            print(f'TURN: {game.turn_counter}')
-            print(f'STR: {hero.strength},'
-                  f' LUCK: {hero.luck},'
-                  f' AGL: {hero.agility},'
-                  f' HP: {hero.hp}/{hero.max_hp},'
-                  f' Lvl: {hero.level},'
-                  f' exp: {hero.exp}/{hero.exp_to_next_level}')
-            print(f'X: {my_board.pos_x} Y: {my_board.pos_y}')  # up down / right left
-            if my_board.monsters:
-                print(f'M_X: {my_board.monsters[0].position_x} M_Y: {my_board.monsters[0].position_y}')
 
     # game loop broken
     # hero is dead or game won2
