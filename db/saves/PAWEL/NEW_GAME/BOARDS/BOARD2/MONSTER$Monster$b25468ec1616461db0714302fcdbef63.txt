@@ -1,0 +1,1 @@
+{"name": "Rat", "symbol_on_map": "R", "position_x": 7, "position_y": 7, "id": "b25468ec1616461db0714302fcdbef63", "strength": 10, "hp": 100, "max_hp": 100, "agility": 50, "luck": 10, "move_type": "GUARD_HORIZONTAL", "color_in_battle": "\u001b[31m", "exp": 50, "loot": {}, "on_fight_message": "*pik*pik*", "on_die_message": "Argghr...", "move_param": [3, [0]]}

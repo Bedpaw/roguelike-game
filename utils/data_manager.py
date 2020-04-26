@@ -2,6 +2,7 @@ from games_config.board_factory import create_new_board
 from classes.Object.Creature.Monster.Monsters import Troll
 from classes.Object.Creature.NPC.NPC import NPC
 from classes.Object.Creature.Monster.Monster import Monster
+from utils.validation import int_input
 import os
 import json
 import shutil
@@ -87,8 +88,7 @@ def get_string_between_symbol(symbol, text):
     return string_to_return[:-1]  # Remove symbol at end
 
 
-def read_game_config(player_name):
-    game_name = get_game_name(player_name)
+def read_game_config(player_name, game_name):
     with open(f'db/saves/{player_name}/{game_name}/game_config.txt', 'r') as f:
         list_of_elements = f.readlines()[1].split(', ')
         difficulty_level, board_index, hero_class = list_of_elements
@@ -102,7 +102,15 @@ def write_game_config(game):
 
 
 def get_game_name(player_name):
-    return os.listdir(f'db/saves/{player_name}')[0]
+    games_names = os.listdir(f'db/saves/{player_name}')[::-1]
+    # READY VERSION, COMMENTED
+    # games_as_string = ''
+    # for i, game_name in enumerate(games_names):
+    #     games_as_string += f'{i + 1}. {game_name}\n'
+    #
+    # game_choice = int_input(f'Please choose game to load:\n{games_as_string}> ', len(games_names))
+    # return games_names[game_choice - 1]
+    return games_names[0]   # Mock
 
 
 def create_new_folder(path):

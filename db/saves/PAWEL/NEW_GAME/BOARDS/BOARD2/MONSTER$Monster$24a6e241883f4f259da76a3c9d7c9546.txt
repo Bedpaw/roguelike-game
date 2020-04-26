@@ -1,0 +1,1 @@
+{"name": "Troll", "symbol_on_map": "T", "position_x": 10, "position_y": 9, "id": "24a6e241883f4f259da76a3c9d7c9546", "strength": 40, "hp": 200, "max_hp": 200, "agility": 10, "luck": 10, "move_type": "RANDOM_STRAIGHT", "color_in_battle": "\u001b[31m", "exp": 100, "on_fight_message": "You have no chance with me! ", "on_die_message": "Argghr...", "move_param": null}
