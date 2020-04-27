@@ -58,7 +58,7 @@ class Palladin(Hero):
 
     def show_stats_breed(self):
         clear_screen()
-        print(f"{' '*5}class: {self.breed}")
+        print(f"{' '*5}class: {self.breed} level: {self.level}")
         self.stats_info()
         pass
 

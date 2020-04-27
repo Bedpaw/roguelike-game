@@ -58,7 +58,7 @@ class Sorcerer(Hero):
 
     def show_stats_breed(self):
         clear_screen()
-        print(f"{' '*5}class: {self.breed}")
+        print(f"{' '*5}{self.breed} level: {self.level}")
         print('\n'.join(self.stats_info()))
         pass
 

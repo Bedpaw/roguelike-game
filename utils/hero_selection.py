@@ -6,7 +6,7 @@ from classes.Object.Creature.Hero.Hero_Breed.Sorcerer import Sorcerer
 from classes.Object.Creature.Hero.Hero_Breed.Palladin import Palladin
 
 
-choose_hero_type = {
+select_type = {
     "0": [COLORS.COLOR.RED, "Knight", COLORS.STYLES.RESET, Knight],
     "1": [COLORS.COLOR.BLUE,  "Sorcerer", COLORS.STYLES.RESET, Sorcerer],
     "2": [COLORS.COLOR.GREEN,  "Palladin", COLORS.STYLES.RESET, Palladin]
@@ -18,7 +18,7 @@ def get_user_hero_choice():
     while not valid_key:
         clear_screen()
         print('Select class you want to play [w/s] and press enter:')
-        for k, v in choose_hero_type.items():
+        for k, v in select_type.items():
             if k == str(current_key):
                 print(f"%s{COLORS.BG_COLOR.LIGHTGREY}[{k}]. {v[1]}{v[2]}" % (' ' * 8))
             else:
@@ -31,7 +31,7 @@ def get_user_hero_choice():
             current_key -= 1
         elif ord(key) == 13:
             champ_name = input('Please enter your nickname: ')
-            return choose_hero_type[str(current_key)][3](champ_name)
+            return select_type[str(current_key)][3](champ_name)
         else:
             print("not [w] or [s] pressed")
             time.sleep(2)

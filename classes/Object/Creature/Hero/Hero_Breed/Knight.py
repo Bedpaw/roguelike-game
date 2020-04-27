@@ -59,7 +59,7 @@ class Knight(Hero):
 
     def show_stats_breed(self):
         clear_screen()
-        print(f"{' '*5}class: {self.breed}")
+        print(f"{' '*5}class: {self.breed} level: {self.level}")
         x = self.stats_info()
         print(x)
         pass

@@ -2,8 +2,7 @@ from classes.Object.Creature.Creature import Creature
 from macros.COLORS import *
 from utils.decorations import cprint, ctext
 from macros import MOVES_TYPES, OBJECT_TYPES
-
-
+from utils.key_service import *
 
 class Hero(Creature):
     def __init__(self, name="Set_me_name", symbol_on_map="@", position_x=-1, position_y=-1,
@@ -53,6 +52,30 @@ class Hero(Creature):
         "coins": 100,
     }
     on_fight_message = "Time to stop this creature!"
+    def level_up(self):
+        """
+        1) Add level
+        2) Set new exp_to_next_level
+        3) Improve hero skills
+        :return: pass
+        """
+        self.level += 1
+        self.points_for_level += 5
+        self.exp_to_next_level = self.exp + int(self.exp_to_next_level * 1.3)
+        cprint(f"You have received {self.level} level!", SUCCESS)
+        stats = self.stats_info()
+        # TODO
+        # REGEX in future
+        indexes = [1, 3, 7, 9]
+        for i, item in enumerate(stats):
+            if i in indexes:
+                item[i] += ' + | -'
+
+        while key_pressed() != 'l':
+
+            print('\n'.join(stats))
+
+
 
     def get_exp(self, exp):
         """
@@ -82,7 +105,8 @@ class Hero(Creature):
         cprint(f'{self.name} is stupid cheater...', self.color_in_battle)
 
     def stats_info(self):
-        return[f"{' '*5}{BG_COLOR.RED}{COLOR.CBLACK}{STYLES.BOLD}    strength:     {self.strength}{STYLES.RESET}",
+        return[f"{' '*5}Skill points: {self.points_for_level}",
+            f"{' '*5}{BG_COLOR.RED}{COLOR.CBLACK}{STYLES.BOLD}    strength:     {self.strength}{STYLES.RESET}",
             f"{' '*5}  (physical dmg: {self.phys_dmg})",
             f"{' '*5}{BG_COLOR.GREEN}{COLOR.CBLACK}{STYLES.BOLD}    agility:      {self.agility}{STYLES.RESET}",
             f"{' '*5}  (crit_chance:  {self.luck})",
