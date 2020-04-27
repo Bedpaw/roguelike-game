@@ -35,7 +35,7 @@ class Bridge():
 class Wall_Vertical():
     symbol_on_map = '|'
     field_color = COLORS.BG_COLOR.LIGHTGREY
-    field_move_possible = True
+    field_move_possible = False
 
 
 map_file = 'classes/Board/Map_drawing/level1_map.txt'

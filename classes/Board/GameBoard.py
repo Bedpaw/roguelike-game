@@ -42,8 +42,13 @@ class Board:
     def move_monsters(self):
         for monster in self.monsters:
             valid = False
+            moves_counter = 0
             while not valid:
-                x, y = monster.move()
+                x, y = monster.move(params=monster.move_param)
+                # Skip move if no valid option in 10 trys
+                moves_counter += 1
+                if moves_counter == 10:
+                    valid = True
                 if self.check_move_possibility(monster, x, y):
                     monster.position_x = x
                     monster.position_y = y
@@ -64,10 +69,14 @@ class Board:
         :param positionY:HORIZONTAL <->
         :return: True if move is possible, False if it isn't
         """
+
         # Idea for making one for for checking everything instead for loops do it by checking proper value in given caller
         if positionX < 1 or positionY < 0 or positionY > self.width - 1 or positionX > self.height:
             return False
-        elif self.game_board_in_class[positionX][positionY].field_move_possible == False:
+
+        check_position = self.game_board_in_class[positionX][positionY]  # after 1 if, because index out of range
+
+        if not check_position.field_move_possible:
             return False
 
         else:
@@ -85,17 +94,16 @@ class Board:
                         if one_npc.on_meet(self.hero):  # return True if hero start fight with NPC else False
                             if not one_npc.is_on_board:
                                 del self.npc[i]
-                                # return True
-                            return True
+                                return True
+                        return False
 
             elif isinstance(caller, Monster):
-                if isinstance(self.game_board_in_class[positionX][positionY], NPC):
+                if isinstance(check_position, NPC) or isinstance(check_position, Monster):
                     return False
-
-                elif self.pos_x == positionX and self.pos_y == positionY:
+                if self.pos_x == positionX and self.pos_y == positionY:
                     cprint(f'{self.hero.name} has been attacked by {caller.name}!', ERROR, start_enter=1, wait_after=1)
                     battle(self.hero, caller, BATTLE_MODES.IMMEDIATE_FIGHT)
-                    self.monsters.remove(caller)    # Not sure if this will work with many monsters
+                    self.monsters.remove(caller)  # Not sure if this will work with many monsters
                     return True
 
             # monster vs npc validation
@@ -107,27 +115,33 @@ class Board:
         while not valid_key:
             key_pressed = key_service.key_pressed()
 
-            if key_pressed in ['w', 's', 'a', 'd', 'p', 'm']:
-                if key_pressed == 'p':
-                    exit(0)
+            if key_pressed in ['w', 's', 'a', 'd', 'p', 'm', 'o']:
 
+                if key_pressed == 'p':
+                    exit()
+                if key_pressed == 'o':
+                    cprint("Game saved...", wait_after=1)
+                    self.game.save_game()
+                elif key_pressed == 'm':
+                    self.hero.show_stats_breed()
                 # Move from first gate
                 elif key_pressed == 'd' and self.pos_x == 0 and self.pos_y == 0:
                     self.pos_x += 1
                     valid_key = True
+                # Move to previous board
                 elif self.pos_x == 1 and self.pos_y == 0 and key_pressed == 'a':
                     if self.game.current_board_index != 0:
                         self.game.previous_board()
                         valid_key = True
-
-                elif self.pos_x == self.height and self.pos_y == self.width-1 and key_pressed == 'd':
+                # Move to next board
+                elif self.pos_x == self.height and self.pos_y == self.width - 1 and key_pressed == 'd':
                     self.game.next_board()
                     valid_key = True
-                elif key_pressed == 'm':
-                    self.hero.show_stats_breed()
+
+                # Normal move
 
                 else:
-                    new_x_pos, new_y_pos = self.hero.move(key_pressed)  # hero.move trick to work with Y, X cords
+                    new_x_pos, new_y_pos = self.hero.move(key_pressed)
                     if self.check_move_possibility(self.hero, new_x_pos, new_y_pos):
                         self.pos_x = new_x_pos
                         self.pos_y = new_y_pos
@@ -209,4 +223,5 @@ class Board:
         # BOTTOM PRINT AND LOGIC
         # print(f"{border_field}{' ' * (max_row_length -4)}{border_field}")
         print(f"{new_empty_line[1:]}\n{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}")
+
 

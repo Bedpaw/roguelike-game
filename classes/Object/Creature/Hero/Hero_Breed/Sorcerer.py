@@ -8,7 +8,7 @@ from utils.utils import clear_screen
 
 class Sorcerer(Hero):
     def __init__(self, name="Set_me_name", symbol_on_map="S", position_x=0, position_y=0,
-                 strength=20,
+                 strength=400,
                  phys_dmg=12,
                  hp=300,
                  max_hp=300,

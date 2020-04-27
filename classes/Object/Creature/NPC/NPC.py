@@ -13,6 +13,12 @@ from classes.Object.Creature.Monster.Monsters import Arnold
 
 class NPC(Monster):
     conversation_folder_path = 'db/conversations/'
+    color_in_battle = COLOR.RED
+    color_on_board = COLOR.PURPLE
+    in_conversation_color = COLOR.PURPLE
+    field_color = BG_COLOR.BLUE
+    field_move_possible = True
+    # message_in_field -> wiadomosc do printowania z danego obiektu po ruchu hero
 
     def __init__(self, name="Set_me_name", symbol_on_map="M", position_x=-1, position_y=-1,
                  strength=100,
@@ -20,31 +26,25 @@ class NPC(Monster):
                  max_hp=200,
                  agility=10,
                  luck=0,
-                 color_in_battle=COLOR.RED,
                  move_type=MOVES_TYPES.STAY,
-                 color_on_board=COLOR.PURPLE,
+                 move_param=None,
                  conversation_file_name='example1.txt',
                  exp=300,
-
+                 loot=None,
+                 dialog_index = 0,
+                 on_die_message = "Stop, you won, you can pass...",
+                 on_fight_message = "I warned you..."
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
-                         strength, hp, max_hp, agility, luck)
+                         strength, hp, max_hp, agility, luck, move_type, move_param, exp,
+                         loot, on_fight_message, on_die_message)
 
-        self.color_in_battle = color_in_battle
-        self.color_on_board = color_on_board
-        self.move_type = move_type
-        self.exp = exp
+        self.dialog_index = dialog_index
         self.start_dialog = self.conversation_folder_path + conversation_file_name
         self.dialogs_path = [self.start_dialog]
 
-    in_conversation_color = COLOR.PURPLE
-    dialog_index = 0
-    on_die_message = "Stop, you won, you can pass..."
-    on_fight_message = "I warned you..."
-    field_color = BG_COLOR.BLUE
-    field_move_possible = True
-    NPC_type = OBJECT_TYPES.NPC
-    # message_in_field -> wiadomosc do printowania z danego obiektu po ruchu hero
+
+
     def on_meet(self, hero):
         """
         Function to out if hero meet NPC
@@ -61,7 +61,7 @@ class NPC(Monster):
         :return:[list] indentation_store
         """
         dialog_path = self.dialogs_path[self.dialog_index]
-        return read_dialog_from_file(dialog_path)
+        return self.read_dialog_from_file(dialog_path)
 
     def __do_after_conversation(self, func, hero):
         """
@@ -146,67 +146,72 @@ class NPC(Monster):
                 # Print header
                 cprint(f'\n{self.name}: {next_header_text}\n', self.in_conversation_color, STYLES.BOLD)
 
+    @staticmethod
+    def read_dialog_from_file(text_file):
+        """
 
-def read_dialog_from_file(text_file):
-    """
+        :param text_file:
+        indentation = "  "
+        headers text
+        option always start with [1], [2], [3] etc..
+        &... in headers (except line 1) you have to write which options of next indentation are connected with this header
+        &... for options that end dialog -> this string will be returned from dialog function
 
-    :param text_file:
-    indentation = "  "
-    headers text
-    option always start with [1], [2], [3] etc..
-    &... in headers (except line 1) you have to write which options of next indentation are connected with this header
-    &... for options that end dialog -> this string will be returned from dialog function
-
-    EXAMPLE:
-    Stop don't move or I will kill you!
-      [1] Slow down, let's talk...
-        I don't have time for talking, what do you want? &012  <-- U HAVE TO WRITE ALL OPTIONS HERE
-          [1] Why are you so angry?                             <- 0
-            I have to stay here all day long, when all my friends drinking beer in pub. &0          <--- 0
-              [1] Hmm... maybe I have some idea... &END
-          [2] Me neither! Get out from my way! &BATTLE          <- 1
-          [3] OK, I won't waste your time! &END                 <- 2
-      [2] Get out from my way! &BATTLE
-      [3] Ok, ok, chill out
-        Something other &3                                      <    !!!!!
-          [1] option &END                                       <- 3 !!!!!
+        EXAMPLE:
+        Stop don't move or I will kill you!
+          [1] Slow down, let's talk...
+            I don't have time for talking, what do you want? &012  <-- U HAVE TO WRITE ALL OPTIONS HERE
+              [1] Why are you so angry?                             <- 0
+                I have to stay here all day long, when all my friends drinking beer in pub. &0          <--- 0
+                  [1] Hmm... maybe I have some idea... &END
+              [2] Me neither! Get out from my way! &BATTLE          <- 1
+              [3] OK, I won't waste your time! &END                 <- 2
+          [2] Get out from my way! &BATTLE
+          [3] Ok, ok, chill out
+            Something other &3                                      <    !!!!!
+              [1] option &END                                       <- 3 !!!!!
 
 
-    :return:lines from text_file:list of lists: [
-                            [string, string, string...]
-                            [all lines with 0 indentation]
-                            [all lines with 1 indentation]
-                            etc...
-                            ]
-    """
+        :return:lines from text_file:list of lists: [
+                                [string, string, string...]
+                                [all lines with 0 indentation]
+                                [all lines with 1 indentation]
+                                etc...
+                                ]
+        """
 
-    def longest_indentation_in_line():
-        counter = 0
-        for char in line:
-            if char == " ":
-                counter += 1
-            else:
-                return counter
+        def longest_indentation_in_line():
+            counter = 0
+            for char in line:
+                if char == " ":
+                    counter += 1
+                else:
+                    return counter
 
-    with open(text_file, 'r') as f:
-        lines = f.readlines()
+        with open(text_file, 'r') as f:
+            lines = f.readlines()
 
-        # Find biggest indentation
-        biggest_indentation = 0
-        for line in lines:
-            max_in = longest_indentation_in_line()
-            if max_in > biggest_indentation:
-                biggest_indentation = max_in
+            # Find biggest indentation
+            biggest_indentation = 0
+            for line in lines:
+                max_in = longest_indentation_in_line()
+                if max_in > biggest_indentation:
+                    biggest_indentation = max_in
 
-        # Create store list for dialog lines in all indentations
-        indentation_store = [[] for i in range(int(biggest_indentation / 2) + 2)]
+            # Create store list for dialog lines in all indentations
+            indentation_store = [[] for i in range(int(biggest_indentation / 2) + 2)]
 
-        # Sort dialogs to proper indentations
-        for line in lines:
-            indentation_index = int(longest_indentation_in_line() / 2)
-            line = line.lstrip()[:-1]  # Remove indentations and \n
-            indentation_store[indentation_index].append(line)
-        return indentation_store
+            # Sort dialogs to proper indentations
+            for line in lines:
+                indentation_index = int(longest_indentation_in_line() / 2)
+                line = line.lstrip()[:-1]  # Remove indentations and \n
+                indentation_store[indentation_index].append(line)
+            return indentation_store
+
+    # <---------------------------------- NPC ---------------------------------->
+    @classmethod
+    def gimme_beer_guard(cls):
+        pass
 
 # path = '../../../../db/conversations/example1.txt'
 # guard = NPC("Guard", "A", 1, 1)

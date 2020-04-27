@@ -9,7 +9,7 @@ from macros.COLORS import *
 class Creature(MyObject):
     def __init__(self, name="Set_me_name", symbol_on_map="M", position_x=-1, position_y=-1,
                  strength=5, hp=100, max_hp=100, agility=10, luck=10,
-                 color_in_battle=STYLES.RESET,
+                 color_in_battle=COLOR.RED,
                  move_type=MOVES_TYPES.RANDOM):
 
         super().__init__(name, symbol_on_map, position_x, position_y)

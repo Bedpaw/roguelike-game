@@ -1,8 +1,11 @@
 from games_config.board_factory import create_new_board
 from classes.Object.Creature.Monster.Monsters import Troll
 from classes.Object.Creature.NPC.NPC import NPC
+from classes.Object.Creature.Monster.Monster import Monster
+from utils.validation import int_input
 import os
 import json
+import shutil
 
 
 # utils for reading/writing to files
@@ -58,7 +61,10 @@ def save_objects_from_board(file_path, board):
 def load_boards_to_game(game):
     board_names_list = os.listdir(game.boards_save_path)
     for i, board_name in enumerate(board_names_list):
-        board = create_new_board(game, board_index=i, loading=True)
+        if game.current_board_index == i:
+            board = create_new_board(game, board_index=i, loading=True, current_board=True)
+        else:
+            board = create_new_board(game, board_index=i, loading=True)
         load_objects_to_board(f'{game.boards_save_path}/{board_name}', board)
         game.boards.append(board)
 
@@ -79,16 +85,36 @@ def get_string_between_symbol(symbol, text):
             string_to_return += char
         if char == symbol:
             take_letter = not take_letter
-    return string_to_return[:-1]     # Remove symbol at end
+    return string_to_return[:-1]  # Remove symbol at end
 
 
-def read_game_config(player_name):
-    game_name = get_game_name(player_name)
+def read_game_config(player_name, game_name):
     with open(f'db/saves/{player_name}/{game_name}/game_config.txt', 'r') as f:
         list_of_elements = f.readlines()[1].split(', ')
         difficulty_level, board_index, hero_class = list_of_elements
-        return int(difficulty_level), int(board_index), hero_class
+        return float(difficulty_level), int(board_index), hero_class
+
+
+def write_game_config(game):
+    with open(game.game_config_path, 'w+') as f:
+        f.write("difficulty_level, current_board_index, hero_class\n"
+                f"{game.difficulty_level}, {game.current_board_index}, {game.hero.__class__.__name__}")
 
 
 def get_game_name(player_name):
-    return os.listdir(f'db/saves/{player_name}')[0]
+    games_names = os.listdir(f'db/saves/{player_name}')[::-1]
+    # READY VERSION, COMMENTED
+    # games_as_string = ''
+    # for i, game_name in enumerate(games_names):
+    #     games_as_string += f'{i + 1}. {game_name}\n'
+    #
+    # game_choice = int_input(f'Please choose game to load:\n{games_as_string}> ', len(games_names))
+    # return games_names[game_choice - 1]
+    return games_names[0]   # Mock
+
+
+def create_new_folder(path):
+    print('tpppppp', path)
+    if os.path.exists(path):
+        shutil.rmtree(path)
+    os.mkdir(path)
