@@ -173,6 +173,8 @@ class Board:
 
             if i == 1:
                 additonal_info = f"{' '*2}Nickname: {self.hero.name}  "
+            if i == 2:
+                additonal_info = f"{' '*2}Level: {self.hero.level}  "
             if i == 3:
                 additonal_info = f"{' '*2}Class: {self.hero.breed}  "
             if i == 4:
@@ -184,6 +186,12 @@ class Board:
             if i == 7:
                 additonal_info = f"{' ' * 2}CORDS: x:{self.hero.position_x} | y:{self.hero.position_y}"
                 additonal_info += f"{' ' *(6 - len(str(self.hero.position_x)) - len(str(self.hero.position_y)))}"
+            if i == 8:
+                if self.hero.points_for_level > 0:
+                    additonal_info = f"{' ' * 2}Press [m] to add points  "
+
+
+
 
             middle_fileds += additonal_info
 
