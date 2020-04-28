@@ -114,7 +114,6 @@ def get_game_name(player_name):
 
 
 def create_new_folder(path):
-    print('tpppppp', path)
     if os.path.exists(path):
         shutil.rmtree(path)
     os.mkdir(path)

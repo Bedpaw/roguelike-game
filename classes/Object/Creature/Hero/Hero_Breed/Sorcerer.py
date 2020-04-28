@@ -1,5 +1,5 @@
 from classes.Object.Creature.Hero.Hero import Hero
-from macros.COLORS import COLOR
+from macros.COLORS import *
 from utils.decorations import cprint, ctext
 from macros import MOVES_TYPES, OBJECT_TYPES
 from utils.validation import int_input
@@ -56,11 +56,11 @@ class Sorcerer(Hero):
         }
     }
 
-    def show_stats_breed(self):
-        clear_screen()
-        print(f"{' '*5}{self.breed} level: {self.level}")
-        print('\n'.join(self.stats_info()))
-        pass
 
+    # def add_statistic(self):
+    #     display_add_points = [f"{item} [+] | [-]" for item in self.stats_info()]
+    #     # regex in future not time for now:
+    #     indexes_of_possibilites = [1, 3, 7, 9]
+    #     return self.stats_info()
 
 

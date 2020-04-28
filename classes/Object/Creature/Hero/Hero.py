@@ -4,6 +4,7 @@ from utils.decorations import cprint, ctext
 from macros import MOVES_TYPES, OBJECT_TYPES
 from utils.key_service import *
 from utils.validation import int_input
+import time
 
 class Hero(Creature):
     def __init__(self, name="Set_me_name", symbol_on_map="@", position_x=-1, position_y=-1,
@@ -45,12 +46,10 @@ class Hero(Creature):
         self.mana = mana
         self.max_mana = max_mana
         self.breed = 'Knight'
+        self.current_choice_index = - 1
     field_color = BG_COLOR.RED
     type_of = OBJECT_TYPES.HERO
     color_on_board = STYLES.BOLD + COLOR.CBLACK
-
-
-
 
     inventory = {
         "coins": 100,
@@ -67,7 +66,96 @@ class Hero(Creature):
         self.level += 1
         self.exp_to_next_level = self.exp + int(self.exp_to_next_level * 1.3)
         cprint(f"You have received {self.level} level!", SUCCESS)
-        self.points_for_level+=5
+        self.points_for_level += 5
+
+    def print_add_points(self):
+        choice_possiblities = ['strength', 'agility', 'stamina', 'energy']
+        for k, v in self.stats_info().items():
+            if isinstance(v, list) and k == choice_possiblities[self.current_choice_index]:
+                print(f"%s{COLOR.CBLACK}{STYLES.BOLD}{BG_COLOR.LIGHTGREY}{k} {v[1]}{v[3]}{v[2]}" % (' ' * 8))
+            elif isinstance(v, list):
+                print(f"%s{COLOR.CBLACK}{STYLES.BOLD}{v[0]}{k} {v[1]}{v[3]}{v[2]}" % (' ' * 8))
+            else:
+                print(f"%s   ({k}:{v})" % (' ' * 8))
+
+    def add_statistic(self):
+        # regex in future no time, for now is like it is ... :
+        # indexes_of_possibilites = [1, 3, 7, 9]
+        # display_add_points = [f"{item} [+] | [-]" if i in indexes_of_possibilites
+        #                       else f"{item}" for i, item in enumerate(self.stats_info())]
+        stats_key_pressed = False
+        choice_possiblities = ['strength', 'agility', 'stamina', 'energy']
+        skill_impr = {
+            1: self.strength,
+            2: self.agility,
+            3: self.stamina,
+            4: self.energy
+        }
+        S = 115
+        W = 119
+        ENTER = 13
+        while stats_key_pressed is not 'e':
+            clear_screen()
+
+            print('Press [w]/[s] to select skill.')
+
+            if stats_key_pressed == 'w':
+                self.current_choice_index -= 1
+            if stats_key_pressed == 's':
+                self.current_choice_index += 1
+
+            if self.current_choice_index >= len(choice_possiblities):
+                if ord(stats_key_pressed) == S:
+                    self.current_choice_index = 0
+                elif ord(stats_key_pressed) == W:
+                    self.current_choice_index = 2
+            else:
+                if self.current_choice_index == len(choice_possiblities) and ord(stats_key_pressed) == S:
+                    self.current_choice_index = 0
+                if self.current_choice_index < 0:
+                    self.current_choice_index = len(choice_possiblities) - abs(self.current_choice_index)
+
+            for k, v in self.stats_info().items():
+                if isinstance(v, list) and k == choice_possiblities[self.current_choice_index]:
+                    print(f"%s{COLOR.CBLACK}{STYLES.BOLD}{BG_COLOR.LIGHTGREY}{k} {v[1]}{v[3]}{v[2]}" % (' ' * 8))
+                elif isinstance(v, list):
+                    print(f"%s{COLOR.CBLACK}{STYLES.BOLD}{v[0]}{k} {v[1]}{v[3]}{v[2]}" % (' ' * 8))
+                else:
+                    print(f"%s   ({k}:{v})" % (' ' * 8))
+
+
+            stats_key_pressed = key_pressed()
+            if ord(stats_key_pressed) == ENTER:
+                return True
+
+            # while not labled:
+            #     add_rmv = key_pressed()
+            #     if add_rmv == '+':
+            #         self.points_for_level -= 1
+            #     elif add_rmv == '-':
+            #         self.points_for_level += 1
+            #     else:
+            #         labled = False
+
+
+            #
+            # if ord(stats_key_pressed) == ENTER:
+            #     return stats_key_pressed
+            #     while add_rmv:
+            #         add_rmv = key_pressed()
+            #         if add_rmv == '+':
+            #             self.points_for_level += 1
+            #         elif add_rmv == '-':
+            #             self.points_for_level -= 1
+            #         elif ord(add_rmv) == ENTER:
+            #             add_rmv = False
+            #
+            #     print('Enter dziala')
+            #     time.sleep(1)
+
+
+
+        # return '\n'.join(display_add_points)
 
 
     def get_exp(self, exp):
@@ -98,160 +186,34 @@ class Hero(Creature):
         cprint(f'{self.name} is stupid cheater...', self.color_in_battle)
 
     def stats_info(self):
-        return[f"{' '*5}Skill points: {self.points_for_level}",
-            f"{' '*5}{BG_COLOR.RED}{COLOR.CBLACK}{STYLES.BOLD}    strength:     {self.strength}{STYLES.RESET}",
-            f"{' '*5}  (physical dmg: {self.phys_dmg})",
-            f"{' '*5}{BG_COLOR.GREEN}{COLOR.CBLACK}{STYLES.BOLD}    agility:      {self.agility}{STYLES.RESET}",
-            f"{' '*5}  (crit_chance:  {self.luck})",
-            f"{' '*5}  (doge chance:  {self.doge_chance})",
-            f"{' '*5}  (defense:      {self.defense})",
-            f"{' '*5}{BG_COLOR.ORANGE}{COLOR.CBLACK}{STYLES.BOLD}    stamina:      {self.strength}{STYLES.RESET}",
-            f"{' '*5}  (hp:   {self.strength})",
-            f"{' '*5}{BG_COLOR.BLUE}{COLOR.CBLACK}{STYLES.BOLD}    energy:       {self.strength}{STYLES.RESET}",
-            f"{' '*5}  (magic dmg:  {self.magic_dmg})",
-            f"{' '*5}  (max_mana:  {self.max_mana})"]
+        plus_minus = ' [+]|[-]'
+        return{
+                "Skill points": self.points_for_level,
+                "strength":  [BG_COLOR.RED, self.strength, STYLES.RESET, plus_minus],
+                "physical dmg": self.phys_dmg,
+                "agility": [BG_COLOR.GREEN, self.agility, STYLES.RESET, plus_minus],
+                "crit_chance": self.luck,
+                "doge chance": self.doge_chance,
+                "defense": self.defense,
+                "stamina": [BG_COLOR.ORANGE, self.stamina, STYLES.RESET, plus_minus],
+                "hp": self.hp,
+                "energy": [BG_COLOR.BLUE, self.energy, STYLES.RESET, plus_minus],
+                "magic dmg": self.magic_dmg,
+                "max_mana": self.max_mana
+                }
 
 
+    def show_stats_breed(self):
+        clear_screen()
+        print(f"{' '*5}{self.breed} level: {self.level}")
+        statistic = self.stats_info()
+        label_len = 16
+        for k, v in statistic.items():
+            espace = int((label_len - len(k))/2)
+            if isinstance(v, list):
+                print(f"%s{COLOR.CBLACK}{STYLES.BOLD}{v[0]}{espace * ' '} {k} {v[1]}{espace * ' '}{v[2]}" % (' ' * 8))
+            else:
+                print(f"%s   ({k}:{v})" % (' ' * 8))
+        pass
 
-# from classes.Object.Creature.Creature import Creature
-# from macros.COLORS import *
-# from utils.decorations import cprint, ctext
-# from macros import MOVES_TYPES, OBJECT_TYPES
-# from utils.validation import int_input
-
-
-# class Hero(Creature):
-#     def __init__(self, name="Set_me_name", symbol_on_map="@", position_x=-1, position_y=-1,
-#                  strength=500,
-#                  hp=2000,
-#                  max_hp=400,
-#                  agility=10,
-#                  luck=10,
-#                  color_in_battle=COLOR.GREEN,
-#                  move_type=MOVES_TYPES.MANUAL,
-#                  level=1,
-#                  exp=0,
-#                  exp_to_next_level=100):
-#         super().__init__(name, symbol_on_map, position_x, position_y,
-#                          strength, hp, max_hp, agility, luck)
-#         self.color_in_battle = color_in_battle
-#         self.move_type = move_type
-#         self.level = level
-#         self.exp = exp
-#         self.exp_to_next_level = exp_to_next_level
-#         self.skill_improv = {
-#                 "1": {
-#                     "skill": "strength",
-#                     "amount": 10,
-#                 },
-#                 "2": {
-#                     "skill": "hp",
-#                     "skill2": "max_hp",
-#                     "amount": 30,
-#                 },
-#                 "3": {
-#                     "skill": "agility",
-#                     "amount": 5,
-#                 },
-#                 "4": {
-#                     "skill": "luck",
-#                     "amount": 5,
-#                 }
-#             }
-#     field_color = BG_COLOR.RED
-#     type_of = OBJECT_TYPES.HERO
-#     color_on_board = STYLES.BOLD + COLOR.RED
-
-#     inventory = {
-#         "coins": 100,
-#     }
-#     on_fight_message = "Time to stop this creature!"
-
-#     def level_up(self):
-#         """
-#         1) Add level
-#         2) Set new exp_to_next_level
-#         3) Improve hero skills
-#         :return: pass
-#         """
-#         self.level += 1
-#         self.exp_to_next_level = self.exp + int(self.exp_to_next_level * 1.3)
-#         cprint(f"You have received {self.level} level!", SUCCESS)
-
-#         skill_to_improve = int_input("Which skill do you want to improve?\n"
-#                                      "[1] Strength + 10\n"
-#                                      "[2] Health + 30\n"
-#                                      "[3] Agility + 5\n"
-#                                      "[4] Luck + 5\n"
-#                                      "Pick a number: ", 4)
-
-#         for k, v in self.skill_improv.items():
-#             if k == str(skill_to_improve):
-#                 self.__setattr__(v["skill"], v["amount"] + self.__getattribute__(v["skill"]))
-#                 if "skill2" in v:
-#                     self.__setattr__(v["skill2"], v["amount"] + self.__getattribute__(v["skill2"]))
-#         pass
-
-
-#     def stats_info(self):
-#         # return[f"{' '*5}Skill points: {self.points_for_level}",
-#             f"{' '*5}{BG_COLOR.RED}{COLOR.CBLACK}{STYLES.BOLD}    strength:     {self.strength}{STYLES.RESET}",
-#             # f"{' '*5}  (physical dmg: {self.phys_dmg})",
-#             f"{' '*5}{BG_COLOR.GREEN}{COLOR.CBLACK}{STYLES.BOLD}    agility:      {self.agility}{STYLES.RESET}",
-#             f"{' '*5}  (crit_chance:  {self.luck})",
-#             # f"{' '*5}  (doge chance:  {self.doge_chance})",
-#             # f"{' '*5}  (defense:      {self.defense})",
-#             f"{' '*5}{BG_COLOR.ORANGE}{COLOR.CBLACK}{STYLES.BOLD}    stamina:      {self.strength}{STYLES.RESET}",
-#             f"{' '*5}  (hp:   {self.strength})",
-#             f"{' '*5}{BG_COLOR.BLUE}{COLOR.CBLACK}{STYLES.BOLD}    energy:       {self.strength}{STYLES.RESET}",
-#             f"{' '*5}  (magic dmg:  {self.magic_dmg})",
-#             f"{' '*5}  (max_mana:  {self.max_mana})"]
-
-
- # def level_up(self):
-    #     """
-    #     1) Add level
-    #     2) Set new exp_to_next_level
-    #     3) Improve hero skills
-    #     :return: pass
-    #     """
-    #     self.level += 1
-    #     self.points_for_level += 5
-    #     self.exp_to_next_level = self.exp + int(self.exp_to_next_level * 1.3)
-    #     cprint(f"You have received {self.level} level!", SUCCESS)
-    #     stats = self.stats_info()
-    #     # TODO
-    #     # REGEX in future
-    #     indexes = [1, 3, 7, 9]
-    #     for i, item in enumerate(stats):
-    #         if i in indexes:
-    #             item[i] += ' + | -'
-    #
-    #     while key_pressed() != 'l':
-    #
-    #         print('\n'.join(stats))
-    # def level_up(self):
-    #     """
-    #     1) Add level
-    #     2) Set new exp_to_next_level
-    #     3) Improve hero skills
-    #     :return: pass
-    #     """
-    #     self.level += 1
-    #     self.exp_to_next_level = self.exp + int(self.exp_to_next_level * 1.3)
-    #     cprint(f"You have received {self.level} level!", SUCCESS)
-    #
-    #     skill_to_improve = int_input("Which skill do you want to improve?\n"
-    #                                  "[1] Strength + 10\n"
-    #                                  "[2] Health + 30\n"
-    #                                  "[3] Agility + 5\n"
-    #                                  "[4] Luck + 5\n"
-    #                                  "Pick a number: ", 4)
-    #
-    #     for k, v in self.skill_improv.items():
-    #         if k == str(skill_to_improve):
-    #             self.__setattr__(v["skill"], v["amount"] + self.__getattribute__(v["skill"]))
-    #             if "skill2" in v:
-    #                 self.__setattr__(v["skill2"], v["amount"] + self.__getattribute__(v["skill2"]))
-    #     pass
 

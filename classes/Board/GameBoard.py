@@ -25,7 +25,7 @@ class Board:
         # --------------------------------
         self.game_board_in_class = [[Field()]] + copy.deepcopy(self.board_map) + [[Field()]]
         self.game_board_in_class[self.pos_x][self.pos_y] = self.hero
-        self.name = "Mongolscy przemytnicy rzeżuchy"
+        self.name = "Mongolscy przemytnicy rzeżuchy "
         self.monsters = []
         self.npc = []
         self.treasures = []
@@ -123,7 +123,30 @@ class Board:
                     cprint("Game saved...", wait_after=1)
                     self.game.save_game()
                 elif key_pressed == 'm':
-                    self.hero.show_stats_breed()
+                    if self.hero.points_for_level == 0:
+                        self.hero.show_stats_breed()
+                    elif self.hero.points_for_level > 0:
+                        labled = self.hero.add_statistic()
+
+                        while labled:
+                            val = True
+                            while val:
+                                add_rmv = key_service.key_pressed()
+                                if add_rmv == '+':
+                                    self.hero.points_for_level -= 1
+                                    self.hero.print_add_points()
+                                elif add_rmv == '-':
+                                    self.hero.points_for_level += 1
+                                    self.hero.print_add_points()
+                                elif ord(add_rmv) == 13:
+                                    val = False
+                            labled = self.hero.add_statistic()
+                            exit_loop = key_service.key_pressed()
+                            if ord(exit_loop) == 13:
+                                labled = False
+
+                        self.print_board()
+
                 # Move from first gate
                 elif key_pressed == 'd' and self.pos_x == 0 and self.pos_y == 0:
                     self.pos_x += 1
@@ -189,8 +212,8 @@ class Board:
             if i == 8:
                 if self.hero.points_for_level > 0:
                     additonal_info = f"{' ' * 2}Press [m] to add points  "
-
-
+            if i == 9:
+                    additonal_info = f"{' ' * 2}|H|:HP |M|:MANAss"
 
 
             middle_fileds += additonal_info

@@ -25,11 +25,16 @@ def get_user_hero_choice():
                 print(f"%s{v[0] + v[0]}[{k}]. {v[1]}{v[2]}" % (' ' * 8))
         key = key_pressed()
 
-        if ord(key) == 115:
+    # KEYBOARD PRESS S OR W
+        S = 115
+        W = 119
+        ENTER = 13
+
+        if ord(key) == S:
             current_key += 1
-        elif ord(key) == 119:
+        elif ord(key) == W:
             current_key -= 1
-        elif ord(key) == 13:
+        elif ord(key) == ENTER:
             champ_name = input('Please enter your nickname: ')
             return select_type[str(current_key)][3](champ_name)
         else:
@@ -37,12 +42,12 @@ def get_user_hero_choice():
             time.sleep(2)
 
         if current_key >= 3:
-            if ord(key) == 115:
+            if ord(key) == S:
                 current_key = 0
-            elif ord(key) == 119:
+            elif ord(key) == W:
                 current_key = 2
         else:
-            if current_key == 3 and ord(key) == 115:
+            if current_key == 3 and ord(key) == S:
                 current_key = 0
             if current_key < 0:
                 current_key = 3 - abs(current_key)
