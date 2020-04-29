@@ -2,6 +2,7 @@
 from classes.Object.Object import MyObject
 from macros import COLORS
 
+
 class Gate():
     symbol_on_map = ' '
     field_color = COLORS.BG_COLOR.GREEN
@@ -23,7 +24,7 @@ class Wall():
 class River():
     symbol_on_map = '~'
     field_color = COLORS.BG_COLOR.BLUE
-    field_move_possible = True
+    field_move_possible = False
 
 
 class Bridge():

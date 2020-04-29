@@ -1,6 +1,7 @@
 from classes.Board.Fields import *
+from random import randint
 import copy
-from macros import OBJECT_TYPES, BATTLE_MODES
+from macros import OBJECT_TYPES, BATTLE_MODES, MOVES_TYPES
 from utils import key_service
 from utils.decorations import cprint
 from macros.COLORS import *
