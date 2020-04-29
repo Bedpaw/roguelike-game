@@ -10,6 +10,7 @@ from classes.Board.Fields import Field
 from classes.Object.Creature.Hero.Hero import Hero
 from classes.Object.Creature.NPC.NPC import NPC
 from classes.Object.Creature.Monster.Monster import Monster
+from utils.sounds import play_music, pause_music, unpause_music
 
 import time
 
@@ -32,6 +33,9 @@ class Board:
         self.monsters = []
         self.npc = []
         self.treasures = []
+
+    def special_ground_effect(self):
+        pass
 
     def update_board(self):
         self.make_empty_list()
@@ -104,7 +108,9 @@ class Board:
                     return False
                 if self.pos_x == positionX and self.pos_y == positionY:
                     cprint(f'{self.hero.name} has been attacked by {caller.name}!', ERROR, start_enter=1, wait_after=1)
+                    # pause_music()
                     battle(self.hero, caller, BATTLE_MODES.IMMEDIATE_FIGHT)
+                    # unpause_music()
                     self.monsters.remove(caller)  # Not sure if this will work with many monsters
                     return True
 
@@ -179,3 +185,90 @@ class Board:
 
         # BOTTOM
         # print(f"{' '*13}{overscore*(self.width+3)}\n")
+
+    def random_free_position(self):
+        free_position = False
+        while not free_position:
+            y = randint(0, self.width - 1)
+            x = randint(1, self.height)
+            if isinstance(self.game_board_in_class[x][y], Field):
+                return x, y
+
+    def add_object_in_random_pos(self, init_func, count=1):
+        for i in range(count):
+            self.update_board()
+            x, y = self.random_free_position()
+            obj = init_func(x, y, self.game.difficulty_level)
+            if isinstance(obj, Monster):
+                self.monsters.append(obj)
+
+    @classmethod
+    def board_switcher(cls, board_id, game, board_map, width, height, hero):
+        board = cls(game, board_map, width, height, hero)
+
+        def switcher(board_id):
+            boards = {
+                "0": labirynth,
+                "1": plain,
+                "2": troll_cave_entry,
+                "3": troll_cave,
+                "4": the_great_bridge,
+                "5": city
+            }
+            return boards[str(board_id)]()
+
+        def labirynth():
+            board.name = "Labyrynth"
+            board.monsters = [
+                Monster.troll(7, 7, game.difficulty_level),
+                Monster.rat(9, 7)
+            ]
+            return board
+
+        def plain():
+            board.name = "Plain"
+            board.npc = [NPC("Guard", "G", 4, 8), NPC('Guard', 'G', 4, 10)]
+            board.add_object_in_random_pos(Monster.rat, count=4)
+            board.add_object_in_random_pos(Monster.snake, count=4)
+            return board
+
+        def troll_cave_entry():
+            board.name = "Troll cave entry"
+            board.monsters = [
+                Monster.troll(2, 5, game.difficulty_level),
+                Monster.troll(5, 12, game.difficulty_level),
+                Monster.troll(9, 8, game.difficulty_level),
+            ]
+            board.monsters[0].move_type = MOVES_TYPES.STAY
+            board.monsters[1].move_type = MOVES_TYPES.STAY
+            board.monsters[2].move_type = MOVES_TYPES.STAY
+            board.add_object_in_random_pos(Monster.rat)
+            board.add_object_in_random_pos(Monster.rat)
+            return board
+
+        def troll_cave():
+            board.name = "Troll cave"
+            board.monsters = [Monster.troll_warrior(1, 2, game.difficulty_level),
+                              Monster.troll(4, 5, game.difficulty_level),
+                              Monster.troll(6, 5, game.difficulty_level),
+                              Monster.troll(5, 6, game.difficulty_level),
+                              Monster.troll(5, 4, game.difficulty_level)
+                              ]
+            board.monsters[0].move_type = MOVES_TYPES.STAY
+            board.npc = [
+                NPC.troll_king(5, 5, game.difficulty_level)
+            ]
+            return board
+
+        def the_great_bridge():
+            board.name = "The great bridge"
+            board.add_object_in_random_pos(Monster.rat, count=6)
+
+            return board
+
+        def city():
+            board.name = "City"
+
+            return board
+
+        return switcher(board_id)

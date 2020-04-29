@@ -24,14 +24,14 @@ def create_new_board(game, board_index, loading=False, current_board=False):
             game.hero.position_x = game.true_player_position[0]
             game.hero.position_y = game.true_player_position[1]
 
-    board = Board(game, board_map=board_map,
-                  width=board_width,
-                  height=board_height,
-                  hero=game.hero)
+    board = Board.board_switcher(
+        board_id=board_index,
+        game=game,
+        board_map=board_map,
+        width=board_width,
+        height=board_height,
+        hero=game.hero)
+
     if not loading:
-        board.monsters = [
-            Monster.troll(7, 7, game.difficulty_level),
-            Monster.rat(9, 7)
-         ]
-        board.npc = [NPC("Guard", "G", 1, 3)]
+        pass
     return board

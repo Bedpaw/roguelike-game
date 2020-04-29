@@ -89,7 +89,7 @@ class Monster(Creature):
                    )
 
     @classmethod
-    def rat(cls, pos_x, pos_y,):
+    def rat(cls, pos_x, pos_y, dif_lvl=1):
         return cls(name="Rat",
                    position_x=pos_x,
                    position_y=pos_y,

@@ -5,6 +5,7 @@ from macros import OBJECT_TYPES
 from macros import MOVES_TYPES
 from utils.decorations import cprint
 from utils.validation import int_input
+from macros import DIFFICULTY_LEVEL
 
 # tests
 from classes.Object.Creature.Hero.Hero import Hero
@@ -14,10 +15,10 @@ from classes.Object.Creature.Monster.Monsters import Arnold
 class NPC(Monster):
     conversation_folder_path = 'db/conversations/'
     color_in_battle = COLOR.RED
-    color_on_board = COLOR.PURPLE
     in_conversation_color = COLOR.PURPLE
     field_color = BG_COLOR.BLUE
     field_move_possible = True
+
     # message_in_field -> wiadomosc do printowania z danego obiektu po ruchu hero
 
     def __init__(self, name="Set_me_name", symbol_on_map="M", position_x=-1, position_y=-1,
