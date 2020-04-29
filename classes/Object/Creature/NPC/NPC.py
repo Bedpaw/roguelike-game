@@ -6,6 +6,7 @@ from macros import MOVES_TYPES
 from utils.decorations import cprint
 from utils.validation import int_input
 from macros import DIFFICULTY_LEVEL
+from utils.utils import clear_screen
 
 # tests
 from classes.Object.Creature.Hero.Hero import Hero
@@ -16,7 +17,6 @@ class NPC(Monster):
     conversation_folder_path = 'db/conversations/'
     color_in_battle = COLOR.RED
     in_conversation_color = COLOR.PURPLE
-    field_color = BG_COLOR.BLUE
     field_move_possible = True
 
     # message_in_field -> wiadomosc do printowania z danego obiektu po ruchu hero
@@ -35,7 +35,9 @@ class NPC(Monster):
                  dialog_index=0,
                  on_die_message="Stop, you won, you can pass...",
                  on_fight_message="I warned you...",
-                 color_on_board=COLOR.PURPLE
+                 color_on_board=COLOR.PURPLE,
+                 field_color=BG_COLOR.BLUE
+
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility, luck, move_type, move_param, exp,
@@ -45,16 +47,18 @@ class NPC(Monster):
         self.start_dialog = self.conversation_folder_path + conversation_file_name
         self.dialogs_path = [self.start_dialog]
         self.color_on_board = color_on_board
+        self.field_color = field_color
+
     def on_meet(self, hero):
         """
         Function to out if hero meet NPC
         :param hero:
         :return:pass
         """
-        conversation_effects = self.__conversation(self.__dialog_path(), hero)
+        conversation_effects = self.__conversation(self.__dialog_path(hero), hero)
         return self.__do_after_conversation(conversation_effects, hero)
 
-    def __dialog_path(self):
+    def __dialog_path(self, hero):
         """
         Basic version: read and return as a list lines from txt files:
         This function should be overwritten in child class if you want to change dialog path despite of some conditions
@@ -75,6 +79,9 @@ class NPC(Monster):
             return True
         if func == "TRADE":
             self.__trade(hero)
+
+        if func == "END":
+            clear_screen()
         return False
 
     def __trade(self, hero):
@@ -235,6 +242,31 @@ class NPC(Monster):
                    on_die_message='Ughh, yough bum bum troll kingo... yough ken eat his braaajn nowww'
 
                    )
+
+    @classmethod
+    def fake_wall(cls, pos_x, pos_y, name):
+        fake_wall = cls(
+            name=name,
+            position_x=pos_x,
+            position_y=pos_y,
+            symbol_on_map='|',
+            field_color=BG_COLOR.LIGHTGREY)
+
+        fake_wall.dialogs_path = [
+                                  f'{fake_wall.conversation_folder_path}troll_cave_hole_dialog1.txt',
+                                  f'{fake_wall.conversation_folder_path}troll_cave_hole_dialog2.txt'
+                                  ]
+
+        def __dialog_path(hero):
+            if hero.quest:   # mock
+                fake_wall.dialog_index = 1
+            dialog_path = fake_wall.dialogs_path[fake_wall.dialog_index]
+            return fake_wall.read_dialog_from_file(dialog_path)
+
+        fake_wall.__dialog_path = __dialog_path
+
+        return fake_wall
+
 # path = '../../../../db/conversations/example1.txt'
 # guard = NPC("Guard", "A", 1, 1)
 # monster = Arnold("Guard", "A", 2, 2)

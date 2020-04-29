@@ -12,8 +12,6 @@ from classes.Object.Creature.NPC.NPC import NPC
 from classes.Object.Creature.Monster.Monster import Monster
 from utils.sounds import play_music, pause_music, unpause_music
 
-import time
-
 
 class Board:
     def __init__(self, game, board_map, width, height, hero):
@@ -29,10 +27,11 @@ class Board:
         # --------------------------------
         self.game_board_in_class = [[Field()]] + copy.deepcopy(self.board_map) + [[Field()]]
         self.game_board_in_class[self.pos_x][self.pos_y] = self.hero
-        self.name = "Mongolscy przemytnicy rzeżuchy"
+        self.name = "Mongolscy przemytnicy rzeżuchy "
         self.monsters = []
         self.npc = []
         self.treasures = []
+        self.logo = 'Ziomeczki & ziomale'
 
     def special_ground_effect(self):
         pass
@@ -101,6 +100,7 @@ class Board:
                             if not one_npc.is_on_board:
                                 del self.npc[i]
                                 return True
+                        self.print_board()
                         return False
 
             elif isinstance(caller, Monster):
@@ -123,12 +123,37 @@ class Board:
         while not valid_key:
             key_pressed = key_service.key_pressed()
 
-            if key_pressed in ['w', 's', 'a', 'd', 'p', 'o']:
+            if key_pressed in ['w', 's', 'a', 'd', 'p', 'm', 'o']:
+
                 if key_pressed == 'p':
                     exit()
                 if key_pressed == 'o':
                     cprint("Game saved...", wait_after=1)
                     self.game.save_game()
+                elif key_pressed == 'm':
+                    if self.hero.points_for_level == 0:
+                        self.hero.show_stats_breed()
+                    elif self.hero.points_for_level > 0:
+                        labled = self.hero.add_statistic()
+
+                        while labled:
+                            val = True
+                            while val:
+                                add_rmv = key_service.key_pressed()
+                                if add_rmv == '+':
+                                    self.hero.points_for_level -= 1
+                                    self.hero.print_add_points()
+                                elif add_rmv == '-':
+                                    self.hero.points_for_level += 1
+                                    self.hero.print_add_points()
+                                elif ord(add_rmv) == 13:
+                                    val = False
+                            labled = self.hero.add_statistic()
+                            exit_loop = key_service.key_pressed()
+                            if ord(exit_loop) == 13:
+                                labled = False
+
+                        self.print_board()
 
                 # Move from first gate
                 elif key_pressed == 'd' and self.pos_x == 0 and self.pos_y == 0:
@@ -143,7 +168,9 @@ class Board:
                 elif self.pos_x == self.height and self.pos_y == self.width - 1 and key_pressed == 'd':
                     self.game.next_board()
                     valid_key = True
+
                 # Normal move
+
                 else:
                     new_x_pos, new_y_pos = self.hero.move(key_pressed)
                     if self.check_move_possibility(self.hero, new_x_pos, new_y_pos):
@@ -152,39 +179,95 @@ class Board:
                         valid_key = True
 
     def print_board(self):
-        # overscore = "\u203e"
+        border_field = f"{BG_COLOR.BLUE}  {STYLES.RESET}"
 
-        # MIDDLE
+        # MIDDLE LOGIC
+        middle_border = []
+        max_row_length = 0
+
         for i, list_of_fields in enumerate(self.game_board_in_class):
+
             if i == 0:
-                middle_fileds = f"{' ' * 5}"
+                middle_fileds = f"{border_field}{' ' * 5}"
             elif i == 1 or i == self.height + 1:
                 middle_fileds += ''
             else:
+                middle_fileds = f"\n{border_field}{' ' * 6}"
 
-                middle_fileds += f"\n{' ' * 6}"
+            for j, field in enumerate(list_of_fields):
+                if field.symbol_on_map not in symbols_to_txt_draw.keys():
+                    middle_fileds += self.board_map[i-1][j].field_color + field.color_on_board + field.symbol_on_map + STYLES.RESET
+                else:
+                    middle_fileds += field.field_color + field.symbol_on_map + STYLES.RESET
 
-            for field in list_of_fields:
-                # print(field)
-                # if field.symbol_on_map == '0':
-                #     middle_fileds += BG_COLOR.GREEN + ' ' + STYLES.RESET
-                # else:
-                middle_fileds += field.field_color + field.symbol_on_map + STYLES.RESET
+            additonal_info = ''
 
-            # elif i == len(self.game_board_in_class)-3:
-            #     middle_fileds += '|_\n'
-            # elif i == len(self.game_board_in_class)-2:
-            #     middle_fileds += ''
-            # elif i == len(self.game_board_in_class)-1:
-            #     middle_fileds += ''
+            if i == 1:
+                additonal_info = f"{' '*2}Nickname: {self.hero.name}  "
+            if i == 2:
+                additonal_info = f"{' '*2}Level: {self.hero.level}  "
+            if i == 3:
+                additonal_info = f"{' '*2}Class: {self.hero.breed}  "
+            if i == 4:
+                additonal_info = f"{' '*2}HP: {self.hero.hp}/{self.hero.max_hp}  "
+            if i == 5:
+                additonal_info = f"{' '*2}MANA: {self.hero.hp}/{self.hero.max_hp}  "
+            if i == 6:
+                additonal_info = f"{' '* 2}EXP: {self.hero.exp}/{self.hero.exp_to_next_level}  "
+            if i == 7:
+                additonal_info = f"{' ' * 2}CORDS: x:{self.hero.position_x} | y:{self.hero.position_y}"
+                additonal_info += f"{' ' *(6 - len(str(self.hero.position_x)) - len(str(self.hero.position_y)))}"
+            if i == 8:
+                if self.hero.points_for_level > 0:
+                    additonal_info = f"{' ' * 2}Press [m] to add points  "
+            if i == 9:
+                    additonal_info = f"{' ' * 2}|H|:HP |M|:MANAss"
 
-            # else:
-            #     middle_fileds += '|\n'
 
-        print(middle_fileds, sep='')
+            middle_fileds += additonal_info
+
+            if i is len(self.game_board_in_class) - 1:
+                row_length = self.width + 11 + len(additonal_info)
+            else:
+                row_length = self.width + 10 + len(additonal_info)
+            if i not in [0, len(self.game_board_in_class) - 2]:
+                middle_border.append([row_length, middle_fileds])
+
+            if row_length > max_row_length:
+                max_row_length = row_length
+
+        if len(self.name) + 2 > max_row_length:
+            max_row_length = len(self.name) + 2
+
+
+        # GENERAL
+        new_empty_line = f"\n{border_field}{' ' * (max_row_length -4)}{border_field}"
+        # TOP PRINT AND LOGIC
+        map_name = f"{border_field}{' ' * 2}Mapa: {self.name}{' ' * (max_row_length - len(self.name) - 12)}{border_field}"
+        top = f"{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}\n"
+        logo = f"{border_field}{' ' * 2}{self.logo}{STYLES.RESET}{' ' * (max_row_length - len(self.logo)-6)}{border_field}\n"
+        top += logo + map_name + new_empty_line
+        print(top)
+
+        # MIDDLE
+        mid = []
+        for i, item in enumerate(middle_border):
+            mid.append(f"{item[1]}{' ' * (max_row_length - item[0])}{border_field}")
+        print(''.join(mid), new_empty_line)
+
+
+        # LAST MESSAGE FROM HERO
+        # TODO
+
+        # BOTTOM PRINT AND LOGIC
+        # print(f"{border_field}{' ' * (max_row_length -4)}{border_field}")
+        print(f"{new_empty_line[1:]}\n{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}")
+
+
 
         # BOTTOM
         # print(f"{' '*13}{overscore*(self.width+3)}\n")
+
 
     def random_free_position(self):
         free_position = False
@@ -223,6 +306,7 @@ class Board:
                 Monster.troll(7, 7, game.difficulty_level),
                 Monster.rat(9, 7)
             ]
+
             return board
 
         def plain():
@@ -242,8 +326,8 @@ class Board:
             board.monsters[0].move_type = MOVES_TYPES.STAY
             board.monsters[1].move_type = MOVES_TYPES.STAY
             board.monsters[2].move_type = MOVES_TYPES.STAY
-            board.add_object_in_random_pos(Monster.rat)
-            board.add_object_in_random_pos(Monster.rat)
+            board.add_object_in_random_pos(Monster.rat, count=2)
+
             return board
 
         def troll_cave():
@@ -256,7 +340,8 @@ class Board:
                               ]
             board.monsters[0].move_type = MOVES_TYPES.STAY
             board.npc = [
-                NPC.troll_king(5, 5, game.difficulty_level)
+                NPC.troll_king(5, 5, game.difficulty_level),
+                NPC.fake_wall(6, 11, name="Hole in the wall")
             ]
             return board
 
@@ -272,3 +357,4 @@ class Board:
             return board
 
         return switcher(board_id)
+
