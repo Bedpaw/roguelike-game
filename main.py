@@ -3,11 +3,6 @@ from menu.main_menu import run_main_menu
 from menu.main_menu import welcome_image
 from utils.decorations import cprint
 
-def welcome_image():
-    with open ("default.txt", "r") as f:
-        for row in f:
-            cprint((row[:-1]), BG_COLOR.WHITE, COLOR.DARKGREY, STYLES.BOLD)
-
 
 
 def main():

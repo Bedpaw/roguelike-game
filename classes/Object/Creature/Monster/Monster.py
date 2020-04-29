@@ -3,6 +3,7 @@ from utils.decorations import cprint
 from macros import OBJECT_TYPES, DIFFICULTY_LEVEL
 from macros.COLORS import *
 from macros import MOVES_TYPES
+from classes.Object.Item.Item import *
 
 
 class Monster(Creature):
@@ -64,6 +65,7 @@ class Monster(Creature):
                    exp=100,
                    loot={
                        "gloves": "Magic gloves",
+                       "coins": 100
                    },
                    )
 
@@ -83,6 +85,7 @@ class Monster(Creature):
                    exp=1000,
                    loot={
                        'key': 1,
+                       "gloves": Item.gloves(6)
                    },
                    on_fight_message="YOU LITTLE RAT!",
                    on_die_message="I will be back...",

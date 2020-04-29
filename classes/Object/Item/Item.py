@@ -4,13 +4,13 @@ from utils.key_service import key_pressed
 from macros import OBJECT_TYPES
 from macros.COLORS import *
 from random import *
-from classes.Object.Creature.Hero.Hero import Hero
+# from classes.Object.Creature.Hero.Hero import Hero
 from classes.Object.Creature.Monster.Monster import Monster
 from utils.validation import int_input
-from events.Battle import *
+# from events.Battle import
 
-hero = Hero(name="Franek")
-monster = Monster(name="Goblin")
+# hero = Hero(name="Franek")
+# monster = Monster(name="Goblin")
 
 
 class Item:
@@ -47,31 +47,11 @@ class Item:
         hero.agility -= self.agility
         hero.luck -= self.luck
 
-    def add_to_inventory(self, loot, hero):#add to inventory jako param
-        hero.inventory.update(loot)
-        self.add_power(hero.inventory[loot[0]])
-        return hero.inventory, hero.strength
-
-    def use_potion(self, hero):
-        if key_pressed() == "h":
-            answer = int_input("Which potion you want to use?/n[1] Healing potion/n[2] Mana power")
-            if answer == 1:
-                if self.is_in_inventory():
-                    hero.hp + hero.inventory
-
-
-    def is_in_inventory(self, item, hero):
-        if item in hero.inventory:
-            return True
-        else:
-            return False
-
-
 
     @classmethod
-    def gloves(cls, item_type, name, agility):
-        return cls(item_type, name, agility)
-
+    def gloves(cls, agility=5):
+        names = ["Magic gloves", "Gloves of Goblins"]
+        return cls(agility=agility, item_type="gloves", name=choice(names))
     @classmethod
     def helmet(cls, item_type, name, strength):
         return cls(item_type, name, strength)
@@ -97,56 +77,52 @@ class Item:
         return cls(item_type, name, agility)
 
     @classmethod
-    def boots(cls, item_type, name, luck):
-        return cls(item_type, name, luck)
+    def boots(cls, item_type, name, agility): #strength, agility, stamina, energy
+        return cls(item_type, name, agility)
 
     @classmethod
-    def wand(cls, item_type, name, luck):
-        return cls(item_type, name, luck)
+    def wand(cls, item_type, name, agility):
+        return cls(item_type, name, agility)
 
     @classmethod
-    def healing_potion(cls, item_type, name, max_hp):
-        return cls(item_type, name, max_hp)
+    def healing_potion(cls, item_type, name, stamina):
+        return cls(item_type, name, stamina)
 
     @classmethod
-    def mana(cls, item_type, name, luck):
-        return cls(item_type, name, luck)
+    def mana(cls, item_type, name, energy):
+        return cls(item_type, name, energy)
 
     @classmethod
     def key(cls, item_type, name):
         return cls(item_type, name)
 
-    @classmethod
-    def coins(cls, item_type, name):  # TODO PAWEŁ - jesli kasy na razie się nie wydaje, liczba może zostać w stringu??
-        return cls(item_type, name)
 
 
-treasure = [Item.gloves("gloves", "Magic gloves", 5),
-            Item.gloves("gloves", "Gloves of pain", 8),
-            Item.helmet("helmet", "Odin's horns", 8),
-            Item.helmet("helmet", "Warriors' helmet", 7),
-            Item.sword("sword", "Sword for stinky Trolls", 7),
-            Item.sword("sword", "Ultralight dagger", 6),
-            Item.armor("armor", "Dragon's scales", 15),
-            Item.armor("armor", "Titanium armor", 14),
-            Item.wand("wand", "Wand of Hobbits", 5),
-            Item.wand("wand", "Harry Potter wand", 7),
-            Item.belt("belt", "Snake skin belt", 2),
-            Item.belt("belt", "Karate black belt", 3),
-            Item.trousers("trousers", "King Arthur's pantaloons", 6),
-            Item.trousers("trousers", "Leather trousers", 5),
-            Item.boots("boots", "Boots of luck", 3),
-            Item.boots("boots", "Clover boots", 8),
-            Item.healing_potion("hpotion", "Papa Smurf's healing potion", 50),
-            Item.healing_potion("hpotion", "EXTRA COOL potion", 100),
-            Item.healing_potion("hpotion", "Porter beer + cocaine", 120),
-            Item.healing_potion("hpotion", "Honey and milk", 40),
-            Item.mana("mpotion", "Power is back potion", 10),
-            Item.mana("mpotion", "Gummibear potion", 12),
-            Item.key("key", "steel key"),
-            Item.key("key", "copper key"),
-            Item.coins("coins", "100")
-            ]
+# treasure = [Item.gloves("gloves", "Magic gloves", 5),
+#             Item.gloves("gloves", "Gloves of pain", 8),
+#             Item.helmet("helmet", "Odin's horns", 8),
+#             Item.helmet("helmet", "Warriors' helmet", 7),
+#             Item.sword("sword", "Sword for stinky Trolls", 7),
+#             Item.sword("sword", "Ultralight dagger", 6),
+#             Item.armor("armor", "Dragon's scales", 15),
+#             Item.armor("armor", "Titanium armor", 14),
+#             Item.wand("wand", "Wand of Hobbits", 5),
+#             Item.wand("wand", "Harry Potter wand", 7),
+#             Item.belt("belt", "Snake skin belt", 2),
+#             Item.belt("belt", "Karate black belt", 3),
+#             Item.trousers("trousers", "King Arthur's pantaloons", 6),
+#             Item.trousers("trousers", "Leather trousers", 5),
+#             Item.boots("boots", "Boots of luck", 3),
+#             Item.boots("boots", "Clover boots", 8),
+#             Item.healing_potion("hpotion", "Papa Smurf's healing potion", 50),
+#             Item.healing_potion("hpotion", "EXTRA COOL potion", 100),
+#             Item.healing_potion("hpotion", "Porter beer + cocaine", 120),
+#             Item.healing_potion("hpotion", "Honey and milk", 40),
+#             Item.mana("mpotion", "Power is back potion", 10),
+#             Item.mana("mpotion", "Gummibear potion", 12),
+#             Item.key("key", "steel key"),
+#             Item.key("key", "copper key")
+#             ]
 
 
 class Treasure(MyObject):
@@ -177,11 +153,9 @@ class Treasure(MyObject):
                 if hero.is_in_inventory("key"):
                     loot = self.which_item_in_chest(treasure)
                     if loot[0].item_type in hero.inventory:
-                        if "coins" in hero.inventory:
-                            hero.inventory["coins"] += 100
-                        else:
-                            hero.inventory["coins"] = 100
-                        print(f'You have gain 100 coins!')
+                        if "coins" in loot:
+                            hero.coins += 100
+                            print(f'You have gain 100 coins!')
 
                     else:
                         print(f'You took from chest {loot[0].name}')

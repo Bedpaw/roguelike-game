@@ -87,13 +87,9 @@ def get_string_between_symbol(symbol, text):
             take_letter = not take_letter
     return string_to_return[:-1]  # Remove symbol at end
 
-<<<<<<< HEAD
-def read_game_config(player_name):
-    game_name = get_game_name(player_name)
-=======
 
 def read_game_config(player_name, game_name):
->>>>>>> cc6379c54d52eae76acee8db94ab84b940852ccf
+
     with open(f'db/saves/{player_name}/{game_name}/game_config.txt', 'r') as f:
         list_of_elements = f.readlines()[1].split(', ')
         difficulty_level, board_index, hero_class = list_of_elements

@@ -6,7 +6,7 @@ import time
 
 
 def create_new_board(game, board_index, loading=False, current_board=False):
-    map_file = f'games_config/Map_drawing/level{board_index}_map.txt'
+    map_file = f'../games_config/Map_drawing/level{board_index}_map.txt'
     board_map = get_map(map_file)
 
     board_height = len(board_map)

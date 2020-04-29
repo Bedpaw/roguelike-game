@@ -9,9 +9,9 @@ def create_new_game_mock():
     game_name = "NEW_GAME"
     difficulty_level = 1
 
-    create_new_folder(f'db/saves/{player_name}/{game_name}')
-    create_new_folder(f'db/saves/{player_name}/{game_name}/BOARDS')
-    create_new_folder(f'db/saves/{player_name}/{game_name}/BOARDS/BOARD0')
+    create_new_folder(f'../db/saves/{player_name}/{game_name}')
+    create_new_folder(f'../db/saves/{player_name}/{game_name}/BOARDS')
+    create_new_folder(f'../db/saves/{player_name}/{game_name}/BOARDS/BOARD0')
 
     hero = create_new_hero()
     game = Game(player_name=player_name,

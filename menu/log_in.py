@@ -5,7 +5,7 @@ def log_in():
         player_name = input("Please provide your name: ").upper()
 
         # Search in saves/players.csv if player name exist:
-        is_in_database = True    # MOCK
+        is_in_database = False    # MOCK
 
         # If player is in database store his password here:
         password = "XXX"    # MOCK
