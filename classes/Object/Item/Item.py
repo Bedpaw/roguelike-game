@@ -14,8 +14,17 @@ monster = Monster(name="Goblin")
 
 
 class Item:
+    """Abstract class without place on map, eg. loots from monsters"""
 
-    def __init__(self, item_type="sword", name="set_name", hp=0, max_hp=0, strength=0, agility=0, luck=0):
+    def __init__(self,
+                 item_type="sword",
+                 name="set_name",
+                 hp=0,
+                 max_hp=0,
+                 strength=0,
+                 agility=0,
+                 luck=0):
+
         self.item_type = item_type
         self.name = name
         self.hp = hp
@@ -38,21 +47,20 @@ class Item:
         hero.agility -= self.agility
         hero.luck -= self.luck
 
-    def add_to_inventory(self, hero):
-        hero.inventory.update(monster.loot)
-        # self.add_power(hero)
-        return hero.inventory
+    def add_to_inventory(self, loot, hero):#add to inventory jako param
+        hero.inventory.update(loot)
+        self.add_power(hero.inventory[loot[0]])
+        return hero.inventory, hero.strength
 
-    # def use_potion(self, hero):
-    #     if key_pressed() == "p":
-    #         if key_pressed() == "h":
-    #             answer = int_input("Which potion you want to use?/n[1] Healing potion/n[2] Mana power")
-    #             if answer == 1:
-    #                 if self.is_in_inventory():
-    #                     hero.hp + hero.inventory
+    def use_potion(self, hero):
+        if key_pressed() == "h":
+            answer = int_input("Which potion you want to use?/n[1] Healing potion/n[2] Mana power")
+            if answer == 1:
+                if self.is_in_inventory():
+                    hero.hp + hero.inventory
 
 
-    def is_in_inventory(item, hero):
+    def is_in_inventory(self, item, hero):
         if item in hero.inventory:
             return True
         else:
@@ -94,7 +102,7 @@ class Item:
 
     @classmethod
     def wand(cls, item_type, name, luck):
-        return cls(item_type, name, luck) #TODO MAGIC ITEM
+        return cls(item_type, name, luck)
 
     @classmethod
     def healing_potion(cls, item_type, name, max_hp):
@@ -121,6 +129,8 @@ treasure = [Item.gloves("gloves", "Magic gloves", 5),
             Item.sword("sword", "Ultralight dagger", 6),
             Item.armor("armor", "Dragon's scales", 15),
             Item.armor("armor", "Titanium armor", 14),
+            Item.wand("wand", "Wand of Hobbits", 5),
+            Item.wand("wand", "Harry Potter wand", 7),
             Item.belt("belt", "Snake skin belt", 2),
             Item.belt("belt", "Karate black belt", 3),
             Item.trousers("trousers", "King Arthur's pantaloons", 6),
@@ -140,8 +150,13 @@ treasure = [Item.gloves("gloves", "Magic gloves", 5),
 
 
 class Treasure(MyObject):
+    """Class with treasures, treasure is chooseng item from items"""
 
-    def __init__(self, name="Set_me_name", symbol_on_map="$", position_x=-1, position_y=-1, is_locked=False,
+    def __init__(self,
+                 name="Set_me_name",
+                 symbol_on_map="$",
+                 position_x=-1, position_y=-1,
+                 is_locked=False,
                  message_in_field=""):
 
         super().__init__(name, symbol_on_map, position_x, position_y)
@@ -192,4 +207,4 @@ class Treasure(MyObject):
 
 chest = Treasure("chest", is_locked=True)  # tworze obiekt z wybranym parametrem
 # chest.open_treasure(hero) #wywoluje funkcje z obiektu z parametrem hero
-# Item.add_to_inventory(monster.loot, hero)
+# print(Item().add_to_inventory(monster.loot, hero))
