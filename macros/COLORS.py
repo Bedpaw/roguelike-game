@@ -15,6 +15,8 @@ class STYLES:
 class COLOR:
     WHITE = '\033[30m'
     # WHITE = rs.CreateColor(255, 255, 255)
+    CBLACK = '\33[30m'
+    CWHITE = '\33[37m'
     RED = '\033[31m'
     GREEN = '\033[32m'
     ORANGE = '\033[33m'

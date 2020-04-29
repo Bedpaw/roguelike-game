@@ -14,7 +14,7 @@ class Field():
     field_move_possible = True
 
 
-class Wall():
+class Wall_Horizontal():
     symbol_on_map = '-'
     field_color = COLORS.BG_COLOR.LIGHTGREY
     field_move_possible = False
@@ -32,18 +32,24 @@ class Bridge():
     field_move_possible = True
 
 
+class Wall_Vertical():
+    symbol_on_map = '|'
+    field_color = COLORS.BG_COLOR.LIGHTGREY
+    field_move_possible = False
+
+
 map_file = 'classes/Board/Map_drawing/level1_map.txt'
-# map_file2 = 'class'
 
 symbols_to_txt_draw = {
     '0': Field(),
-    '-': Wall(),
+    '-': Wall_Vertical(),
     '~': River(),
     '=': Bridge(),
-    ' ': Gate()
+    ' ': Gate(),
+    '|': Wall_Horizontal()
 }
 
-def get_map(map_file_name=map_file): #get map
+def get_map(map_file_name=map_file):
     with open(map_file_name, 'r') as f:
         full_map = f.readlines()
         full_map_list = [list(item.strip()) for item in full_map]
@@ -54,7 +60,4 @@ def get_map(map_file_name=map_file): #get map
                 if elem in symbols_to_txt_draw:
                     row_of_fields.append(symbols_to_txt_draw[elem])
             list_of_all_fields.append(row_of_fields)
-    # print(list_of_all_fields)
     return list_of_all_fields
-# map_list = get_background_color(map_file)
-# print(map_list)
