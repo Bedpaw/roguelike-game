@@ -32,9 +32,10 @@ class NPC(Monster):
                  conversation_file_name='example1.txt',
                  exp=300,
                  loot=None,
-                 dialog_index = 0,
-                 on_die_message = "Stop, you won, you can pass...",
-                 on_fight_message = "I warned you..."
+                 dialog_index=0,
+                 on_die_message="Stop, you won, you can pass...",
+                 on_fight_message="I warned you...",
+                 color_on_board=COLOR.PURPLE
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility, luck, move_type, move_param, exp,
@@ -43,9 +44,7 @@ class NPC(Monster):
         self.dialog_index = dialog_index
         self.start_dialog = self.conversation_folder_path + conversation_file_name
         self.dialogs_path = [self.start_dialog]
-
-
-
+        self.color_on_board = color_on_board
     def on_meet(self, hero):
         """
         Function to out if hero meet NPC
@@ -214,6 +213,28 @@ class NPC(Monster):
     def gimme_beer_guard(cls):
         pass
 
+    @classmethod
+    def troll_king(cls, pos_x, pos_y, dif_lvl=DIFFICULTY_LEVEL.NORMAL):
+        dif_dep = cls.difficulty_depends  # shortcut only
+        return cls(name="Troll king",
+                   position_x=pos_x,
+                   position_y=pos_y,
+                   symbol_on_map="T",
+                   strength=dif_dep(70, dif_lvl),
+                   max_hp=dif_dep(500, dif_lvl),
+                   hp=dif_dep(500, dif_lvl),
+                   move_type=MOVES_TYPES.RANDOM_STRAIGHT,
+
+                   exp=300,
+                   loot={
+                       'coins': 500,
+                   },
+                   color_on_board=COLOR.CYAN,
+                   conversation_file_name='troll_king.txt',
+                   on_fight_message="UGA HA!",
+                   on_die_message='Ughh, yough bum bum troll kingo... yough ken eat his braaajn nowww'
+
+                   )
 # path = '../../../../db/conversations/example1.txt'
 # guard = NPC("Guard", "A", 1, 1)
 # monster = Arnold("Guard", "A", 2, 2)
