@@ -3,9 +3,12 @@ from utils.decorations import cprint
 from utils.validation import int_input
 from macros import BATTLE_MODES
 from macros.COLORS import *
+from utils.sounds import *
+from pygame.mixer import music
+from pygame.mixer import Sound
 
 
-def battle(hero, monster, battle_mode=BATTLE_MODES.IMMEDIATE_FIGHT):
+def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT):
     """
     :param hero:[object]
     :param monster:[object]
@@ -28,12 +31,19 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.IMMEDIATE_FIGHT):
                                     'What should I do master?: ', number_of_options=2)
             if hero_attack == 1:
                 hero.attack(monster)
+                # attack = Sound('db/sounds/battle/sword_attack.wav')
+                # attack.play()
             elif hero_attack == 2:
                 hero.special_attack(monster)
         else:
             hero.attack(monster)
 
+
+
     # Battle start messages
+    # music.pause()
+    # music.load('db/sounds/battle.mp3')
+    # music.play(-1)
     cprint(f"Battle start! {hero.name} vs {monster.name}", COLOR.PURPLE, start_enter=1, end_enter=1)
     hero.start_fight_message()
     monster.start_fight_message()
@@ -66,7 +76,12 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.IMMEDIATE_FIGHT):
 
     # Battle end
     cprint(f'You have got {monster.exp} exp.', SUCCESS)
+    # music.load('db/sounds/battle/win_battle.mp3')
+    # music.play()
     input("\nPress enter to exit fight report...\n")
+    # music.stop()
+    # music.unpause()
     hero.get_exp(monster.exp)
     # hero.add_items(monster.loot) TODO: to implement
-    pass
+
+    # return play_music("db/sounds/main_menu_start.mp3", infinite=True)

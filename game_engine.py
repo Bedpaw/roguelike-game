@@ -4,6 +4,8 @@ from utils.data_manager import *
 from games_config.new_game_creator import create_new_game
 from classes.Object.Creature.Hero.Hero import Hero  # eval use it!!!
 from mock.new_game_creator_mock import create_new_game_mock
+from utils.sounds import *
+from classes.Board.GameBoard import Board
 
 
 def load_game(player_name):
@@ -30,12 +32,13 @@ def game_engine(user_choice, player_name):
     while not game.endgame:
         game.board_changed = False
         my_board = game.current_board()
+        play_music("db/sounds/main_menu_start.mp3", infinite=True)
         while not game.board_changed and not game.endgame:
-
             my_board.update_board()
             print(8 * " " + my_board.name)  # to change :TODO Wojtek, print it in GameBoard
             my_board.print_board()
             my_board.get_user_choice()
+            play_sound('db/sounds/monsters/step.wav')
             my_board.move_monsters()
             clear_screen()  # should be right before print boards
             game.turn_counter += 1
