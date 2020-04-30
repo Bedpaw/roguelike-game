@@ -3,7 +3,7 @@ from utils.decorations import cprint
 from macros import OBJECT_TYPES, DIFFICULTY_LEVEL
 from macros.COLORS import *
 from macros import MOVES_TYPES
-from classes.Object.Item.Item import *
+from classes.Object.Item.Item import Item
 
 
 class Monster(Creature):

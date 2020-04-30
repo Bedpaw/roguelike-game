@@ -1,11 +1,11 @@
 from random import *
-from classes.Object.Creature.Hero.Hero import Hero
+# from classes.Object.Creature.Hero.Hero import Hero
 from classes.Object.Creature.Monster.Monster import Monster
 from classes.Object.Object import MyObject
 from macros.COLORS import *
 from utils.validation import int_input
 
-hero = Hero(name="Franek")
+# hero = Hero(name="Franek")
 monster = Monster(name="Goblin")
 
 
@@ -143,6 +143,7 @@ class Treasure(MyObject):
         """
 
         if self.is_locked:
+
             cprint("You have found closed chest, do you want to look into? ", INFO)
             answer = int_input("[1] Yes\n[2] No\n", 2)
             if answer == 1:
@@ -163,14 +164,15 @@ class Treasure(MyObject):
                 cprint("You left closed chest on it\'s place")
                 return False
         else:
+            loot = self.which_item_in_chest(treasure)
             cprint("You have found a chest and you've opened it", INFO)
-            print(f'You took from chest {self.loot[0].name}')
-            hero.inventory[self.loot[0].item_type] = self.loot[0]
+            print(f'You took from chest {loot[0].name}')
+            hero.inventory[loot[0].item_type] = loot[0]
             return True
 
     def which_item_in_chest(self, treasure):  # losuje item z dostępnych w grze
         loot = []
-        loot.append(choice(treasure))
+        loot.append(choice(treasure)())
         return loot
 
 

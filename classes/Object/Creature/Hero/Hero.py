@@ -50,14 +50,24 @@ class Hero(Creature):
         self.max_mana = max_mana
         self.breed = 'Knight'
         self.current_choice_index = - 1
-        self.inventory = {}
+        self.inventory = { #rzeczy noszone dodaja statsy
+            "shield": None,
+            "helmet": None,
+            "gloves": None,
+            "armor": None,
+            "belt": None,
+            "boots": None
+            }
         self.coins = coins
+        self.backpack = [] #rzeczy noszone nie dodaja statsow
 
     field_color = BG_COLOR.RED
     type_of = OBJECT_TYPES.HERO
     color_on_board = STYLES.BOLD + COLOR.CBLACK
 
     on_fight_message = "Time to stop this creature!"
+
+
 
     def level_up(self):
         """
@@ -235,8 +245,8 @@ class Hero(Creature):
     #         if self.is_in_inventory():
     #             hero.hp + hero.inventory
 
-    def is_in_inventory(self, item):
-        if item in self.inventory:
+    def is_in_backpack(self, item):
+        if item in self.backpack:
             return True
         else:
             return False

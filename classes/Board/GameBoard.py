@@ -213,7 +213,7 @@ class Board:
                 if self.hero.points_for_level > 0:
                     additonal_info = f"{' ' * 2}Press [m] to add points  "
             if i == 9:
-                    additonal_info = f"{' ' * 2}|H|:HP |M|:MANAss"
+                    additonal_info = f"{' ' * 2}|H|:HP |M|:MANA"
 
 
             middle_fileds += additonal_info
