@@ -240,7 +240,7 @@ class Hero(Creature):
                 print(f"%s   ({k}:{v})" % (' ' * 8))
         pass
 
-    # -------- ITEMS -------------
+    # -------------------------- ITEMS -------------------------------------------
     def add_to_inventory(self, loot):
 
         for k, v in loot.items():
@@ -256,11 +256,10 @@ class Hero(Creature):
 
     def use_potion(self, key_pressed, item):
         pass
-    # if key_pressed() == "h":
-    #     answer = int_input("Which potion you want to use?/n[1] Healing potion/n[2] Mana power")
-    #     if answer == 1:
-    #         if self.is_in_inventory():
-    #             hero.hp + hero.inventory
+    if key_pressed() == "h":
+        answer = int_input("Which potion you want to use?/n[1] Healing potion/n[2] Mana power")
+        if answer == 1:
+            pass #TODO
 
     def is_in_backpack(self, item):
         if item in self.backpack:
@@ -268,9 +267,5 @@ class Hero(Creature):
         else:
             return False
 
-
-loot = {"gloves": Item.gloves(12), "coins": 100}
-hero = Hero()
-print(hero.add_to_inventory(loot))
 
 
