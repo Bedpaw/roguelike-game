@@ -43,7 +43,7 @@ class Fire():
     symbol_on_map = "\u03A8"
     field_color = COLORS.BG_COLOR.LIGHTGREY
     color_on_board = COLORS.BG_COLOR.ORANGE
-    field_move_possible = False
+    field_move_possible = True
 
 
 map_file = 'classes/Board/Map_drawing/level1_map.txt'
