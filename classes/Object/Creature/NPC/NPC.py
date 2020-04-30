@@ -36,7 +36,8 @@ class NPC(Monster):
                  on_die_message="Stop, you won, you can pass...",
                  on_fight_message="I warned you...",
                  color_on_board=COLOR.PURPLE,
-                 field_color=BG_COLOR.BLUE
+                 field_color=BG_COLOR.BLUE,
+                 quest_func=None
 
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
@@ -79,9 +80,10 @@ class NPC(Monster):
             return True
         if func == "TRADE":
             self.__trade(hero)
-
         if func == "END":
             clear_screen()
+        if func == "QUEST":
+            self.quest_func
         return False
 
     def __trade(self, hero):
@@ -108,6 +110,8 @@ class NPC(Monster):
                 color = COLOR.LIGHTGREY
             elif "TRADE" in option:
                 color = COLOR.GREEN
+            elif "QUEST" in option:
+                color = COLOR.YELLOW
             return color
 
         ends_index = []
@@ -235,6 +239,7 @@ class NPC(Monster):
                    exp=300,
                    loot={
                        'coins': 500,
+                       'troll_king_brain': 1,
                    },
                    color_on_board=COLOR.CYAN,
                    conversation_file_name='troll_king.txt',
@@ -258,7 +263,7 @@ class NPC(Monster):
                                   ]
 
         def __dialog_path(hero):
-            if hero.quest:   # mock
+            if hero.quests:   # mock
                 fake_wall.dialog_index = 1
             dialog_path = fake_wall.dialogs_path[fake_wall.dialog_index]
             return fake_wall.read_dialog_from_file(dialog_path)
@@ -266,6 +271,20 @@ class NPC(Monster):
         fake_wall.__dialog_path = __dialog_path
 
         return fake_wall
+
+    @classmethod
+    def king(cls, pos_x, pos_y):
+        king = cls(
+            name="King Andrei",
+            position_x=pos_x,
+            position_y=pos_y,
+            symbol_on_map='#',
+            color_on_board=COLOR.YELLOW,
+        )
+        king.dialogs_path = [
+            f'{king.conversation_folder_path}king_before_quest.txt'
+        ]
+
 
 # path = '../../../../db/conversations/example1.txt'
 # guard = NPC("Guard", "A", 1, 1)
