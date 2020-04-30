@@ -3,9 +3,12 @@ from utils.decorations import cprint
 from utils.validation import int_input
 from macros import BATTLE_MODES
 from macros.COLORS import *
+
 from utils.sounds import *
 from pygame.mixer import music
 from pygame.mixer import Sound
+from classes.Object.Item.Item import Item
+
 
 
 def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT):
@@ -82,6 +85,9 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT):
     # music.stop()
     # music.unpause()
     hero.get_exp(monster.exp)
-    # hero.add_items(monster.loot) TODO: to implement
 
+    # hero.add_items(monster.loot) TODO: to implement
     # return play_music("db/sounds/main_menu_start.mp3", infinite=True)
+    # Item.add_to_inventory(hero, monster)
+    pass
+

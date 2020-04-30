@@ -89,6 +89,7 @@ def get_string_between_symbol(symbol, text):
 
 
 def read_game_config(player_name, game_name):
+
     with open(f'db/saves/{player_name}/{game_name}/game_config.txt', 'r') as f:
         list_of_elements = f.readlines()[1].split(', ')
         difficulty_level, board_index, hero_class = list_of_elements
@@ -111,7 +112,6 @@ def get_game_name(player_name):
     # game_choice = int_input(f'Please choose game to load:\n{games_as_string}> ', len(games_names))
     # return games_names[game_choice - 1]
     return games_names[0]   # Mock
-
 
 def create_new_folder(path):
     if os.path.exists(path):

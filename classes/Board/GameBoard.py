@@ -13,6 +13,8 @@ from classes.Object.Creature.Monster.Monster import Monster
 from utils.sounds import play_music, pause_music, unpause_music
 
 
+
+
 class Board:
     def __init__(self, game, board_map, width, height, hero):
         self.game = game
@@ -74,7 +76,6 @@ class Board:
         :param positionY:HORIZONTAL <->
         :return: True if move is possible, False if it isn't
         """
-
         # Idea for making one for for checking everything instead for loops do it by checking proper value in given caller
         if positionX < 1 or positionY < 0 or positionY > self.width - 1 or positionX > self.height:
             return False
@@ -134,26 +135,9 @@ class Board:
                     if self.hero.points_for_level == 0:
                         self.hero.show_stats_breed()
                     elif self.hero.points_for_level > 0:
-                        labled = self.hero.add_statistic()
+                        self.hero.show_stats_with_add_points()
 
-                        while labled:
-                            val = True
-                            while val:
-                                add_rmv = key_service.key_pressed()
-                                if add_rmv == '+':
-                                    self.hero.points_for_level -= 1
-                                    self.hero.print_add_points()
-                                elif add_rmv == '-':
-                                    self.hero.points_for_level += 1
-                                    self.hero.print_add_points()
-                                elif ord(add_rmv) == 13:
-                                    val = False
-                            labled = self.hero.add_statistic()
-                            exit_loop = key_service.key_pressed()
-                            if ord(exit_loop) == 13:
-                                labled = False
-
-                        self.print_board()
+                        # self.print_board()
 
                 # Move from first gate
                 elif key_pressed == 'd' and self.pos_x == 0 and self.pos_y == 0:
@@ -221,7 +205,7 @@ class Board:
                 if self.hero.points_for_level > 0:
                     additonal_info = f"{' ' * 2}Press [m] to add points  "
             if i == 9:
-                    additonal_info = f"{' ' * 2}|H|:HP |M|:MANAss"
+                    additonal_info = f"{' ' * 2}|H|:HP |M|:MANA"
 
 
             middle_fileds += additonal_info

@@ -36,25 +36,18 @@ class Sorcerer(Hero):
 
         # level up attributes
 
-    skill_improv = {
-        "1": {
-            "skill": "strength",
-            "amount": 10,
-        },
-        "2": {
-            "skill": "hp",
-            "skill2": "max_hp",
-            "amount": 50,
-        },
-        "3": {
-            "skill": "agility",
-            "amount": 5,
-        },
-        "4": {
-            "skill": "luck",
-            "amount": 5,
+        self.add_abilities = {
+            1: 2,
+            2: [3, 2, 3],
+            3: [20],
+            4: [5, 30]
         }
-    }
+        self.add_abilities = {
+            "strength": 2,
+            "agility": [3, 2, 3],
+            "stamina": [20],
+            "energy": [5, 30]
+        }
 
 
     # def add_statistic(self):
