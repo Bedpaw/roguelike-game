@@ -25,12 +25,12 @@ def load_game(player_name):
     return game
 
 
-def game_engine(user_choice, player_name):
-    if user_choice == 1:
-        # game = create_new_game(player_name) # !!! <-- Uncomment for full version
-        game = create_new_game_mock()  # !!! <-- Comment for full version
-    elif user_choice == 2:
-        game = load_game(player_name)
+def game_engine(game, player_name):
+    # if user_choice == 1:
+    #     # game = create_new_game(player_name) # !!! <-- Uncomment for full version
+    #     game = create_new_game_mock()  # !!! <-- Comment for full version
+    # elif user_choice == 2:
+    #     game = load_game(player_name)
 
     while not game.endgame:
         game.board_changed = False
@@ -49,4 +49,4 @@ def game_engine(user_choice, player_name):
     # final screen? # add to high scores
 
 
-game_engine(1, "PAWEL")
+# game_engine(1, "PAWEL")

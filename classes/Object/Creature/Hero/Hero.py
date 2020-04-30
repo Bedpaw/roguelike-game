@@ -1,10 +1,14 @@
 from classes.Object.Creature.Creature import Creature
+from classes.Object.Item.Item import Item
 from macros.COLORS import *
 from utils.decorations import cprint, ctext
 from macros import MOVES_TYPES, OBJECT_TYPES
 from utils.key_service import *
+
 from utils.validation import int_input
 import time
+import operator
+
 
 class Hero(Creature):
     def __init__(self, name="Set_me_name", symbol_on_map="@", position_x=-1, position_y=-1,
@@ -27,6 +31,7 @@ class Hero(Creature):
                  magic_dmg=0,
                  mana=0,
                  max_mana=0,
+                 coins=100
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility)
@@ -47,14 +52,24 @@ class Hero(Creature):
         self.max_mana = max_mana
         self.breed = ''
         self.current_choice_index = - 1
+        self.inventory = { #rzeczy noszone dodaja statsy
+            "shield": None,
+            "helmet": None,
+            "gloves": None,
+            "armor": None,
+            "belt": None,
+            "boots": None
+            }
+        self.coins = coins
+        self.backpack = [] #rzeczy noszone nie dodaja statsow
+
     field_color = BG_COLOR.RED
     type_of = OBJECT_TYPES.HERO
     color_on_board = STYLES.BOLD + COLOR.CBLACK
 
-    inventory = {
-        "coins": 100,
-    }
     on_fight_message = "Time to stop this creature!"
+
+
 
     def level_up(self):
         """
@@ -79,12 +94,26 @@ class Hero(Creature):
             else:
                 print(f"%s   ({k}:{v})" % (' ' * 8))
 
+
+    def add_rmv_points(self, skill_choice, add_rmv):
+        operator_choice = {
+            '+': operator.add,
+            '-': operator.sub
+        }
+        if skill_choice == 0:
+            self.strength = operator_choice[add_rmv](self.strength, 1)
+        elif skill_choice == 1:
+            self.agility = operator_choice[add_rmv](self.agility, 1)
+        elif skill_choice == 2:
+            self.stamina = operator_choice[add_rmv](self.stamina, 1)
+        elif skill_choice == 3:
+            self.energy = operator_choice[add_rmv](self.energy, 1)
+
     def add_statistic(self):
 
         stats_key_pressed = False
         choice_possiblities = ['strength', 'agility', 'stamina', 'energy']
         print(self.breed)
-        time.sleep(2)
 
         skill_impr = {
             1: self.strength,
@@ -153,6 +182,7 @@ class Hero(Creature):
 
     def stats_info(self):
         plus_minus = ' [+]|[-]'
+
         return{
                 "Skill points": self.points_for_level,
                 "strength":  [BG_COLOR.RED, self.strength, STYLES.RESET, plus_minus],
@@ -167,18 +197,79 @@ class Hero(Creature):
                 "magic dmg": self.magic_dmg,
                 "max_mana": self.max_mana
                 }
+    def show_stats_with_add_points(self):
+        labled, skill_choice = self.add_statistic()
+        temp_skill_add_points = self.points_for_level
+        while labled:
+            val = True
+            while val:
+                add_rmv = key_pressed()
+                if add_rmv == '+':
+                    if self.points_for_level < 1:
+                        val = False
+                    else:
+                        self.points_for_level -= 1
+                        self.add_rmv_points(skill_choice, add_rmv)
+                elif add_rmv == '-':
+                    if self.points_for_level >= temp_skill_add_points:
+                        val = False
+                    else:
+                        self.points_for_level += 1
+                        self.add_rmv_points(skill_choice, add_rmv)
+
+                elif ord(add_rmv) == 13:
+                    val = False
+                self.print_add_points()
+
+            labled = self.add_statistic()
+            exit_loop = key_pressed()
+            if ord(exit_loop) == 13:
+                labled = False
 
     def show_stats_breed(self):
         clear_screen()
-        print(f"{' '*5}{self.breed} level: {self.level}")
+        print(f"{' ' * 5}{self.breed} level: {self.level}")
         statistic = self.stats_info()
         label_len = 16
         for k, v in statistic.items():
-            espace = int((label_len - len(k))/2)
+            espace = int((label_len - len(k)) / 2)
             if isinstance(v, list):
                 print(f"%s{COLOR.CBLACK}{STYLES.BOLD}{v[0]}{espace * ' '} {k} {v[1]}{espace * ' '}{v[2]}" % (' ' * 8))
             else:
                 print(f"%s   ({k}:{v})" % (' ' * 8))
         pass
+
+    # -------- ITEMS -------------
+    def add_to_inventory(self, loot):
+
+        for k, v in loot.items():
+            if k == "coins":
+                self.coins += v
+            else:
+                self.inventory.update({k: v})
+                v.add_power(self)
+
+    def print_inventory(self):
+        for k, v in self.inventory.items():  # TODO PATI
+            print(k, v.name)
+
+    def use_potion(self, key_pressed, item):
+        pass
+    # if key_pressed() == "h":
+    #     answer = int_input("Which potion you want to use?/n[1] Healing potion/n[2] Mana power")
+    #     if answer == 1:
+    #         if self.is_in_inventory():
+    #             hero.hp + hero.inventory
+
+    def is_in_backpack(self, item):
+        if item in self.backpack:
+            return True
+        else:
+            return False
+
+
+loot = {"gloves": Item.gloves(12), "coins": 100}
+hero = Hero()
+print(hero.add_to_inventory(loot))
 
 

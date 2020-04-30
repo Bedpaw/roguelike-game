@@ -1,6 +1,7 @@
 from classes.Object.Creature.Monster.Monster import Monster
 from macros import MOVES_TYPES
 from macros.COLORS import *
+from classes.Object.Item.Item import Item
 
 
 class Troll(Monster):
@@ -11,6 +12,7 @@ class Troll(Monster):
     exp = 100
     loot = {
         "coins": 150,
+
     }
     field_color = BG_COLOR.BLUE
     field_move_possible = True

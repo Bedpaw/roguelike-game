@@ -5,6 +5,7 @@ from macros.COLORS import *
 from macros import MOVES_TYPES
 
 
+
 class Monster(Creature):
     color_on_board = COLOR.RED
     color_in_battle = COLOR.RED
@@ -63,7 +64,8 @@ class Monster(Creature):
                    move_type=MOVES_TYPES.RANDOM_STRAIGHT,
                    exp=100,
                    loot={
-                       'coins': 150,
+                       "gloves": "Magic gloves",
+                       "coins": 100
                    },
                    )
 
@@ -83,6 +85,7 @@ class Monster(Creature):
                    exp=1000,
                    loot={
                        'key': 1,
+                       # "gloves": Item.gloves(6)
                    },
                    on_fight_message="YOU LITTLE RAT!",
                    on_die_message="I will be back...",

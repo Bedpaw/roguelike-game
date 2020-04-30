@@ -110,20 +110,6 @@ class Board:
             # item in the feature(monster i hero)
             return True
 
-    def add_rmv_points(self, skill_choice, add_rmv):
-        operator_choice = {
-            '+': operator.add,
-            '-': operator.sub
-        }
-        if skill_choice == 0:
-            self.hero.strength = operator_choice[add_rmv](self.hero.strength, 1)
-        elif skill_choice == 1:
-            self.hero.agility = operator_choice[add_rmv](self.hero.agility, 1)
-        elif skill_choice == 2:
-            self.hero.stamina = operator_choice[add_rmv](self.hero.stamina, 1)
-        elif skill_choice == 3:
-            self.hero.energy = operator_choice[add_rmv](self.hero.energy, 1)
-
     def get_user_choice(self):
         valid_key = False  # change to True if key is valid AND move is possible
         while not valid_key:
@@ -140,35 +126,9 @@ class Board:
                     if self.hero.points_for_level == 0:
                         self.hero.show_stats_breed()
                     elif self.hero.points_for_level > 0:
-                        labled, skill_choice = self.hero.add_statistic()
-                        temp_skill_add_points = self.hero.points_for_level
-                        while labled:
-                            val = True
-                            while val:
-                                add_rmv = key_service.key_pressed()
-                                if add_rmv == '+':
-                                    if self.hero.points_for_level < 1:
-                                        val = False
-                                    else:
-                                        self.hero.points_for_level -= 1
-                                        self.add_rmv_points(skill_choice, add_rmv)
-                                elif add_rmv == '-':
-                                    if self.hero.points_for_level >= temp_skill_add_points:
-                                        val = False
-                                    else:
-                                        self.hero.points_for_level += 1
-                                        self.add_rmv_points(skill_choice, add_rmv)
+                        self.hero.show_stats_with_add_points()
 
-                                elif ord(add_rmv) == 13:
-                                    val = False
-                                self.hero.print_add_points()
-
-                            labled = self.hero.add_statistic()
-                            exit_loop = key_service.key_pressed()
-                            if ord(exit_loop) == 13:
-                                labled = False
-
-                        self.print_board()
+                        # self.print_board()
 
                 # Move from first gate
                 elif key_pressed == 'd' and self.pos_x == 0 and self.pos_y == 0:
@@ -236,7 +196,7 @@ class Board:
                 if self.hero.points_for_level > 0:
                     additonal_info = f"{' ' * 2}Press [m] to add points  "
             if i == 9:
-                    additonal_info = f"{' ' * 2}|H|:HP |M|:MANAss"
+                    additonal_info = f"{' ' * 2}|H|:HP |M|:MANA"
 
 
             middle_fileds += additonal_info
