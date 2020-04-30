@@ -176,7 +176,7 @@ class Treasure(MyObject):
         return loot
 
 
-print(which_item_in_chest(self,treasure))
+print(Treasure.which_item_in_chest(treasure))
 
 chest = Treasure("chest", is_locked=True)  # tworze obiekt z wybranym parametrem
 chest.open_treasure(hero) #wywoluje funkcje z obiektu z parametrem hero
