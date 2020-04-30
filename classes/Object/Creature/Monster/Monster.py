@@ -6,6 +6,7 @@ from macros import MOVES_TYPES
 from classes.Object.Item.Item import Item
 
 
+
 class Monster(Creature):
     color_on_board = COLOR.RED
     color_in_battle = COLOR.RED
@@ -70,6 +71,24 @@ class Monster(Creature):
                    )
 
     @classmethod
+    def troll_warrior(cls, pos_x, pos_y, dif_lvl=DIFFICULTY_LEVEL.NORMAL):
+        dif_dep = cls.difficulty_depends  # shortcut only
+        return cls(name="Troll warrior",
+                   position_x=pos_x,
+                   position_y=pos_y,
+                   symbol_on_map="T",
+                   strength=dif_dep(50, dif_lvl),
+                   max_hp=dif_dep(300, dif_lvl),
+                   hp=dif_dep(300, dif_lvl),
+                   move_type=MOVES_TYPES.RANDOM_STRAIGHT,
+                   exp=150,
+                   loot={
+                       'coins': 250,
+                        "belt" : Item.belt(7)
+                   },
+                   )
+
+    @classmethod
     def giant(cls, pos_x, pos_y, dif_lvl=DIFFICULTY_LEVEL.NORMAL):
         dif_dep = cls.difficulty_depends  # shortcut only
         return cls(name="Giant",
@@ -92,7 +111,7 @@ class Monster(Creature):
                    )
 
     @classmethod
-    def rat(cls, pos_x, pos_y,):
+    def rat(cls, pos_x, pos_y, dif_lvl=1):
         return cls(name="Rat",
                    position_x=pos_x,
                    position_y=pos_y,
@@ -100,6 +119,9 @@ class Monster(Creature):
                    move_param=[3, [0]],
                    symbol_on_map="R",
                    agility=50,
+                   loot={
+                       "boots": Item.boots(4)
+                   },
                    on_fight_message="*pik*pik*")
 
     @classmethod
@@ -114,6 +136,9 @@ class Monster(Creature):
                    strength=dif_dep(20, dif_lvl),
                    agility=80,
                    luck=30,
+                   loot={
+                       "gloves": Item.shield(9)
+                   },
                    on_fight_message="sssss",
                    on_die_message="sssss",
                    )

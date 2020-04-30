@@ -176,8 +176,8 @@ class Treasure(MyObject):
         return loot
 
 
-print(Treasure.which_item_in_chest(treasure))
-
-chest = Treasure("chest", is_locked=True)  # tworze obiekt z wybranym parametrem
-chest.open_treasure(hero) #wywoluje funkcje z obiektu z parametrem hero
-print(Item().add_to_inventory(monster.loot, hero))
+# print(which_item_in_chest(self,treasure))
+#
+# chest = Treasure("chest", is_locked=True)  # tworze obiekt z wybranym parametrem
+# chest.open_treasure(hero) #wywoluje funkcje z obiektu z parametrem hero
+# print(Item().add_to_inventory(monster.loot, hero))

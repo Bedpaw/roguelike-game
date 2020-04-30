@@ -4,8 +4,10 @@ from macros.COLORS import *
 from utils.decorations import cprint, ctext
 from macros import MOVES_TYPES, OBJECT_TYPES
 from utils.key_service import *
+
 from utils.validation import int_input
 import time
+import operator
 
 
 class Hero(Creature):
@@ -48,8 +50,9 @@ class Hero(Creature):
         self.magic_dmg = magic_dmg
         self.mana = mana
         self.max_mana = max_mana
-        self.breed = 'Knight'
+        self.breed = ''
         self.current_choice_index = - 1
+        self.quests = []
         self.inventory = { #rzeczy noszone dodaja statsy
             "shield": None,
             "helmet": None,
@@ -83,6 +86,7 @@ class Hero(Creature):
 
     def print_add_points(self):
         choice_possiblities = ['strength', 'agility', 'stamina', 'energy']
+        print(f"{item} [+] | [-]" for item in self.stats_info())
         for k, v in self.stats_info().items():
             if isinstance(v, list) and k == choice_possiblities[self.current_choice_index]:
                 print(f"%s{COLOR.CBLACK}{STYLES.BOLD}{BG_COLOR.LIGHTGREY}{k} {v[1]}{v[3]}{v[2]}" % (' ' * 8))
@@ -91,27 +95,42 @@ class Hero(Creature):
             else:
                 print(f"%s   ({k}:{v})" % (' ' * 8))
 
+
+    def add_rmv_points(self, skill_choice, add_rmv):
+        operator_choice = {
+            '+': operator.add,
+            '-': operator.sub
+        }
+        if skill_choice == 0:
+            self.strength = operator_choice[add_rmv](self.strength, 1)
+        elif skill_choice == 1:
+            self.agility = operator_choice[add_rmv](self.agility, 1)
+        elif skill_choice == 2:
+            self.stamina = operator_choice[add_rmv](self.stamina, 1)
+        elif skill_choice == 3:
+            self.energy = operator_choice[add_rmv](self.energy, 1)
+
     def add_statistic(self):
-        # regex in future no time, for now is like it is ... :
-        # indexes_of_possibilites = [1, 3, 7, 9]
-        # display_add_points = [f"{item} [+] | [-]" if i in indexes_of_possibilites
-        #                       else f"{item}" for i, item in enumerate(self.stats_info())]
+
         stats_key_pressed = False
         choice_possiblities = ['strength', 'agility', 'stamina', 'energy']
+        print(self.breed)
+
         skill_impr = {
             1: self.strength,
             2: self.agility,
             3: self.stamina,
             4: self.energy
         }
+
         S = 115
         W = 119
         ENTER = 13
+
         while stats_key_pressed is not 'e':
             clear_screen()
 
-            print('Press [w]/[s] to select skill.')
-
+            print('Select by [w]/[s] and press[enter] to select skill.')
             if stats_key_pressed == 'w':
                 self.current_choice_index -= 1
             if stats_key_pressed == 's':
@@ -128,43 +147,12 @@ class Hero(Creature):
                 if self.current_choice_index < 0:
                     self.current_choice_index = len(choice_possiblities) - abs(self.current_choice_index)
 
-            for k, v in self.stats_info().items():
-                if isinstance(v, list) and k == choice_possiblities[self.current_choice_index]:
-                    print(f"%s{COLOR.CBLACK}{STYLES.BOLD}{BG_COLOR.LIGHTGREY}{k} {v[1]}{v[3]}{v[2]}" % (' ' * 8))
-                elif isinstance(v, list):
-                    print(f"%s{COLOR.CBLACK}{STYLES.BOLD}{v[0]}{k} {v[1]}{v[3]}{v[2]}" % (' ' * 8))
-                else:
-                    print(f"%s   ({k}:{v})" % (' ' * 8))
+            self.print_add_points()
 
             stats_key_pressed = key_pressed()
             if ord(stats_key_pressed) == ENTER:
-                return True
+                return True, self.current_choice_index
 
-            # while not labled:
-            #     add_rmv = key_pressed()
-            #     if add_rmv == '+':
-            #         self.points_for_level -= 1
-            #     elif add_rmv == '-':
-            #         self.points_for_level += 1
-            #     else:
-            #         labled = False
-
-            #
-            # if ord(stats_key_pressed) == ENTER:
-            #     return stats_key_pressed
-            #     while add_rmv:
-            #         add_rmv = key_pressed()
-            #         if add_rmv == '+':
-            #             self.points_for_level += 1
-            #         elif add_rmv == '-':
-            #             self.points_for_level -= 1
-            #         elif ord(add_rmv) == ENTER:
-            #             add_rmv = False
-            #
-            #     print('Enter dziala')
-            #     time.sleep(1)
-
-        # return '\n'.join(display_add_points)
 
     def get_exp(self, exp):
         """
@@ -195,20 +183,49 @@ class Hero(Creature):
 
     def stats_info(self):
         plus_minus = ' [+]|[-]'
-        return {
-            "Skill points": self.points_for_level,
-            "strength": [BG_COLOR.RED, self.strength, STYLES.RESET, plus_minus],
-            "physical dmg": self.phys_dmg,
-            "agility": [BG_COLOR.GREEN, self.agility, STYLES.RESET, plus_minus],
-            "crit_chance": self.luck,
-            "doge chance": self.doge_chance,
-            "defense": self.defense,
-            "stamina": [BG_COLOR.ORANGE, self.stamina, STYLES.RESET, plus_minus],
-            "hp": self.hp,
-            "energy": [BG_COLOR.BLUE, self.energy, STYLES.RESET, plus_minus],
-            "magic dmg": self.magic_dmg,
-            "max_mana": self.max_mana
-        }
+
+        return{
+                "Skill points": self.points_for_level,
+                "strength":  [BG_COLOR.RED, self.strength, STYLES.RESET, plus_minus],
+                "physical dmg": self.phys_dmg,
+                "agility": [BG_COLOR.GREEN, self.agility, STYLES.RESET, plus_minus],
+                "crit_chance": self.luck,
+                "doge chance": self.doge_chance,
+                "defense": self.defense,
+                "stamina": [BG_COLOR.ORANGE, self.stamina, STYLES.RESET, plus_minus],
+                "hp": self.hp,
+                "energy": [BG_COLOR.BLUE, self.energy, STYLES.RESET, plus_minus],
+                "magic dmg": self.magic_dmg,
+                "max_mana": self.max_mana
+                }
+    def show_stats_with_add_points(self):
+        labled, skill_choice = self.add_statistic()
+        temp_skill_add_points = self.points_for_level
+        while labled:
+            val = True
+            while val:
+                add_rmv = key_pressed()
+                if add_rmv == '+':
+                    if self.points_for_level < 1:
+                        val = False
+                    else:
+                        self.points_for_level -= 1
+                        self.add_rmv_points(skill_choice, add_rmv)
+                elif add_rmv == '-':
+                    if self.points_for_level >= temp_skill_add_points:
+                        val = False
+                    else:
+                        self.points_for_level += 1
+                        self.add_rmv_points(skill_choice, add_rmv)
+
+                elif ord(add_rmv) == 13:
+                    val = False
+                self.print_add_points()
+
+            labled = self.add_statistic()
+            exit_loop = key_pressed()
+            if ord(exit_loop) == 13:
+                labled = False
 
     def show_stats_breed(self):
         clear_screen()

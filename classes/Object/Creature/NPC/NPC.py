@@ -5,6 +5,8 @@ from macros import OBJECT_TYPES
 from macros import MOVES_TYPES
 from utils.decorations import cprint
 from utils.validation import int_input
+from macros import DIFFICULTY_LEVEL
+from utils.utils import clear_screen
 
 # tests
 from classes.Object.Creature.Hero.Hero import Hero
@@ -14,10 +16,9 @@ from classes.Object.Creature.Monster.Monsters import Arnold
 class NPC(Monster):
     conversation_folder_path = 'db/conversations/'
     color_in_battle = COLOR.RED
-    color_on_board = COLOR.PURPLE
     in_conversation_color = COLOR.PURPLE
-    field_color = BG_COLOR.BLUE
     field_move_possible = True
+
     # message_in_field -> wiadomosc do printowania z danego obiektu po ruchu hero
 
     def __init__(self, name="Set_me_name", symbol_on_map="M", position_x=-1, position_y=-1,
@@ -31,9 +32,13 @@ class NPC(Monster):
                  conversation_file_name='example1.txt',
                  exp=300,
                  loot=None,
-                 dialog_index = 0,
-                 on_die_message = "Stop, you won, you can pass...",
-                 on_fight_message = "I warned you..."
+                 dialog_index=0,
+                 on_die_message="Stop, you won, you can pass...",
+                 on_fight_message="I warned you...",
+                 color_on_board=COLOR.PURPLE,
+                 field_color=BG_COLOR.BLUE,
+                 quest_func=None
+
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility, luck, move_type, move_param, exp,
@@ -42,8 +47,8 @@ class NPC(Monster):
         self.dialog_index = dialog_index
         self.start_dialog = self.conversation_folder_path + conversation_file_name
         self.dialogs_path = [self.start_dialog]
-
-
+        self.color_on_board = color_on_board
+        self.field_color = field_color
 
     def on_meet(self, hero):
         """
@@ -51,10 +56,10 @@ class NPC(Monster):
         :param hero:
         :return:pass
         """
-        conversation_effects = self.__conversation(self.__dialog_path(), hero)
+        conversation_effects = self.__conversation(self.__dialog_path(hero), hero)
         return self.__do_after_conversation(conversation_effects, hero)
 
-    def __dialog_path(self):
+    def __dialog_path(self, hero):
         """
         Basic version: read and return as a list lines from txt files:
         This function should be overwritten in child class if you want to change dialog path despite of some conditions
@@ -75,6 +80,10 @@ class NPC(Monster):
             return True
         if func == "TRADE":
             self.__trade(hero)
+        if func == "END":
+            clear_screen()
+        if func == "QUEST":
+            self.quest_func
         return False
 
     def __trade(self, hero):
@@ -101,6 +110,8 @@ class NPC(Monster):
                 color = COLOR.LIGHTGREY
             elif "TRADE" in option:
                 color = COLOR.GREEN
+            elif "QUEST" in option:
+                color = COLOR.YELLOW
             return color
 
         ends_index = []
@@ -212,6 +223,68 @@ class NPC(Monster):
     @classmethod
     def gimme_beer_guard(cls):
         pass
+
+    @classmethod
+    def troll_king(cls, pos_x, pos_y, dif_lvl=DIFFICULTY_LEVEL.NORMAL):
+        dif_dep = cls.difficulty_depends  # shortcut only
+        return cls(name="Troll king",
+                   position_x=pos_x,
+                   position_y=pos_y,
+                   symbol_on_map="T",
+                   strength=dif_dep(70, dif_lvl),
+                   max_hp=dif_dep(500, dif_lvl),
+                   hp=dif_dep(500, dif_lvl),
+                   move_type=MOVES_TYPES.RANDOM_STRAIGHT,
+
+                   exp=300,
+                   loot={
+                       'coins': 500,
+                       'troll_king_brain': 1,
+                   },
+                   color_on_board=COLOR.CYAN,
+                   conversation_file_name='troll_king.txt',
+                   on_fight_message="UGA HA!",
+                   on_die_message='Ughh, yough bum bum troll kingo... yough ken eat his braaajn nowww'
+
+                   )
+
+    @classmethod
+    def fake_wall(cls, pos_x, pos_y, name):
+        fake_wall = cls(
+            name=name,
+            position_x=pos_x,
+            position_y=pos_y,
+            symbol_on_map='|',
+            field_color=BG_COLOR.LIGHTGREY)
+
+        fake_wall.dialogs_path = [
+                                  f'{fake_wall.conversation_folder_path}troll_cave_hole_dialog1.txt',
+                                  f'{fake_wall.conversation_folder_path}troll_cave_hole_dialog2.txt'
+                                  ]
+
+        def __dialog_path(hero):
+            if hero.quests:   # mock
+                fake_wall.dialog_index = 1
+            dialog_path = fake_wall.dialogs_path[fake_wall.dialog_index]
+            return fake_wall.read_dialog_from_file(dialog_path)
+
+        fake_wall.__dialog_path = __dialog_path
+
+        return fake_wall
+
+    @classmethod
+    def king(cls, pos_x, pos_y):
+        king = cls(
+            name="King Andrei",
+            position_x=pos_x,
+            position_y=pos_y,
+            symbol_on_map='#',
+            color_on_board=COLOR.YELLOW,
+        )
+        king.dialogs_path = [
+            f'{king.conversation_folder_path}king_before_quest.txt'
+        ]
+
 
 # path = '../../../../db/conversations/example1.txt'
 # guard = NPC("Guard", "A", 1, 1)
