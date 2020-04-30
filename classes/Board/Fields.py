@@ -2,6 +2,7 @@
 from classes.Object.Object import MyObject
 from macros import COLORS
 
+
 class Gate():
     symbol_on_map = ' '
     field_color = COLORS.BG_COLOR.GREEN
@@ -23,7 +24,7 @@ class Wall_Horizontal():
 class River():
     symbol_on_map = '~'
     field_color = COLORS.BG_COLOR.BLUE
-    field_move_possible = True
+    field_move_possible = False
 
 
 class Bridge():
@@ -42,7 +43,7 @@ class Fire():
     symbol_on_map = "\u03A8"
     field_color = COLORS.BG_COLOR.LIGHTGREY
     color_on_board = COLORS.BG_COLOR.ORANGE
-    field_move_possible = False
+    field_move_possible = True
 
 
 map_file = 'classes/Board/Map_drawing/level1_map.txt'

@@ -52,6 +52,7 @@ class Hero(Creature):
         self.max_mana = max_mana
         self.breed = ''
         self.current_choice_index = - 1
+        self.quests = []
         self.inventory = { #rzeczy noszone dodaja statsy
             "shield": None,
             "helmet": None,

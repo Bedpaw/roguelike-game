@@ -26,12 +26,12 @@ class Knight(Hero):
                  exp=0,
                  exp_to_next_level=100,
                  breed='Knight',
-
+                    
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility,
                          color_in_battle, move_type, level, exp, exp_to_next_level,phys_dmg,
-                         luck,doge_chance,defense,stamina,energy,magic_dmg,mana,max_mana)
+                         luck,doge_chance,defense,stamina,energy,magic_dmg,mana,max_mana,)
         self.breed = breed
 
     # level up attributes

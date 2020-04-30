@@ -70,6 +70,23 @@ class Monster(Creature):
                    )
 
     @classmethod
+    def troll_warrior(cls, pos_x, pos_y, dif_lvl=DIFFICULTY_LEVEL.NORMAL):
+        dif_dep = cls.difficulty_depends  # shortcut only
+        return cls(name="Troll warrior",
+                   position_x=pos_x,
+                   position_y=pos_y,
+                   symbol_on_map="T",
+                   strength=dif_dep(50, dif_lvl),
+                   max_hp=dif_dep(300, dif_lvl),
+                   hp=dif_dep(300, dif_lvl),
+                   move_type=MOVES_TYPES.RANDOM_STRAIGHT,
+                   exp=150,
+                   loot={
+                       'coins': 250,
+                   },
+                   )
+
+    @classmethod
     def giant(cls, pos_x, pos_y, dif_lvl=DIFFICULTY_LEVEL.NORMAL):
         dif_dep = cls.difficulty_depends  # shortcut only
         return cls(name="Giant",
@@ -92,7 +109,7 @@ class Monster(Creature):
                    )
 
     @classmethod
-    def rat(cls, pos_x, pos_y,):
+    def rat(cls, pos_x, pos_y, dif_lvl=1):
         return cls(name="Rat",
                    position_x=pos_x,
                    position_y=pos_y,
