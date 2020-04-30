@@ -1,16 +1,12 @@
-from classes.Object.Object import MyObject
-from utils.decorations import cprint
-from utils.key_service import key_pressed
-from macros import OBJECT_TYPES
-from macros.COLORS import *
 from random import *
-# from classes.Object.Creature.Hero.Hero import Hero
+from classes.Object.Creature.Hero.Hero import Hero
 from classes.Object.Creature.Monster.Monster import Monster
+from classes.Object.Object import MyObject
+from macros.COLORS import *
 from utils.validation import int_input
-# from events.Battle import
 
-# hero = Hero(name="Franek")
-# monster = Monster(name="Goblin")
+hero = Hero(name="Franek")
+monster = Monster(name="Goblin")
 
 
 class Item:
@@ -23,110 +19,110 @@ class Item:
                  max_hp=0,
                  strength=0,
                  agility=0,
-                 luck=0):
-
+                 stamina=0,
+                 energy=0):
         self.item_type = item_type
         self.name = name
         self.hp = hp
         self.max_hp = max_hp
         self.strength = strength
         self.agility = agility
-        self.luck = luck
+        self.energy = energy
+        self.stamina = stamina
 
     def add_power(self, hero):
         hero.strength += self.strength
         hero.hp += self.hp
         hero.max_hp += self.max_hp
         hero.agility += self.agility
-        hero.luck += self.luck
+        hero.energy += self.energy
+        hero.stamina += self.stamina
 
     def del_power(self, hero):
         hero.strength -= self.strength
         hero.hp -= self.hp
         hero.max_hp -= self.max_hp
         hero.agility -= self.agility
-        hero.luck -= self.luck
-
+        hero.energy -= self.energy
+        hero.stamina -= self.stamina
 
     @classmethod
     def gloves(cls, agility=5):
         names = ["Magic gloves", "Gloves of Goblins"]
         return cls(agility=agility, item_type="gloves", name=choice(names))
-    @classmethod
-    def helmet(cls, item_type, name, strength):
-        return cls(item_type, name, strength)
 
     @classmethod
-    def sword(cls, item_type, name, strength):
-        return cls(item_type, name, strength)
+    def helmet(cls, strength=8):
+        names = ["Odin's horns", "Warriors' helmet"]
+        return cls(strength=strength, item_type="helmet", name=choice(names))
 
     @classmethod
-    def armor(cls, item_type, name, strength):
-        return cls(item_type, name, strength)
+    def sword(cls, strength=15):
+        names = ["Sword of pain", "Cutting edge", "Assasin's Dagger", "King's Arthur sword"]
+        return cls(strength=strength, item_type="sword", name=choice(names))
 
     @classmethod
-    def belt(cls, item_type, name, strength):
-        return cls(item_type, name, strength)
+    def armor(cls, strength=25):
+        names = ["Dragon's armor", "Burning armor of hell", "Devil's skin", "Grizzlie bear's fur"]
+        return cls(strength=strength, item_type="armor", name=choice(names))
 
     @classmethod
-    def shield(cls, item_type, name, agility):
-        return cls(item_type, name, agility)
+    def belt(cls, strength=10):
+        names = ["Snake skin belt", "Poor cloth belt"]
+        return cls(strength=strength, item_type="belt", name=choice(names))
 
     @classmethod
-    def trousers(cls, item_type, name, agility):
-        return cls(item_type, name, agility)
+    def shield(cls, agility=15):
+        names = ["Captain America shield", "Stainless steel shield"]
+        return cls(agility=agility, item_type="gloves", name=choice(names))
 
     @classmethod
-    def boots(cls, item_type, name, agility): #strength, agility, stamina, energy
-        return cls(item_type, name, agility)
+    def trousers(cls, agility=5):
+        names = ["Alligator skin pants", "Leather pants"]
+        return cls(agility=agility, item_type="gloves", name=choice(names))
 
     @classmethod
-    def wand(cls, item_type, name, agility):
-        return cls(item_type, name, agility)
+    def boots(cls, agility=8):  # strength, agility, stamina, energy
+        names = ["Light leather boots", "Steel boots"]
+        return cls(agility=agility, item_type="gloves", name=choice(names))
 
     @classmethod
-    def healing_potion(cls, item_type, name, stamina):
-        return cls(item_type, name, stamina)
+    def wand(cls, energy=20):
+        names = ["Wooden wand", "Wand of Fire"]
+        return cls(energy=energy, item_type="gloves", name=choice(names))
 
     @classmethod
-    def mana(cls, item_type, name, energy):
-        return cls(item_type, name, energy)
+    def healing_potion(cls, stamina=150):
+        names = ["Papa Smurf's healing potion", "EXTRA COOL potion", "Porter beer + cocaine", "Honey and milk"]
+        return cls(stamina=stamina, item_type="healing_potion", name=choice(names))
 
     @classmethod
-    def key(cls, item_type, name):
-        return cls(item_type, name)
+    def mana(cls, energy=150):
+        names = ["Power is back potion", "Gummibear potion"]
+        return cls(energy=energy, item_type="mana", name=choice(names))
+
+    @classmethod
+    def key(cls):
+        return cls(cls, item_type="key", name="Golden key")
 
 
-
-# treasure = [Item.gloves("gloves", "Magic gloves", 5),
-#             Item.gloves("gloves", "Gloves of pain", 8),
-#             Item.helmet("helmet", "Odin's horns", 8),
-#             Item.helmet("helmet", "Warriors' helmet", 7),
-#             Item.sword("sword", "Sword for stinky Trolls", 7),
-#             Item.sword("sword", "Ultralight dagger", 6),
-#             Item.armor("armor", "Dragon's scales", 15),
-#             Item.armor("armor", "Titanium armor", 14),
-#             Item.wand("wand", "Wand of Hobbits", 5),
-#             Item.wand("wand", "Harry Potter wand", 7),
-#             Item.belt("belt", "Snake skin belt", 2),
-#             Item.belt("belt", "Karate black belt", 3),
-#             Item.trousers("trousers", "King Arthur's pantaloons", 6),
-#             Item.trousers("trousers", "Leather trousers", 5),
-#             Item.boots("boots", "Boots of luck", 3),
-#             Item.boots("boots", "Clover boots", 8),
-#             Item.healing_potion("hpotion", "Papa Smurf's healing potion", 50),
-#             Item.healing_potion("hpotion", "EXTRA COOL potion", 100),
-#             Item.healing_potion("hpotion", "Porter beer + cocaine", 120),
-#             Item.healing_potion("hpotion", "Honey and milk", 40),
-#             Item.mana("mpotion", "Power is back potion", 10),
-#             Item.mana("mpotion", "Gummibear potion", 12),
-#             Item.key("key", "steel key"),
-#             Item.key("key", "copper key")
-#             ]
+treasure = [
+    Item.gloves,
+    Item.helmet,
+    Item.sword,
+    Item.armor,
+    Item.wand,
+    Item.belt,
+    Item.trousers,
+    Item.boots,
+    Item.healing_potion,
+    Item.mana,
+    Item.key
+]
 
 
 class Treasure(MyObject):
-    """Class with treasures, treasure is chooseng item from items"""
+    """Class with treasures, treasure is choosing item from items"""
 
     def __init__(self,
                  name="Set_me_name",
@@ -156,7 +152,6 @@ class Treasure(MyObject):
                         if "coins" in loot:
                             hero.coins += 100
                             print(f'You have gain 100 coins!')
-
                     else:
                         print(f'You took from chest {loot[0].name}')
                         hero.inventory[loot[0].item_type] = loot[0]
@@ -179,6 +174,8 @@ class Treasure(MyObject):
         return loot
 
 
+print(which_item_in_chest(self,treasure))
+
 chest = Treasure("chest", is_locked=True)  # tworze obiekt z wybranym parametrem
-# chest.open_treasure(hero) #wywoluje funkcje z obiektu z parametrem hero
-# print(Item().add_to_inventory(monster.loot, hero))
+chest.open_treasure(hero) #wywoluje funkcje z obiektu z parametrem hero
+print(Item().add_to_inventory(monster.loot, hero))
