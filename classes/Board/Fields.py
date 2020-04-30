@@ -38,6 +38,13 @@ class Wall_Vertical():
     field_move_possible = False
 
 
+class Fire():
+    symbol_on_map = "\u03A8"
+    field_color = COLORS.BG_COLOR.LIGHTGREY
+    color_on_board = COLORS.BG_COLOR.ORANGE
+    field_move_possible = False
+
+
 map_file = 'classes/Board/Map_drawing/level1_map.txt'
 
 symbols_to_txt_draw = {
@@ -46,7 +53,8 @@ symbols_to_txt_draw = {
     '~': River(),
     '=': Bridge(),
     ' ': Gate(),
-    '|': Wall_Horizontal()
+    '|': Wall_Horizontal(),
+    'v': Fire
 }
 
 def get_map(map_file_name=map_file):

@@ -9,6 +9,7 @@ from classes.Board.Fields import Field
 from classes.Object.Creature.Hero.Hero import Hero
 from classes.Object.Creature.NPC.NPC import NPC
 from classes.Object.Creature.Monster.Monster import Monster
+import operator
 
 
 class Board:
@@ -69,7 +70,6 @@ class Board:
         :param positionY:HORIZONTAL <->
         :return: True if move is possible, False if it isn't
         """
-
         # Idea for making one for for checking everything instead for loops do it by checking proper value in given caller
         if positionX < 1 or positionY < 0 or positionY > self.width - 1 or positionX > self.height:
             return False
@@ -110,6 +110,20 @@ class Board:
             # item in the feature(monster i hero)
             return True
 
+    def add_rmv_points(self, skill_choice, add_rmv):
+        operator_choice = {
+            '+': operator.add,
+            '-': operator.sub
+        }
+        if skill_choice == 0:
+            self.hero.strength = operator_choice[add_rmv](self.hero.strength, 1)
+        elif skill_choice == 1:
+            self.hero.agility = operator_choice[add_rmv](self.hero.agility, 1)
+        elif skill_choice == 2:
+            self.hero.stamina = operator_choice[add_rmv](self.hero.stamina, 1)
+        elif skill_choice == 3:
+            self.hero.energy = operator_choice[add_rmv](self.hero.energy, 1)
+
     def get_user_choice(self):
         valid_key = False  # change to True if key is valid AND move is possible
         while not valid_key:
@@ -126,20 +140,29 @@ class Board:
                     if self.hero.points_for_level == 0:
                         self.hero.show_stats_breed()
                     elif self.hero.points_for_level > 0:
-                        labled = self.hero.add_statistic()
-
+                        labled, skill_choice = self.hero.add_statistic()
+                        temp_skill_add_points = self.hero.points_for_level
                         while labled:
                             val = True
                             while val:
                                 add_rmv = key_service.key_pressed()
                                 if add_rmv == '+':
-                                    self.hero.points_for_level -= 1
-                                    self.hero.print_add_points()
+                                    if self.hero.points_for_level < 1:
+                                        val = False
+                                    else:
+                                        self.hero.points_for_level -= 1
+                                        self.add_rmv_points(skill_choice, add_rmv)
                                 elif add_rmv == '-':
-                                    self.hero.points_for_level += 1
-                                    self.hero.print_add_points()
+                                    if self.hero.points_for_level >= temp_skill_add_points:
+                                        val = False
+                                    else:
+                                        self.hero.points_for_level += 1
+                                        self.add_rmv_points(skill_choice, add_rmv)
+
                                 elif ord(add_rmv) == 13:
                                     val = False
+                                self.hero.print_add_points()
+
                             labled = self.hero.add_statistic()
                             exit_loop = key_service.key_pressed()
                             if ord(exit_loop) == 13:
