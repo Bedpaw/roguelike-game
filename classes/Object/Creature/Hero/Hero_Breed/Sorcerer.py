@@ -53,15 +53,15 @@ class Sorcerer(Hero):
 
         # level up attributes
     def level_up_attributes(self):
-        self.phys_dmg += 2
+        self.phys_dmg += 0.5
         self.luck += 1
-        self.dodge_chance += 1
+        self.dodge_chance += 2
         self.defense += 1
-        self.hp += 5
-        self.max_hp +=5
-        self.magic_dmg += 1
-        self.mana += 2
-        self.max_mana += 2
+        self.hp += 3
+        self.max_hp += 3
+        self.magic_dmg += 3
+        self.mana += 5
+        self.max_mana += 5
 
 
 

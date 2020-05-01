@@ -55,13 +55,13 @@ class Palladin(Hero):
     def level_up_attributes(self):
         self.phys_dmg += 2
         self.luck += 1
-        self.dodge_chance += 1
-        self.defense += 1
-        self.hp += 5
-        self.max_hp +=5
-        self.magic_dmg += 1
-        self.mana += 2
-        self.max_mana += 2
+        self.dodge_chance += 1.5
+        self.defense += 1.5
+        self.hp += 4
+        self.max_hp += 4
+        self.magic_dmg += 2
+        self.mana += 3
+        self.max_mana += 3
 
 
 
