@@ -1,1 +1,3 @@
-name, password, store_information_about_player?
+name,password
+p,1
+ala,4444
