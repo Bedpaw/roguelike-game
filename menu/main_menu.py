@@ -9,11 +9,11 @@ from games_config.new_game_creator import *
 
 
 def about_us():
-    with open("menu/about_us.txt", "r") as f:
+    with open("about_us.txt", "r") as f:
         print(f.read())
 
 def welcome_image():
-    with open ("menu/default.txt", "r") as f:
+    with open("default.txt", "r") as f:
         for row in f:
             cprint((row[:-1]), BG_COLOR.WHITE, COLOR.DARKGREY, STYLES.BOLD)
 

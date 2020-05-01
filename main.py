@@ -8,7 +8,7 @@ from utils.decorations import cprint
 def main():
 
 
-    print("WELCOME IN <GAME_NAME>\n")
+    print("WELCOME IN ANGRY TROLLS\n")
     welcome_image()
     player_name = log_in()
     run_main_menu(player_name)

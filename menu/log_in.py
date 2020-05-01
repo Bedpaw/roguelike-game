@@ -1,32 +1,23 @@
-import csv
-
 def log_in():
-    password_correct = False
-    player_name = None
-    while not password_correct:
-        player_name = input("Please provide your name: ").upper()
 
-        with open("../db/saves/players.csv", "r+", newline="") as csv_file:
-            reader = csv.reader(csv_file)
-            for row in reader:
-                if player_name.upper() == row[0]:
-                   user_password = input("Hello again!\n"
-                                  "Please provide your password\n"
-                                  "Password: ")
-                    if user_password == row[1]:
-                        password_correct = True
-                # saves/$player_name$ already exist
-                    else:
-                        print("Your password is incorrect")
-        else:
-            # new player
-            user_password = input("Hello!\n"
-                                  "Please provide your password\n"
-                                  "Password: ")
-            # write players name and password to saves/players.csv
-            # create folder with player name in saves
-            password_correct = True
+    with open("../db/saves/players.txt", "r+") as file:
+        reader = file.readlines()[1:]
+        player_name = input("NAME").upper()
 
-    return player_name
+        for row in reader:
 
-log_in()
+            db_name, db_password = row.strip().split(",")
+
+            while player_name == db_name:
+                password = input("PASSWORD:")
+                if password == db_password:
+                    print("Pass correct")
+                    return player_name
+                else:
+                    print("Pass not correct")
+
+        with open("db/saves/players.txt", "a+") as f:
+            password_new = input("PASSWORDNEW:")
+            f.write("\n" + player_name + "," + password_new)
+
+            return player_name
