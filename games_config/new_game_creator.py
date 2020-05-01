@@ -35,7 +35,7 @@ def create_new_game(player_name):
     hero = get_user_hero_choice()
 
 
-    # hero = create_new_hero()
+    hero = create_new_hero()
     game = Game(player_name=player_name,
                 game_name=game_name,
                 difficulty_level=difficulty_level,

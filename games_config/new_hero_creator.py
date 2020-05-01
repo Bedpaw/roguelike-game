@@ -24,9 +24,9 @@ def create_new_hero():
         print('Select class you want to play [w/s] and press enter:')
         for k, v in select_type.items():
             if k == str(current_key):
-                print(f"%s{COLORS.BG_COLOR.LIGHTGREY}[{k}]. {v[1]}{v[2]}" % (' ' * 8))
+                print(f"%s{COLORS.BG_COLOR.LIGHTGREY}     {v[1]}    {v[2]}" % (' ' * 8))
             else:
-                print(f"%s{v[0] + v[0]}[{k}]. {v[1]}{v[2]}" % (' ' * 8))
+                print(f"%s{v[0] + v[0]}     {v[1]}    {v[2]}" % (' ' * 8))
         key = key_pressed()
 
         if ord(key) == 115:

@@ -1,8 +1,7 @@
 from classes.Object.Creature.Hero.Hero import Hero
 from macros.COLORS import COLOR
-from utils.decorations import cprint, ctext
 from macros import MOVES_TYPES, OBJECT_TYPES
-from utils.utils import clear_screen
+
 
 
 class Knight(Hero):
@@ -48,7 +47,7 @@ class Knight(Hero):
         # extra_atributes per point
         self.stats_ratio = {
             0: 2,
-            1: [3, 2, 3],
+            1: [1, 2, 3],
             2: 10,
             3: [1, 2]
         }

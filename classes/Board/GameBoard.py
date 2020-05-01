@@ -209,9 +209,9 @@ class Board:
             if i == 3:
                 additonal_info = f"{' '*2}Class: {self.hero.breed}  "
             if i == 4:
-                additonal_info = f"{' '*2}HP: {self.hero.hp}/{self.hero.max_hp}  "
+                additonal_info = f"{' '*2}HP: {int(self.hero.hp)}/{int(self.hero.max_hp)}  "
             if i == 5:
-                additonal_info = f"{' '*2}MANA: {self.hero.hp}/{self.hero.max_hp}  "
+                additonal_info = f"{' '*2}MANA: {int(self.hero.mana)}/{int(self.hero.max_mana)}  "
             if i == 6:
                 additonal_info = f"{' '* 2}EXP: {self.hero.exp}/{self.hero.exp_to_next_level}  "
             if i == 7:
