@@ -146,11 +146,13 @@ class Board:
                 if key_pressed == 'o':
                     cprint("Game saved...", wait_after=1)
                     self.game.save_game()
+
                 elif key_pressed == 'm':
                     if self.hero.points_for_level == 0:
                         self.hero.show_stats_breed()
                     elif self.hero.points_for_level > 0:
                         self.hero.show_stats_with_add_points()
+                        self.print_board()
 
 
                 # Move from first gate

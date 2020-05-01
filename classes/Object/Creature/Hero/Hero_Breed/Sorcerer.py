@@ -4,7 +4,7 @@ from macros import MOVES_TYPES, OBJECT_TYPES
 
 
 class Sorcerer(Hero):
-    def __init__(self, name="Set_me_name", symbol_on_map="K", position_x=0, position_y=0,
+    def __init__(self, name="Set_me_name", symbol_on_map="S", position_x=0, position_y=0,
                  strength=28,
                  hp=500,
                  max_hp=500,
