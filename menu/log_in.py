@@ -1,26 +1,23 @@
+import csv
+
 def log_in():
     password_correct = False
     player_name = None
     while not password_correct:
         player_name = input("Please provide your name: ").upper()
 
-        # Search in saves/players.csv if player name exist:
-        is_in_database = False    # MOCK
-
-        # If player is in database store his password here:
-        password = "XXX"    # MOCK
-
-        if is_in_database:
-            # existing player
-            user_password = input("Hello again!\n"
+        with open("../db/saves/players.csv", "r+", newline="") as csv_file:
+            reader = csv.reader(csv_file)
+            for row in reader:
+                if player_name.upper() == row[0]:
+                   user_password = input("Hello again!\n"
                                   "Please provide your password\n"
                                   "Password: ")
-
-            if user_password == password:
-                password_correct = True
+                    if user_password == row[1]:
+                        password_correct = True
                 # saves/$player_name$ already exist
-            else:
-                print("Your password is incorrect")
+                    else:
+                        print("Your password is incorrect")
         else:
             # new player
             user_password = input("Hello!\n"
@@ -31,3 +28,5 @@ def log_in():
             password_correct = True
 
     return player_name
+
+log_in()
