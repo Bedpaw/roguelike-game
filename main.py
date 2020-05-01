@@ -4,7 +4,6 @@ from menu.main_menu import welcome_image
 from utils.decorations import cprint
 
 
-
 def main():
 
 

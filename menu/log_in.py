@@ -1,6 +1,6 @@
 def log_in():
 
-    with open("../db/saves/players.txt", "r+") as file:
+    with open("db/saves/players.txt", "r+") as file:
         reader = file.readlines()[1:]
         player_name = input("NAME").upper()
 

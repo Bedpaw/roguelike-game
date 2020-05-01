@@ -281,7 +281,8 @@ class Board:
                 "2": troll_cave_entry,
                 "3": troll_cave,
                 "4": the_great_bridge,
-                "5": city
+                "5": city,
+                "6": highway_to_hell,
             }
             return boards[str(board_id)]()
 
@@ -342,5 +343,15 @@ class Board:
 
             return board
 
+        def highway_to_hell():
+            board.name = "highway_to_hell"
+            board.monsters =[] #TODO
+            board.treasures = [] #TODO
+
+            return board
+
+
         return switcher(board_id)
+
+
 
