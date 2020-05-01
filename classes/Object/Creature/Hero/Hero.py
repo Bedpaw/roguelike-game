@@ -29,7 +29,7 @@ class Hero(Creature):
                  stamina=0,
                  energy=0,
                  magic_dmg=0,
-                 mana=100,
+                 mana=0,
                  max_mana=0,
                  coins=100,
                  stats_ratio={},
@@ -86,18 +86,18 @@ class Hero(Creature):
         if skill_choice == 0:
             self.phys_dmg = operator_choice[add_rmv](self.phys_dmg, stats_ratio[skill_choice])
         if skill_choice == 1:
-            self.luck = operator_choice[add_rmv](self.phys_dmg, stats_ratio[skill_choice][0])
-            self.dodge_chance = operator_choice[add_rmv](self.phys_dmg, stats_ratio[skill_choice][1])
-            self.defense = operator_choice[add_rmv](self.phys_dmg, stats_ratio[skill_choice][2])
+            self.luck = operator_choice[add_rmv](self.luck, stats_ratio[skill_choice][0])
+            self.dodge_chance = operator_choice[add_rmv](self.dodge_chance, stats_ratio[skill_choice][1])
+            self.defense = operator_choice[add_rmv](self.defense, stats_ratio[skill_choice][2])
         if skill_choice == 2:
-            self.hp = operator_choice[add_rmv](self.phys_dmg, stats_ratio[skill_choice])
-            self.max_hp = operator_choice[add_rmv](self.phys_dmg, stats_ratio[skill_choice])
+            self.hp = operator_choice[add_rmv](self.hp, stats_ratio[skill_choice])
+            self.max_hp = operator_choice[add_rmv](self.max_hp, stats_ratio[skill_choice])
         if skill_choice == 3:
             self.magic_dmg += stats_ratio[skill_choice][0]
-            self.mana = operator_choice[add_rmv](self.phys_dmg, stats_ratio[skill_choice][1])
-            self.max_mana = operator_choice[add_rmv](self.phys_dmg, stats_ratio[skill_choice][1])
-        print('dzialam tutaj calc')
-        time.sleep(2)
+            self.mana = operator_choice[add_rmv](self.mana, stats_ratio[skill_choice][1])
+            self.max_mana = operator_choice[add_rmv](self.max_mana, stats_ratio[skill_choice][1])
+        # print('dzialam tutaj calc')
+        # time.sleep(2)
 
 
     def level_up(self):
@@ -138,6 +138,9 @@ class Hero(Creature):
             self.stamina = operator_choice[add_rmv](self.stamina, 1)
         elif skill_choice == 3:
             self.energy = operator_choice[add_rmv](self.energy, 1)
+
+        # print('Dzialam sobie tutaj add_rmv_points')
+        # time.sleep(2)
 
 
     def add_statistic(self):
@@ -227,9 +230,12 @@ class Hero(Creature):
                 "magic dmg": self.magic_dmg,
                 "max_mana": self.max_mana
                 }
+
     def show_stats_with_add_points(self):
         labled, skill_choice = self.add_statistic()
         temp_skill_add_points = self.points_for_level
+        # print('Wszedlem do show stats with add ponts')
+        # time.sleep(2)
         while labled:
             val = True
             while val:
@@ -238,6 +244,8 @@ class Hero(Creature):
                     if self.points_for_level < 1:
                         val = False
                     else:
+                        # print('Dzialam w +')
+                        # time.sleep(2)
                         self.points_for_level -= 1
                         self.add_rmv_points(skill_choice, add_rmv)
                         self.calculate_extra_attributes(skill_choice, self.stats_ratio, add_rmv)
@@ -245,19 +253,50 @@ class Hero(Creature):
                     if self.points_for_level >= temp_skill_add_points:
                         val = False
                     else:
+                        # print('Dzialam w +')
+                        # time.sleep(2)
                         self.points_for_level += 1
                         self.add_rmv_points(skill_choice, add_rmv)
                         self.calculate_extra_attributes(skill_choice, self.stats_ratio, add_rmv)
-
-                else:
-                    if ord(add_rmv) == 13:
-                        val = False
-                    self.print_add_points()
-
-            labled, skill_choice = self.add_statistic()
+                elif ord(add_rmv) == 13:
+                    val = False
+                self.print_add_points()
+            # else:
+            # labled, skill_choice = self.add_statistic()
             exit_loop = key_pressed()
-            if ord(exit_loop) == 13:
+            if exit_loop == 'm':
                 labled = False
+    # def show_stats_with_add_points(self):
+    #     labled, skill_choice = self.add_statistic()
+    #     temp_skill_add_points = self.points_for_level
+    #     while labled:
+    #         val = True
+    #         while val:
+    #             add_rmv = key_pressed()
+    #             if add_rmv == '+':
+    #                 if self.points_for_level < 1:
+    #                     val = False
+    #                 else:
+    #                     self.points_for_level -= 1
+    #                     self.add_rmv_points(skill_choice, add_rmv)
+    #                     self.calculate_extra_attributes(skill_choice, self.stats_ratio, add_rmv)
+    #             elif add_rmv == '-':
+    #                 if self.points_for_level >= temp_skill_add_points:
+    #                     val = False
+    #                 else:
+    #                     self.points_for_level += 1
+    #                     self.add_rmv_points(skill_choice, add_rmv)
+    #                     self.calculate_extra_attributes(skill_choice, self.stats_ratio, add_rmv)
+    #
+    #             else:
+    #                 if ord(add_rmv) == 13:
+    #                     val = False
+    #                 self.print_add_points()
+    #
+    #         labled, skill_choice = self.add_statistic()
+    #         exit_loop = key_pressed()
+    #         if ord(exit_loop) == 13:
+    #             labled = False
 
     def show_stats_breed(self):
         clear_screen()
