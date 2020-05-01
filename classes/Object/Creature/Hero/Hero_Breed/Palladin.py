@@ -13,7 +13,7 @@ class Palladin(Hero):
                  max_hp=300,
                  agility=10,
                  luck=3,
-                 doge_chance=2,
+                 dodge_chance=2,
                  defense=5,
                  stamina=15,
                  energy=10,
@@ -30,7 +30,7 @@ class Palladin(Hero):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility,
                          color_in_battle, move_type, level, exp, exp_to_next_level,phys_dmg,
-                         luck, doge_chance, defense, stamina, energy, magic_dmg, mana, max_mana)
+                         luck, dodge_chance, defense, stamina, energy, magic_dmg, mana, max_mana)
         self.breed = breed
 
         # level up attributes

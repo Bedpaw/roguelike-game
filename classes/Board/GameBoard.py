@@ -303,7 +303,7 @@ class Board:
         def labirynth():
             board.name = "Labyrynth"
             board.monsters = [
-                Monster.troll(7, 7, game.difficulty_level),
+                Monster.troll(1,2, game.difficulty_level),
                 Monster.rat(9, 7)
             ]
 

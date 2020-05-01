@@ -14,7 +14,7 @@ class Hero(Creature):
     def __init__(self, name="Set_me_name", symbol_on_map="@", position_x=-1, position_y=-1,
 
                  strength=0,
-                 hp=0,
+                 hp=200,
                  max_hp=0,
                  agility=0,
                  color_in_battle=COLOR.GREEN,
@@ -24,14 +24,15 @@ class Hero(Creature):
                  exp_to_next_level=0,
                  phys_dmg=0,
                  luck=0,
-                 doge_chance=0,
+                 dodge_chance=0,
                  defense=0,
                  stamina=0,
                  energy=0,
                  magic_dmg=0,
-                 mana=0,
+                 mana=100,
                  max_mana=0,
-                 coins=100
+                 coins=100,
+                 stats_ratio={},
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility)
@@ -43,13 +44,15 @@ class Hero(Creature):
         self.exp_to_next_level = exp_to_next_level
         self.phys_dmg = phys_dmg
         self.luck = luck
-        self.doge_chance = doge_chance
+        self.dodge_chance = dodge_chance
         self.defense = defense
         self.stamina = stamina
         self.energy = energy
         self.magic_dmg = magic_dmg
         self.mana = mana
         self.max_mana = max_mana
+        self.stats_ratio = {}
+
         self.breed = ''
         self.current_choice_index = - 1
         self.quests = []
@@ -68,8 +71,33 @@ class Hero(Creature):
     type_of = OBJECT_TYPES.HERO
     color_on_board = STYLES.BOLD + COLOR.CBLACK
 
+
     on_fight_message = "Time to stop this creature!"
 
+    def level_up_attributes(self):
+        #DON'T TOUCH IT
+        pass
+
+    def calculate_extra_attributes(self, skill_choice, stats_ratio, add_rmv):
+        operator_choice = {
+            '+': operator.add,
+            '-': operator.sub
+        }
+        if skill_choice == 0:
+            self.phys_dmg = operator_choice[add_rmv](self.phys_dmg, stats_ratio[skill_choice])
+        if skill_choice == 1:
+            self.luck = operator_choice[add_rmv](self.phys_dmg, stats_ratio[skill_choice][0])
+            self.dodge_chance = operator_choice[add_rmv](self.phys_dmg, stats_ratio[skill_choice][1])
+            self.defense = operator_choice[add_rmv](self.phys_dmg, stats_ratio[skill_choice][2])
+        if skill_choice == 2:
+            self.hp = operator_choice[add_rmv](self.phys_dmg, stats_ratio[skill_choice])
+            self.max_hp = operator_choice[add_rmv](self.phys_dmg, stats_ratio[skill_choice])
+        if skill_choice == 3:
+            self.magic_dmg += stats_ratio[skill_choice][0]
+            self.mana = operator_choice[add_rmv](self.phys_dmg, stats_ratio[skill_choice][1])
+            self.max_mana = operator_choice[add_rmv](self.phys_dmg, stats_ratio[skill_choice][1])
+        print('dzialam tutaj calc')
+        time.sleep(2)
 
 
     def level_up(self):
@@ -80,13 +108,14 @@ class Hero(Creature):
         :return: pass
         """
         self.level += 1
+        self.level_up_attributes()
         self.exp_to_next_level = self.exp + int(self.exp_to_next_level * 1.3)
         cprint(f"You have received {self.level} level!", SUCCESS)
         self.points_for_level += 5
 
+
     def print_add_points(self):
         choice_possiblities = ['strength', 'agility', 'stamina', 'energy']
-        print(f"{item} [+] | [-]" for item in self.stats_info())
         for k, v in self.stats_info().items():
             if isinstance(v, list) and k == choice_possiblities[self.current_choice_index]:
                 print(f"%s{COLOR.CBLACK}{STYLES.BOLD}{BG_COLOR.LIGHTGREY}{k} {v[1]}{v[3]}{v[2]}" % (' ' * 8))
@@ -110,11 +139,11 @@ class Hero(Creature):
         elif skill_choice == 3:
             self.energy = operator_choice[add_rmv](self.energy, 1)
 
+
     def add_statistic(self):
 
         stats_key_pressed = False
         choice_possiblities = ['strength', 'agility', 'stamina', 'energy']
-        print(self.breed)
 
         skill_impr = {
             1: self.strength,
@@ -190,10 +219,10 @@ class Hero(Creature):
                 "physical dmg": self.phys_dmg,
                 "agility": [BG_COLOR.GREEN, self.agility, STYLES.RESET, plus_minus],
                 "crit_chance": self.luck,
-                "doge chance": self.doge_chance,
+                "dodge chance": self.dodge_chance,
                 "defense": self.defense,
                 "stamina": [BG_COLOR.ORANGE, self.stamina, STYLES.RESET, plus_minus],
-                "hp": self.hp,
+                "hp": f"{self.hp}/{self.max_hp}",
                 "energy": [BG_COLOR.BLUE, self.energy, STYLES.RESET, plus_minus],
                 "magic dmg": self.magic_dmg,
                 "max_mana": self.max_mana
@@ -211,18 +240,21 @@ class Hero(Creature):
                     else:
                         self.points_for_level -= 1
                         self.add_rmv_points(skill_choice, add_rmv)
+                        self.calculate_extra_attributes(skill_choice, self.stats_ratio, add_rmv)
                 elif add_rmv == '-':
                     if self.points_for_level >= temp_skill_add_points:
                         val = False
                     else:
                         self.points_for_level += 1
                         self.add_rmv_points(skill_choice, add_rmv)
+                        self.calculate_extra_attributes(skill_choice, self.stats_ratio, add_rmv)
 
-                elif ord(add_rmv) == 13:
-                    val = False
-                self.print_add_points()
+                else:
+                    if ord(add_rmv) == 13:
+                        val = False
+                    self.print_add_points()
 
-            labled = self.add_statistic()
+            labled, skill_choice = self.add_statistic()
             exit_loop = key_pressed()
             if ord(exit_loop) == 13:
                 labled = False
@@ -271,6 +303,6 @@ class Hero(Creature):
 
 loot = {"gloves": Item.gloves(12), "coins": 100}
 hero = Hero()
-print(hero.add_to_inventory(loot))
+# print(hero.add_to_inventory(loot))
 
 
