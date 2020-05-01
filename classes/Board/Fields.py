@@ -5,44 +5,51 @@ from macros import COLORS
 
 class Gate():
     symbol_on_map = ' '
+    color_on_board = COLORS.COLOR.RED
     field_color = COLORS.BG_COLOR.GREEN
     field_move_possible = True
 
 
 class Field():
     symbol_on_map = '0'
+    color_on_board = COLORS.COLOR.CWHITE
     field_color = COLORS.BG_COLOR.GREEN
     field_move_possible = True
 
 
 class Wall_Horizontal():
     symbol_on_map = '-'
+    color_on_board = ''
     field_color = COLORS.BG_COLOR.LIGHTGREY
     field_move_possible = False
 
 
 class River():
     symbol_on_map = '~'
+    color_on_board = COLORS.COLOR.BLUE
     field_color = COLORS.BG_COLOR.BLUE
     field_move_possible = False
 
 
 class Bridge():
     symbol_on_map = '='
+    color_on_board = COLORS.COLOR.BROWN
     field_color = COLORS.BG_COLOR.CYAN
     field_move_possible = True
 
 
 class Wall_Vertical():
     symbol_on_map = '|'
+    color_on_board = ''
     field_color = COLORS.BG_COLOR.LIGHTGREY
     field_move_possible = False
 
 
 class Fire():
-    symbol_on_map = "\u03A8"
-    field_color = COLORS.BG_COLOR.LIGHTGREY
-    color_on_board = COLORS.BG_COLOR.ORANGE
+    # symbol_on_map = "\u03A8"
+    symbol_on_map = "^"
+    color_on_board = COLORS.COLOR.RED
+    field_color = COLORS.BG_COLOR.ORANGE
     field_move_possible = True
 
 
@@ -55,7 +62,7 @@ symbols_to_txt_draw = {
     '=': Bridge(),
     ' ': Gate(),
     '|': Wall_Horizontal(),
-    'v': Fire
+    '^': Fire()
 }
 
 def get_map(map_file_name=map_file):

@@ -11,7 +11,7 @@ from classes.Object.Creature.Hero.Hero import Hero
 from classes.Object.Creature.NPC.NPC import NPC
 from classes.Object.Creature.Monster.Monster import Monster
 from utils.sounds import play_music, pause_music, unpause_music
-
+import time
 
 
 
@@ -69,6 +69,13 @@ class Board:
         for object_item in object_items:
             self.game_board_in_class[object_item.position_x][object_item.position_y] = object_item
 
+    def lava_detector(self, x, y):
+        if self.game_board_in_class[x][y] == Fire:
+            print(f"You have step on lava -20 hp!")
+            time.sleep(1)
+        pass
+
+
     def check_move_possibility(self, caller, positionX, positionY):
         """
         :param caller:Hero or Monster
@@ -87,6 +94,10 @@ class Board:
 
         else:
             if isinstance(caller, Hero):
+
+                if isinstance(check_position, Fire):
+                    self.hero.hp -= 20
+                    return True
 
                 for i, monster in enumerate(self.monsters):
                     if monster.position_x == positionX and monster.position_y == positionY:
@@ -107,6 +118,10 @@ class Board:
             elif isinstance(caller, Monster):
                 if isinstance(check_position, NPC) or isinstance(check_position, Monster):
                     return False
+
+                if self.game_board_in_class[positionX][positionY] == Fire:
+                    return False
+
                 if self.pos_x == positionX and self.pos_y == positionY:
                     cprint(f'{self.hero.name} has been attacked by {caller.name}!', ERROR, start_enter=1, wait_after=1)
                     # pause_music()
@@ -137,7 +152,6 @@ class Board:
                     elif self.hero.points_for_level > 0:
                         self.hero.show_stats_with_add_points()
 
-                        # self.print_board()
 
                 # Move from first gate
                 elif key_pressed == 'd' and self.pos_x == 0 and self.pos_y == 0:
@@ -157,7 +171,9 @@ class Board:
 
                 else:
                     new_x_pos, new_y_pos = self.hero.move(key_pressed)
+
                     if self.check_move_possibility(self.hero, new_x_pos, new_y_pos):
+                        self.lava_detector(new_x_pos, new_y_pos)
                         self.pos_x = new_x_pos
                         self.pos_y = new_y_pos
                         valid_key = True
@@ -182,7 +198,7 @@ class Board:
                 if field.symbol_on_map not in symbols_to_txt_draw.keys():
                     middle_fileds += self.board_map[i-1][j].field_color + field.color_on_board + field.symbol_on_map + STYLES.RESET
                 else:
-                    middle_fileds += field.field_color + field.symbol_on_map + STYLES.RESET
+                    middle_fileds += field.field_color + field.color_on_board + field.symbol_on_map + STYLES.RESET
 
             additonal_info = ''
 

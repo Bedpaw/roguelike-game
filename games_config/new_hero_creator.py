@@ -34,11 +34,10 @@ def create_new_hero():
         elif ord(key) == 119:
             current_key -= 1
         elif ord(key) == 13:
-            champ_name = input('Please enter your nickname: ')
-            return select_type[str(current_key)][3](champ_name)
+            return select_type[str(current_key)][3]('Wojtek')
         else:
             print("not [w] or [s] pressed")
-            time.sleep(2)
+            time.sleep(0.5)
 
         if current_key >= 3:
             if ord(key) == 115:
