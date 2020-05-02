@@ -124,11 +124,17 @@ class Board:
         while not valid_key:
             key_pressed = key_service.key_pressed()
 
-            if key_pressed in ['w', 's', 'a', 'd', 'p', 'm', 'o']:
-
-                if key_pressed == 'p':
+            if key_pressed in ['w', 's', 'a', 'd', 'p', 'm', 'o', 'x', 'z']:
+                # Z and X are cheats for testing
+                if key_pressed == 'z':
+                    self.pos_x = 1
+                    self.pos_y = 0
+                elif key_pressed == 'x':
+                    self.pos_x = self.height
+                    self.pos_y = self.width - 1
+                elif key_pressed == 'p':
                     exit()
-                if key_pressed == 'o':
+                elif key_pressed == 'o':
                     cprint("Game saved...", wait_after=1)
                     self.game.save_game()
                 elif key_pressed == 'm':
@@ -290,12 +296,20 @@ class Board:
                 Monster.troll(7, 7, game.difficulty_level),
                 Monster.rat(9, 7)
             ]
+            # board.npc = [
+            #     NPC.troll_king(2, 3, game.difficulty_level),
+            #     NPC.fake_wall(2, 4, name="Hole in the wall"),
+            #     NPC.king(2, 5)
+            # ]
 
             return board
 
         def plain():
             board.name = "Plain"
-            board.npc = [NPC("Guard", "G", 4, 8), NPC('Guard', 'G', 4, 10)]
+            board.npc = [
+                NPC("Guard", "G", 4, 8),
+                NPC('Guard', 'G', 4, 10)
+            ]
             board.add_object_in_random_pos(Monster.rat, count=4)
             board.add_object_in_random_pos(Monster.snake, count=4)
             return board
@@ -316,28 +330,32 @@ class Board:
 
         def troll_cave():
             board.name = "Troll cave"
-            board.monsters = [Monster.troll_warrior(1, 2, game.difficulty_level),
-                              Monster.troll(4, 5, game.difficulty_level),
-                              Monster.troll(6, 5, game.difficulty_level),
-                              Monster.troll(5, 6, game.difficulty_level),
-                              Monster.troll(5, 4, game.difficulty_level)
+            board.monsters = [
+                Monster.troll_warrior(1, 2, game.difficulty_level),
+                Monster.troll(4, 5, game.difficulty_level),
+                Monster.troll(6, 5, game.difficulty_level),
+                Monster.troll(5, 6, game.difficulty_level),
+                Monster.troll(5, 4, game.difficulty_level)
                               ]
             board.monsters[0].move_type = MOVES_TYPES.STAY
             board.npc = [
                 NPC.troll_king(5, 5, game.difficulty_level),
-                NPC.fake_wall(6, 11, name="Hole in the wall")
+                NPC.fake_wall(6, 11, name="Hole in the wall"),
             ]
             return board
 
         def the_great_bridge():
             board.name = "The great bridge"
-            board.add_object_in_random_pos(Monster.rat, count=6)
-
+            board.add_object_in_random_pos(Monster.snake, count=6)
             return board
 
         def city():
             board.name = "City"
-
+            board.npc = [
+                NPC.king(1, 10),
+                #  NPC.eastern_guard(11, 20)
+            ]
+            board.add_object_in_random_pos(Monster.rat, count=3)
             return board
 
         return switcher(board_id)
