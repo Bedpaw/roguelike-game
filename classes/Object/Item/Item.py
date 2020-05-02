@@ -30,7 +30,7 @@ class Item:
         self.energy = energy
         self.stamina = stamina
 
-    def add_power(self, hero):
+    def add_power(self):
         hero.strength += self.strength
         hero.hp += self.hp
         hero.max_hp += self.max_hp
@@ -38,7 +38,7 @@ class Item:
         hero.energy += self.energy
         hero.stamina += self.stamina
 
-    def del_power(self, hero):
+    def del_power(self):
         hero.strength -= self.strength
         hero.hp -= self.hp
         hero.max_hp -= self.max_hp
