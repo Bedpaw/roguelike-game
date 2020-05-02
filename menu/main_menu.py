@@ -1,8 +1,7 @@
-from utils.decorations import cprint
+
 from macros.COLORS import *
 from game_engine import load_game
-from utils import data_manager
-from utils.validation import int_input
+
 from game_engine import game_engine
 from mock.new_game_creator_mock import create_new_game_mock
 from games_config.new_game_creator import *
@@ -11,19 +10,21 @@ from games_config.new_game_creator import *
 def about_us():
     with open("menu/about_us.txt", "r") as f:
         print(f.read())
+    answer = input("Please press T for back to main menu")
+    if answer.upper() == "T":
+        run_main_menu()
 
 def welcome_image():
     with open("menu/default.txt", "r") as f:
         for row in f:
-            cprint((row[:-1]), BG_COLOR.WHITE, COLOR.DARKGREY, STYLES.BOLD)
+            cprint((row[:-1]), BG_COLOR.WHITE, COLOR.LIGHTGREEN, STYLES.BOLD)
 
 def high_scores():
     pass #TODO after W gives me data
 
 def run_main_menu(player_name):
 
-    cprint(f'Welcome {player_name}!\n', COLOR.YELLOW)
-    cprint("What do you want to do today?", COLOR.YELLOW)
+    cprint("CHOOSE ONE OF BELOW OPTIONS\n", COLOR.YELLOW)
     user_choice = int_input("[1] PLAY NEW GAME\n"
                        "[2] LOAD GAME\n"
                        "[3] ABOUT US\n"
