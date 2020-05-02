@@ -241,21 +241,22 @@ class Hero(Creature):
         pass
 
     # -------------------------- ITEMS -------------------------------------------
-    def add_to_backpack(self, loot):
+    def put_on_from_backpack(self, item):
+        choosed_item = None
+        input("Which item you want to put on you?")
+        if item in self.backpack:
+            for item.item_type in self.inventory:
+                pass #dokonczyc
 
-        for k, v in loot.items():
-            if k == "coins":
-                self.coins += v
-            else:
-                self.inventory.update({k: v})
-                v.add_power(self)
+        choosed_item.add_power(self)
 
 #not finished
-    def print_inventory(self):
-        for k, v in self.inventory.items():  # TODO PATI
+    def print_inventory(self, item):
+        for k, v in self.inventory.items():
             cprint("--------------------------")
-
             cprint(f"|{k}| {v.name}|", COLOR.CYAN)
+            print(self.coins)
+            print(self.backpack)
 
     def is_in_backpack(self, item):
         if item in self.backpack:
@@ -268,7 +269,7 @@ class Hero(Creature):
         if key_pressed() == "h":
             hpotion = Item.healing_potion()
             if self.is_in_backpack(hpotion):
-                Item.add_power(hpotion)
+                item.add_power(hpotion)
                 self.remove_from_backpack(hpotion)
             else:
                 cprint("You don't have any healing potion in your backpack!", COLOR.RED)
@@ -282,12 +283,12 @@ class Hero(Creature):
             else:
                 cprint("You don't have any mana potion in your backpack!", COLOR.RED)
 
-    def add_to_backpack(self, item):
-        self.backpack.append(item)
+    def add_to_backpack(self, loot, item):
+        for k, v in loot.items():
+            if k == "coins":
+                self.coins += v
+            else: self.backpack.append(item)
 
     def remove_from_backpack(self, item):
         if self.is_in_backpack(item):
             del item
-
-
-
