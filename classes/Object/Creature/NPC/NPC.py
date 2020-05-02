@@ -325,7 +325,6 @@ class NPC(Monster):
                     quest['COMPLETED'] = True
                     hero.backpack.append(Item.quest_item("Golden ring"))
                     print(f'That was disgusting, but you have found golden ring')
-                    print(hero.backpack)
 
         fake_wall.quest_func = [quest0]
 
