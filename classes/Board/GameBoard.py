@@ -10,6 +10,7 @@ from classes.Board.Fields import Field
 from classes.Object.Creature.Hero.Hero import Hero
 from classes.Object.Creature.NPC.NPC import NPC
 from classes.Object.Creature.Monster.Monster import Monster
+from classes.Object.Item.Item import Treasure
 from utils.sounds import play_music, pause_music, unpause_music
 
 
@@ -286,7 +287,8 @@ class Board:
                 "2": troll_cave_entry,
                 "3": troll_cave,
                 "4": the_great_bridge,
-                "5": city
+                "5": city,
+                "6": highway_to_hell,
             }
             return boards[str(board_id)]()
 
@@ -351,12 +353,23 @@ class Board:
 
         def city():
             board.name = "City"
+
             board.npc = [
                 NPC.king(1, 10),
                 #  NPC.eastern_guard(11, 20)
             ]
             board.add_object_in_random_pos(Monster.rat, count=3)
+            board.treasures = []
+            return board
+
+        def highway_to_hell():
+            board.name = "highway_to_hell"
+            board.monsters =[] #TODO
+            board.treasures = [] #TODO
+
             return board
 
         return switcher(board_id)
+
+
 

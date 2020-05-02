@@ -45,6 +45,19 @@ class Fire():
     color_on_board = COLORS.BG_COLOR.ORANGE
     field_move_possible = True
 
+class Lava_pavement():
+    symbol_on_map = "#"
+    field_color = COLORS.BG_COLOR.RED
+    color_on_board = COLORS.COLOR.DARKGREY
+    field_move_possible = True
+
+class Tree():
+    symbol_on_map = "]["
+    field_color = COLORS.BG_COLOR.GREEN
+    color_on_board = COLORS.COLOR.DARKGREEN
+    field_move_possible = True
+
+
 
 map_file = 'classes/Board/Map_drawing/level1_map.txt'
 
@@ -55,7 +68,9 @@ symbols_to_txt_draw = {
     '=': Bridge(),
     ' ': Gate(),
     '|': Wall_Horizontal(),
-    'v': Fire
+    'v': Fire(),
+    "#": Lava_pavement(),
+    "][": Tree()
 }
 
 def get_map(map_file_name=map_file):
