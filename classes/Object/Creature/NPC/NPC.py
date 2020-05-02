@@ -282,13 +282,119 @@ class NPC(Monster):
             color_on_board=COLOR.YELLOW,
         )
         king.dialogs_path = [
-            f'{king.conversation_folder_path}king_before_quest.txt'
+            f'{king.conversation_folder_path}king/king_before_quest.txt',
+            f'{king.conversation_folder_path}king/king_get_ring.txt',
+            f'{king.conversation_folder_path}king/king_get_troll_brain.txt',
+            f'{king.conversation_folder_path}king/king_before_golden_ring_quest.txt',
+            f'{king.conversation_folder_path}king/king_before_troll_king_quest.txt',
+            f'{king.conversation_folder_path}king/king_before_GR_after_kill_Troll.txt',
+            f'{king.conversation_folder_path}king/king_after_quests_before_kill_Troll.txt',
+            f'{king.conversation_folder_path}king/king_after_quests.txt',
+
         ]
 
+        def quest0(hero):
+            if hero.quest_taken_by_name("GOLDEN RING"):
+                hero.coins += 1000
+                hero.remove_from_backpack('Golden ring')
+                hero.backpack.append(Item.quest_item("King's store patent"))
+                cprint(hero.backpack, wait_after=1)
+                return
+            hero.quests.append({
+                'name': "GOLDEN RING",
+                'description': "King Andrei lost his ring, when he was fighting with trolls."
+                               "Probably one one them hide it somewhere in Troll cave - find it and bring to king "
+                               "Andrei",
+                'COMPLETED': False,
+                'reward': {
+                    'quest': "King's store patent",
+                    'gold': 1000
+                }
+            })
+            cprint(hero.quests, wait_after=2)
 
-# path = '../../../../db/conversations/example1.txt'
-# guard = NPC("Guard", "A", 1, 1)
-# monster = Arnold("Guard", "A", 2, 2)
-# hero = Hero("Andrzej", "A", 3, 4)
+        def quest1(hero):
+            if hero.quest_taken_by_name("TROLL KING") and not hero.quest_done_by_name("TROLL KING"):
+                print('im here')
+                hero.coins += 1000
+                hero.remove_from_backpack('Troll brain')
+                hero.backpack.append(Item.quest_item("King's brave patent"))
+                for quest in hero.quests:
+                    if quest['name'] == "TROLL KING":
+                        quest["COMPLETED"] = True
+                cprint(hero.backpack, wait_after=1)
+                return
+            hero.quests.append({
+                'name': "TROLL KING",
+                'description': "King Andrei has been wounded in fight with Troll King,"
+                               "kill this monster to show King that you are brave enough to go east!",
+                'COMPLETED': False,
+                'reward': {
+                    'quest': "King's brave patent",
+                    'sword': 'Trolls slayer',  # TODO add item
+                    'gold': 1000
+                }
+            })
 
-# guard.on_meet(hero)
+        def __trade(hero):
+            if hero.is_in_backpack("King's store patent"):
+                print("trade")
+            else:
+                print("You need store patent if you want to trade with me")
+
+
+        def __dialog_path(hero):
+            GOLDEN_RING_TAKEN = hero.quest_taken_by_name('GOLDEN RING')
+            GOLDEN_RING_DONE = hero.quest_done_by_name('GOLDEN RING')
+            TROLL_KING_TAKEN = hero.quest_taken_by_name('TROLL KING')
+            TROLL_KING_DONE = hero.quest_done_by_name('TROLL KING')
+
+            if not TROLL_KING_TAKEN and not GOLDEN_RING_TAKEN:
+                print("0")
+                king.dialog_index = 0
+            elif hero.is_in_backpack('Golden ring'):
+                print("1")
+                king.dialog_index = 1
+            elif hero.is_in_backpack('Troll brain'):
+                print('2')
+                king.dialog_index = 2
+            elif TROLL_KING_TAKEN and not GOLDEN_RING_TAKEN and not TROLL_KING_DONE:
+                print("3")
+                print(hero.quests)
+                king.dialog_index = 3
+            elif not TROLL_KING_TAKEN and GOLDEN_RING_TAKEN:
+                print("4")
+                king.dialog_index = 4
+            elif TROLL_KING_DONE and not GOLDEN_RING_TAKEN:
+                print("5")
+                king.dialog_index = 5
+            elif TROLL_KING_TAKEN and GOLDEN_RING_TAKEN and not TROLL_KING_DONE:
+                print("6")
+                king.dialog_index = 6
+            elif TROLL_KING_DONE and GOLDEN_RING_TAKEN:
+                print("7")
+                king.dialog_index = 7
+            dialog_path = king.dialogs_path[king.dialog_index]
+            return king.read_dialog_from_file(dialog_path)
+
+        king.__trade = __trade
+        king.__dialog_path = __dialog_path
+        king.quest_func = [quest0, quest1]
+        return king
+
+    @classmethod
+    def eastern_guard(cls, pos_x, pos_y):
+        eastern_guard = cls(
+            name="Eastern_guard",
+            position_x=pos_x,
+            position_y=pos_y,
+            symbol_on_map='G',
+            field_color=BG_COLOR.LIGHTGREY)
+
+        def on_meet(hero):
+            if hero.quest_done_by_name("TROLL KING"):
+                return True
+            else:
+                print("STOP, you can't move east!")
+        eastern_guard.on_meet = on_meet
+        return eastern_guard
