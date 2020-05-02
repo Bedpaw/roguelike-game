@@ -62,7 +62,7 @@ class Hero(Creature):
             "boots": None
             }
         self.coins = coins
-        self.backpack = [] #rzeczy noszone nie dodaja statsow
+        self.backpack = []
 
     field_color = BG_COLOR.RED
     type_of = OBJECT_TYPES.HERO
@@ -241,7 +241,7 @@ class Hero(Creature):
         pass
 
     # -------------------------- ITEMS -------------------------------------------
-    def add_to_inventory(self, loot):
+    def add_to_backpack(self, loot):
 
         for k, v in loot.items():
             if k == "coins":
@@ -250,22 +250,44 @@ class Hero(Creature):
                 self.inventory.update({k: v})
                 v.add_power(self)
 
+#not finished
     def print_inventory(self):
         for k, v in self.inventory.items():  # TODO PATI
-            print(k, v.name)
+            cprint("--------------------------")
 
-    def use_potion(self, key_pressed, item):
-        pass
-    if key_pressed() == "h":
-        answer = int_input("Which potion you want to use?/n[1] Healing potion/n[2] Mana power")
-        if answer == 1:
-            pass #TODO
+            cprint(f"|{k}| {v.name}|", COLOR.CYAN)
 
     def is_in_backpack(self, item):
         if item in self.backpack:
             return True
         else:
             return False
+
+    def use_potion(self, item):
+
+        if key_pressed() == "h":
+            hpotion = Item.healing_potion()
+            if self.is_in_backpack(hpotion):
+                Item.add_power(hpotion)
+                self.remove_from_backpack(hpotion)
+            else:
+                cprint("You don't have any healing potion in your backpack!", COLOR.RED)
+
+        if key_pressed() == "m":
+            mana = Item.mana()
+            if self.is_in_backpack(mana):
+                Item.add_power(mana)
+                self.remove_from_backpack(mana)
+
+            else:
+                cprint("You don't have any mana potion in your backpack!", COLOR.RED)
+
+    def add_to_backpack(self, item):
+        self.backpack.append(item)
+
+    def remove_from_backpack(self, item):
+        if self.is_in_backpack(item):
+            del item
 
 
 
