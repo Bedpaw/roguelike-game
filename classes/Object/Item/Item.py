@@ -105,6 +105,10 @@ class Item:
     def key(cls):
         return cls(cls, item_type="key", name="Golden key")
 
+    @classmethod
+    def quest_item(cls, name):
+        return cls(item_type="quest", name=name)
+
 
 treasure = [
     Item.gloves,

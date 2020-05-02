@@ -10,7 +10,7 @@ Hello traveller, what are you doing here?
                   [1] Ok, I will find, but I want a great reward! &QUEST0
               [2] I thought you have so important mission, I have better things to do &END
           [2] I'm liar...
-            I knew that there are no more hope for me... GET OUT! &23
+            I knew that there is no more hope for me... GET OUT! &23
               [1] I'm sorry that I let you down... &END
               [2] Everyone has their own problems... &END
       [2] You are boring... &END

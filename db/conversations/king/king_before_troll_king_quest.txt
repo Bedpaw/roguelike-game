@@ -1,36 +1,21 @@
 Hello traveller, what are you doing here?
-  [1] Tell me something about this city...
-    This is Trollgard city. It was created to fend off troll attacks from western caves... but this times trolls aren't the biggest problem &01
-      [1] Whaaaaat, I have just came from their caves, this monsters are terrible, but worse they are stinking as hell
-        You came from troll caves and I have'nt seen any wounds on your body! You are terrible liar or hero that i need! Answer me now! &01
-          [1] I'm hero!
-            I have lost my golden ring, when I was fighting troll king last time, I can't move from there, because I need to recover... &01
-              [1] So you want me to go caves for searching trinkets? How can I find something so small!
-                Trolls are stupid, but they love trinkets, I'm sure that one of them find it and hide im some small tear in ground or a cave_wall &0
-                  [1] Ok, I will find, but I want a great reward! &QUEST0
-              [2] I thought you have so important mission, I have better things to do &END
-          [2] I'm liar...
-            I knew that there are no more hope for me... GET OUT! &23
-              [1] I'm sorry that I let you down... &END
-              [2] Everyone has their own problems... &END
-      [2] You are boring... &END
-  [2] What happened to your face? <There is a big wound just over king's right ear>
-    Trolls...the strongest troll that I have ever seen... he wants to eat my brain &23
+  [1] What happened to your face? <There is a big wound just over king's right ear>
+    Trolls...the strongest troll that I have ever seen... he wants to eat my brain &01
       [1] Hmmm, I think I saw him before, it looks like he is a king of the cave trolls
-        Exactly, and now he is building troll army to attack my city, i can't stop him because east dangerous is even worse and i need to save my warrios... &23
+        Exactly, and now he is building troll army to attack my city, i can't stop him because east dangerous is even worse and i need to save my warrios... &01
           [1] Maybe I can help you with this monster?
-            If you kill him and bring me a prove of that I will let you go east...of course you will get also a lot of many... &45
+            If you kill him and bring me a prove of that I will let you go east...of course you will get also a lot of many... &0
               [1] Yes Sir! I'm going to do that for you! &QUEST1
               [2] No way, I prefer my life than a money! &END
           [2] Maybe you should think about others problem? &END
       [2] You looks really funny with this scar!
-        GET OUT! &4
+        GET OUT! &2
           [1] Ok, ok... don't be so angry &END
-  [3] I want to go eastern trail, please tell your guards to let me go
-    It's impossible, east is too dangerous now for travellers... &45
+  [2] I want to go eastern trail, please tell your guards to let me go
+    It's impossible, east is too dangerous now for travellers... &23
       [1] But I'm brave and strong I can go!
-        I SAID IT'S IMPOSSIBLE! Enough blood has already drained in this land &5
+        I SAID IT'S IMPOSSIBLE! Enough blood has already drained in this land &3
           [1] Ok, ok... don't be so angry &END
       [2] I will stay town then... &END
-  [4] I hear a lot about you alchemical talent king. Can I buy something from your collection? &TRADE
-  [5] Good question... I will just go out &END
+  [3] I hear a lot about you alchemical talent king. Can I buy something from your collection? &TRADE
+  [4] Good question... I will just go out &END

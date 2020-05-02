@@ -1,0 +1,6 @@
+Hello traveller, what are you doing here?
+  [1] I want to go eastern trail, please tell your guards to let me go
+    Just go there, after I saw what you had done with troll king I believe you are the only one, who can help us with east dangerous... &0
+      [1] Thanks &END
+  [2] I hear a lot about you alchemical talent king. Can I buy something from your collection? &TRADE
+  [3] Good question... I will just go out &END

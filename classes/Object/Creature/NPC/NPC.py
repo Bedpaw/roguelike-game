@@ -256,26 +256,44 @@ class NPC(Monster):
     @classmethod
     def troll_king(cls, pos_x, pos_y, dif_lvl=DIFFICULTY_LEVEL.NORMAL):
         dif_dep = cls.difficulty_depends  # shortcut only
-        return cls(name="Troll king",
-                   position_x=pos_x,
-                   position_y=pos_y,
-                   symbol_on_map="T",
-                   strength=dif_dep(70, dif_lvl),
-                   max_hp=dif_dep(500, dif_lvl),
-                   hp=dif_dep(500, dif_lvl),
-                   move_type=MOVES_TYPES.RANDOM_STRAIGHT,
+        troll_king = cls(name="Troll king",
+                         position_x=pos_x,
+                         position_y=pos_y,
+                         symbol_on_map="T",
+                         strength=dif_dep(70, dif_lvl),
+                         max_hp=dif_dep(500, dif_lvl),
+                         hp=dif_dep(500, dif_lvl),
+                         move_type=MOVES_TYPES.RANDOM_STRAIGHT,
 
-                   exp=300,
-                   loot={
-                       'coins': 500,
-                       'troll_king_brain': 1,
-                   },
-                   color_on_board=COLOR.CYAN,
-                   conversation_file_name='troll_king.txt',
-                   on_fight_message="UGA HA!",
-                   on_die_message='Ughh, yough bum bum troll kingo... yough ken eat his braaajn nowww'
+                         exp=300,
+                         loot={
+                             'coins': 500,
+                             'quest': Item.quest_item('Troll brain')
+                         },
+                         color_on_board=COLOR.CYAN,
+                         conversation_file_name='troll_king.txt',
+                         on_fight_message="UGA HA!",
+                         on_die_message='Ughh, yough bum bum troll kingo... yough ken eat his braaajn nowww'
 
-                   )
+                         )
+
+        def __dialog_path(hero):
+            if hero.quest_taken_by_name("TROLL KING"):
+                troll_king.dialog_index = 1
+                hero.backpack.append(Item.quest_item('Troll brain'))  # MOCK
+            else:
+                troll_king.dialog_index = 0
+
+            dialog_path = troll_king.dialogs_path[troll_king.dialog_index]
+            return troll_king.read_dialog_from_file(dialog_path)
+
+        troll_king.__dialog_path = __dialog_path
+
+        troll_king.dialogs_path = [
+            f'{troll_king.conversation_folder_path}troll_king_before_quest.txt',
+            f'{troll_king.conversation_folder_path}troll_king.txt'
+        ]
+        return troll_king
 
     @classmethod
     def fake_wall(cls, pos_x, pos_y, name):
@@ -287,17 +305,29 @@ class NPC(Monster):
             field_color=BG_COLOR.LIGHTGREY)
 
         fake_wall.dialogs_path = [
-                                  f'{fake_wall.conversation_folder_path}troll_cave_hole_dialog1.txt',
-                                  f'{fake_wall.conversation_folder_path}troll_cave_hole_dialog2.txt'
-                                  ]
+            f'{fake_wall.conversation_folder_path}troll_cave_hole_dialog1.txt',
+            f'{fake_wall.conversation_folder_path}troll_cave_hole_dialog2.txt'
+        ]
 
         def __dialog_path(hero):
-            if hero.quests:   # mock
+            if hero.quest_taken_by_name("GOLDEN RING") and not hero.quest_done_by_name("GOLDEN RING"):
                 fake_wall.dialog_index = 1
+            else:
+                fake_wall.dialog_index = 0
             dialog_path = fake_wall.dialogs_path[fake_wall.dialog_index]
             return fake_wall.read_dialog_from_file(dialog_path)
 
         fake_wall.__dialog_path = __dialog_path
+
+        def quest0(hero):
+            for quest in hero.quests:
+                if quest['name'] == "GOLDEN RING":
+                    quest['COMPLETED'] = True
+                    hero.backpack.append(Item.quest_item("Golden ring"))
+                    print(f'That was disgusting, but you have found golden ring')
+                    print(hero.backpack)
+
+        fake_wall.quest_func = [quest0]
 
         return fake_wall
 
