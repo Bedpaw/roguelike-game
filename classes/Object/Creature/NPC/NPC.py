@@ -7,6 +7,7 @@ from utils.decorations import cprint
 from utils.validation import int_input
 from macros import DIFFICULTY_LEVEL
 from utils.utils import clear_screen
+from classes.Object.Item.Item import Item
 
 # tests
 from classes.Object.Creature.Hero.Hero import Hero
@@ -38,17 +39,22 @@ class NPC(Monster):
                  color_on_board=COLOR.PURPLE,
                  field_color=BG_COLOR.BLUE,
                  quest_func=None
-
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility, luck, move_type, move_param, exp,
                          loot, on_fight_message, on_die_message)
 
+        if quest_func is None:
+            quest_func = []
         self.dialog_index = dialog_index
         self.start_dialog = self.conversation_folder_path + conversation_file_name
         self.dialogs_path = [self.start_dialog]
         self.color_on_board = color_on_board
         self.field_color = field_color
+        if quest_func is None:
+            self.quest_func = []
+        else:
+            self.quest_func = quest_func
 
     def on_meet(self, hero):
         """
@@ -73,7 +79,7 @@ class NPC(Monster):
         Run function despite of conversation result
         :param func:STRING: returned from txt.file string interpretation of functions
         :param hero: that take part in conversation with NPC
-        :return:pass
+        :return:False if hero can't move after conversation else True
         """
         if func == "BATTLE":
             battle(hero, self)
@@ -82,8 +88,9 @@ class NPC(Monster):
             self.__trade(hero)
         if func == "END":
             clear_screen()
-        if func == "QUEST":
-            self.quest_func
+        if func.startswith("QUEST"):
+            quest_index = func.split('T')[1]
+            self.quest_func[int(quest_index)](hero)
         return False
 
     def __trade(self, hero):
@@ -135,27 +142,49 @@ class NPC(Monster):
                         cprint(option, color)
             # HEADERS
             elif i % 2 == 0:
+                # print("ENDS", ends_index)
+                # print("OPTIONS", next_header_options)
                 number_of_options = len(next_header_options)  # input validation
                 user_choice = int_input(f'{hero.color_on_board}{STYLES.BOLD}{hero.name}: {STYLES.RESET}',
                                         number_of_options)
+                if i == 2:
+                    # check if user pick function ending conversation
+                    if user_choice - 1 in ends_index:
+                        #   print(functions_to_output[ends_index.index(user_choice - 1)])
+                        return functions_to_output[ends_index.index(user_choice - 1)]
 
-                # check if user pick function ending conversation
-                if user_choice - 1 in ends_index:
-                    return functions_to_output[ends_index.index(user_choice - 1)]
+                    move_index = 1
+                    for index in ends_index:
+                        if index < user_choice:
+                            move_index += 1
 
-                move_index = 1
-                for index in ends_index:
-                    if index < user_choice:
-                        move_index += 1
-                next_header_options = []
+                    # Take from text information about header to output and his options index
+                    next_header_text, options_index = indentation[user_choice - move_index].split("&")
+                    next_header_options = []
+                    for index in options_index:
+                        next_header_options.append(int(index))
+                    # Print header
+                    cprint(f'\n{self.name}: {next_header_text}\n', self.in_conversation_color, STYLES.BOLD)
 
-                # Take from text information about header to output and his options index
-                next_header_text, options_index = indentation[user_choice - move_index].split("&")
-                for index in options_index:
-                    next_header_options.append(int(index))
+                else:
+                    # check if user pick function ending conversation
+                    if next_header_options[user_choice - 1] in ends_index:
+                        #   print(functions_to_output[ends_index.index(next_header_options[user_choice - 1])])
+                        return functions_to_output[ends_index.index(next_header_options[user_choice - 1])]
 
-                # Print header
-                cprint(f'\n{self.name}: {next_header_text}\n', self.in_conversation_color, STYLES.BOLD)
+                    move_index = 0
+                    for index in ends_index:
+                        if index < next_header_options[user_choice - 1]:
+                            move_index += 1
+
+                    # Take from text information about header to output and his options index
+                    next_header_text, options_index = indentation[
+                        next_header_options[user_choice - 1] - move_index].split("&")
+                    next_header_options = []
+                    for index in options_index:
+                        next_header_options.append(int(index))
+                    # Print header
+                    cprint(f'\n{self.name}: {next_header_text}\n', self.in_conversation_color, STYLES.BOLD)
 
     @staticmethod
     def read_dialog_from_file(text_file):

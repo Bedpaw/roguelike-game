@@ -262,15 +262,36 @@ class Hero(Creature):
     #         if self.is_in_inventory():
     #             hero.hp + hero.inventory
 
-    def is_in_backpack(self, item):
-        if item in self.backpack:
-            return True
-        else:
-            return False
+    def is_in_backpack(self, item_name):
+        for item in self.backpack:
+            if item.name == item_name:
+                return True
+        return False
+
+    def remove_from_backpack(self, item_name):
+        for i, item in enumerate(self.backpack):
+            if item.name == item_name:
+                del self.backpack[i]
 
 
-loot = {"gloves": Item.gloves(12), "coins": 100}
-hero = Hero()
-print(hero.add_to_inventory(loot))
+    # -------- QUESTS ------------- #
+
+    def quest_taken_by_name(self, name):
+        for quest in self.quests:
+            if quest['name'] == name:
+                return True
+        return False
+
+    def quest_done_by_name(self, name):
+        for quest in self.quests:
+            if quest['name'] == name:
+                if quest['COMPLETED']:
+                    return True
+        return False
+
+
+# loot = {"gloves": Item.gloves(12), "coins": 100}
+# hero = Hero()
+# print(hero.add_to_inventory(loot))
 
 
