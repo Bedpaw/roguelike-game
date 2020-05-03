@@ -264,30 +264,30 @@ class Hero(Creature):
         else:
             return False
 
-    def use_potion(self, item):
+    def use_hpotion(self, item):
+        hpotion = Item.healing_potion()
+        if self.is_in_backpack(hpotion):
+            hpotion.add_power()
+            self.remove_from_backpack(hpotion)
+        else:
+            cprint("You don't have any healing potion in your backpack!", COLOR.RED)
 
-        if key_pressed() == "h":
-            hpotion = Item.healing_potion()
-            if self.is_in_backpack(hpotion):
-                item.add_power(hpotion)
-                self.remove_from_backpack(hpotion)
-            else:
-                cprint("You don't have any healing potion in your backpack!", COLOR.RED)
+    def use_mana(self, item):
 
-        if key_pressed() == "m":
-            mana = Item.mana()
-            if self.is_in_backpack(mana):
-                Item.add_power(mana)
-                self.remove_from_backpack(mana)
+        mana = Item.mana()
+        if self.is_in_backpack(mana):
+            mana.add_power()
+            self.remove_from_backpack(mana)
 
-            else:
-                cprint("You don't have any mana potion in your backpack!", COLOR.RED)
+        else:
+            cprint("You don't have any mana potion in your backpack!", COLOR.RED)
 
     def add_to_backpack(self, loot, item):
         for k, v in loot.items():
             if k == "coins":
                 self.coins += v
-            else: self.backpack.append(item)
+            else:
+                self.backpack.append(item)
 
     def remove_from_backpack(self, item):
         if self.is_in_backpack(item):

@@ -125,7 +125,7 @@ class Board:
         while not valid_key:
             key_pressed = key_service.key_pressed()
 
-            if key_pressed in ['w', 's', 'a', 'd', 'p', 'm', 'o']:
+            if key_pressed in ['w', 's', 'a', 'd', 'p', 'm', 'o', 'j', 'h']:
 
                 if key_pressed == 'p':
                     exit()
@@ -137,6 +137,11 @@ class Board:
                         self.hero.show_stats_breed()
                     elif self.hero.points_for_level > 0:
                         self.hero.show_stats_with_add_points()
+                elif key_pressed == "h":
+                    self.hero.use_hpotion()
+                elif key_pressed == "m":
+                    self.hero.use_mana()
+
 
                         # self.print_board()
 
