@@ -32,7 +32,6 @@ class Hero(Creature):
                  mana=0,
                  max_mana=0,
                  coins=100,
-                 stats_ratio={},
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility)
@@ -51,8 +50,6 @@ class Hero(Creature):
         self.magic_dmg = magic_dmg
         self.mana = mana
         self.max_mana = max_mana
-        self.stats_ratio = {}
-
         self.breed = ''
         self.current_choice_index = - 1
         self.quests = []
@@ -66,6 +63,7 @@ class Hero(Creature):
             }
         self.coins = coins
         self.backpack = [] #rzeczy noszone nie dodaja statsow
+        self.spells ={}
 
     field_color = BG_COLOR.RED
     type_of = OBJECT_TYPES.HERO
@@ -73,6 +71,32 @@ class Hero(Creature):
 
 
     on_fight_message = "Time to stop this creature!"
+
+    def print_hp(self):
+        if self.hp < 0:
+            self.hp = 0
+        if self.mana < 0:
+            self.mana = 0
+
+        hp_left_prec = (self.hp / self.max_hp) * 100
+        hp_message = f'{self.name}: {self.hp}/{self.max_hp} HP'
+
+        mana_left_prec = (self.mana / self.magic_dmg) * 100
+        mana_message = f'{self.name}: {self.mana}/{self.max_mana} MANA\n'
+
+        if hp_left_prec >= 60:
+            cprint(hp_message, COLOR.GREEN)
+        elif hp_left_prec <= 30:
+            cprint(hp_message, COLOR.RED, STYLES.BOLD)
+        else:
+            cprint(hp_message, COLOR.YELLOW)
+
+        if mana_left_prec >= 60:
+            cprint(mana_message, COLOR.GREEN)
+        elif hp_left_prec <= 30:
+            cprint(mana_message, COLOR.RED, STYLES.BOLD)
+        else:
+            cprint(mana_message, COLOR.YELLOW)
 
     def level_up_attributes(self):
         #DON'T TOUCH IT

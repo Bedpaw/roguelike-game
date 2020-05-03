@@ -102,7 +102,7 @@ class Board:
                 for i, monster in enumerate(self.monsters):
                     if monster.position_x == positionX and monster.position_y == positionY:
                         cprint(f"You attacked {monster.name}!", ERROR, start_enter=1, wait_after=1)
-                        battle(caller, monster, BATTLE_MODES.IMMEDIATE_FIGHT)
+                        battle(caller, monster, BATTLE_MODES.MANUAL_FIGHT)
                         if not monster.is_on_board:
                             del self.monsters[i]
                         return True
@@ -116,6 +116,9 @@ class Board:
                         return False
 
             elif isinstance(caller, Monster):
+
+                if isinstance(check_position, Fire):
+                    return False
                 if isinstance(check_position, NPC) or isinstance(check_position, Monster):
                     return False
 

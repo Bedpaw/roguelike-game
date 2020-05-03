@@ -13,8 +13,8 @@ class Sorcerer(Hero):
                  luck=3,
                  dodge_chance=3,
                  defense=8,
-                 stamina=25,
-                 energy=10,
+                 stamina=15,
+                 energy=28,
                  magic_dmg=2,
                  mana=50,
                  max_mana=50,
@@ -23,13 +23,13 @@ class Sorcerer(Hero):
                  level=1,
                  exp=0,
                  exp_to_next_level=100,
-                 breed='Sorcerer'
-
+                 breed='Sorcerer',
+                 spells = {}
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility,
                          color_in_battle, move_type, level, exp, exp_to_next_level,phys_dmg,
-                         luck,dodge_chance,defense,stamina,energy,magic_dmg,mana,max_mana,)
+                         luck,dodge_chance,defense,stamina,energy,magic_dmg,mana,max_mana,spells)
 
         self.phys_dmg += (self.strength*0.5)
         self.luck += (self.agility*0.3)
@@ -51,6 +51,19 @@ class Sorcerer(Hero):
             3: [2, 5]
         }
 
+        # 0 = Name, 1 = mana cost, 2 = kind of dmg, 3 = dmg_ratio, 4 = energy required
+        self.spells = {
+            1: ['Physical damage', 0, self.phys_dmg, 1, 1],
+            2: ['Fire Ball', 30, self.magic_dmg, 3, 24],
+            3: ['Aqua Beam',  50, self.magic_dmg, 4, 38],
+            4: ['Fire storm', 80, self.magic_dmg, 6, 48],
+            5: ['Lightning', 90, self.magic_dmg, 7, 54],
+            6: ['Inferno', 100, self.magic_dmg, 8, 60],
+            7: ['Ice Storm', 120, self.magic_dmg, 10, 66],
+            8: ['Decay', 150, self.magic_dmg, 12, 75],
+            0: ['HP potion: ', self.hp, 'MANA potion: ', self.mana]
+        }
+
         # level up attributes
     def level_up_attributes(self):
         self.phys_dmg += 0.5
@@ -62,6 +75,21 @@ class Sorcerer(Hero):
         self.magic_dmg += 3
         self.mana += 5
         self.max_mana += 5
+
+    # def spell_fire_ball(self):
+    #     self.mana -= 30
+    #     name = 'Fire Ball'
+    #     dmg_from_spell = 3 * self.magic_dmg
+    #
+    #
+    # def spell_aqua_beam(self):
+    #     self.mana -= 50
+    #     name = 'Aqua Beam'
+    #     dmg_from_spell = 5 * self.magic_dmg
+
+
+
+
 
 
 

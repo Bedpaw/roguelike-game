@@ -25,12 +25,12 @@ class Knight(Hero):
                  exp=0,
                  exp_to_next_level=100,
                  breed='Knight',
-
+                 spells={}
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility,
                          color_in_battle, move_type, level, exp, exp_to_next_level,phys_dmg,
-                         luck,dodge_chance,defense,stamina,energy,magic_dmg,mana,max_mana,)
+                         luck,dodge_chance,defense,stamina,energy,magic_dmg,mana,max_mana,spells)
 
         self.phys_dmg += (self.strength*1)
         self.luck += (self.agility*0.2)
@@ -50,6 +50,14 @@ class Knight(Hero):
             1: [1, 2, 3],
             2: 10,
             3: [1, 2]
+        }
+        self.spells = {
+            1: ['Physical damage', 0, self.phys_dmg, 1, 1],
+            2: ['Cyclon Cutting', 10, self.phys_dmg, 1.2, 10],
+            3: ['Twisting Slash', 15, self.phys_dmg, 1.5, 15],
+            4: ['Regular Blow',  20, self.phys_dmg, 1.8, 20],
+            5: ['Death Stab',  30, self.phys_dmg, 2.5, 35],
+            0: ['HP potion: ', self.hp, 'MANA potion: ', self.mana]
         }
 
         # level up attributes
