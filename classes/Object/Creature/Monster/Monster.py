@@ -82,7 +82,7 @@ class Monster(Creature):
                    exp=150,
                    loot={
                        'coins': 250,
-                        "belt" : Item.belt(7)
+                        "belt": Item.belt(7)
                    },
                    )
 

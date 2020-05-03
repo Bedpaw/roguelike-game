@@ -20,6 +20,7 @@ class Item:
                  strength=0,
                  agility=0,
                  stamina=0,
+                 mana=0,
                  energy=0):
         self.item_type = item_type
         self.name = name
@@ -29,6 +30,7 @@ class Item:
         self.agility = agility
         self.energy = energy
         self.stamina = stamina
+        self.mana = mana
 
     def add_power(self, hero):
         hero.strength += self.strength
@@ -37,6 +39,7 @@ class Item:
         hero.agility += self.agility
         hero.energy += self.energy
         hero.stamina += self.stamina
+        hero.mana += self.mana
 
     def del_power(self, hero):
         hero.strength -= self.strength
@@ -45,6 +48,7 @@ class Item:
         hero.agility -= self.agility
         hero.energy -= self.energy
         hero.stamina -= self.stamina
+        hero.mana -=self.mana
 
     @classmethod
     def gloves(cls, agility=5):
@@ -97,9 +101,9 @@ class Item:
         return cls(stamina=stamina, item_type="healing_potion", name=choice(names))
 
     @classmethod
-    def mana(cls, energy=150):
+    def mana(cls, mana=150):
         names = ["Power is back potion", "Gummibear potion"]
-        return cls(energy=energy, item_type="mana", name=choice(names))
+        return cls(mana=mana, item_type="mana", name=choice(names))
 
     @classmethod
     def key(cls):

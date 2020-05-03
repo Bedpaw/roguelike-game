@@ -128,7 +128,7 @@ class Board:
             self.print_last_message()
             key_pressed = key_service.key_pressed()
 
-            if key_pressed in ['w', 's', 'a', 'd', 'p', 'm', 'o', 'x', 'z']:
+            if key_pressed in ['w', 's', 'a', 'd', 'p', 'm', 'o', 'x', 'z', 'j', 'h']:
                 # Z and X are cheats for testing
                 if key_pressed == 'z':
                     self.pos_x = 1
@@ -146,6 +146,10 @@ class Board:
                         self.hero.show_stats_breed()
                     elif self.hero.points_for_level > 0:
                         self.hero.show_stats_with_add_points()
+                elif key_pressed == "h":
+                    self.hero.use_hpotion()
+                elif key_pressed == "m":
+                    self.hero.use_mana()
 
                         # self.print_board()
 
