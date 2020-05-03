@@ -15,12 +15,13 @@ def about_us(player_name):
         run_main_menu(player_name)
 
 def welcome_image():
-    with open("menu/default.txt", "r") as f:
+    with open("menu/welcome_image.txt", "r") as f:
         for row in f:
             cprint((row[:-1]), BG_COLOR.WHITE, COLOR.LIGHTGREEN, STYLES.BOLD)
 
 def high_scores():
     pass #TODO after W gives me data
+
 
 def run_main_menu(player_name):
 
@@ -28,7 +29,8 @@ def run_main_menu(player_name):
     user_choice = int_input("[1] PLAY NEW GAME\n"
                        "[2] LOAD GAME\n"
                        "[3] ABOUT US\n"
-                       "[4] HIGH SCORES\n",4) # TODO with W /from db some stats, how many monsters, level, name, type of hero
+                       "[4] HIGH SCORES\n"
+                        "Your choice : " )# TODO with W /from db some stats, how many monsters, level, name, type of hero
 
     if user_choice == 1:
         pass
