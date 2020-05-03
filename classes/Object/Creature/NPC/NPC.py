@@ -9,17 +9,12 @@ from macros import DIFFICULTY_LEVEL
 from utils.utils import clear_screen
 from classes.Object.Item.Item import Item
 
-# tests
-from classes.Object.Creature.Hero.Hero import Hero
-
 
 class NPC(Monster):
     conversation_folder_path = 'db/conversations/'
     color_in_battle = COLOR.RED
     in_conversation_color = COLOR.PURPLE
     field_move_possible = True
-
-    # message_in_field -> wiadomosc do printowania z danego obiektu po ruchu hero
 
     def __init__(self, name="Set_me_name", symbol_on_map="M", position_x=-1, position_y=-1,
                  strength=100,
@@ -61,10 +56,10 @@ class NPC(Monster):
         :param hero:
         :return:pass
         """
-        conversation_effects = self.__conversation(self.__dialog_path(hero), hero)
+        conversation_effects = self.__conversation(self.dialog_path(hero), hero)
         return self.__do_after_conversation(conversation_effects, hero)
 
-    def __dialog_path(self, hero):
+    def dialog_path(self, hero):
         """
         Basic version: read and return as a list lines from txt files:
         This function should be overwritten in child class if you want to change dialog path despite of some conditions
@@ -453,5 +448,6 @@ class NPC(Monster):
                 return True
             else:
                 print("STOP, you can't move east!")
+
         eastern_guard.on_meet = on_meet
         return eastern_guard

@@ -1,6 +1,7 @@
 import time
 from macros import COLORS
-from utils.key_service import *
+from utils.key_service import key_pressed
+from utils.utils import clear_screen
 from classes.Object.Creature.Hero.Hero_Breed.Knight import Knight
 from classes.Object.Creature.Hero.Hero_Breed.Sorcerer import Sorcerer
 from classes.Object.Creature.Hero.Hero_Breed.Palladin import Palladin

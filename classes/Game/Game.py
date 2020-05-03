@@ -1,9 +1,7 @@
-from classes.Board import GameBoard
-from classes.Object.Creature.Hero.Hero import Hero
 from games_config.board_factory import create_new_board
-from utils.data_manager import *
-from time import sleep
+from utils.decorations import cprint
 from macros import BATTLE_MODES
+import pickle
 
 
 class Game:
@@ -11,10 +9,7 @@ class Game:
         self.hero = hero
         self.current_board_index = start_board_index
         self.game_name = game_name
-        self.save_folder_path = f'db/saves/{player_name}/{self.game_name}'
-        self.hero_save_path = f'{self.save_folder_path}/hero.txt'
-        self.game_config_path = f'{self.save_folder_path}/game_config.txt'
-        self.boards_save_path = f'{self.save_folder_path}/BOARDS'
+        self.save_folder_path = f'db/saves/{player_name}/'
         self.boards = []
         self.turn_counter = 0
         self.difficulty_level = difficulty_level
