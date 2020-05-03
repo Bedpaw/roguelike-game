@@ -7,12 +7,12 @@ from mock.new_game_creator_mock import create_new_game_mock
 from games_config.new_game_creator import *
 
 
-def about_us():
+def about_us(player_name):
     with open("menu/about_us.txt", "r") as f:
         print(f.read())
     answer = input("Please press T for back to main menu")
     if answer.upper() == "T":
-        run_main_menu()
+        run_main_menu(player_name)
 
 def welcome_image():
     with open("menu/default.txt", "r") as f:
@@ -39,7 +39,7 @@ def run_main_menu(player_name):
         game = load_game(player_name)
         game_engine(game, player_name)
     elif user_choice == 3:
-        about_us()
+        about_us(player_name)
     elif user_choice == 4:
         high_scores()
 

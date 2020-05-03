@@ -1,5 +1,4 @@
 from games_config.board_factory import create_new_board
-from classes.Object.Creature.Monster.Monsters import Troll
 from classes.Object.Creature.NPC.NPC import NPC
 from classes.Object.Creature.Monster.Monster import Monster
 from utils.validation import int_input

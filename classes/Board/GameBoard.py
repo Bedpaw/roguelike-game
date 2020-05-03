@@ -390,6 +390,3 @@ class Board:
             return board
 
         return switcher(board_id)
-
-
-
