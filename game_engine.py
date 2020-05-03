@@ -47,6 +47,7 @@ def game_engine(game, player_name):
             clear_screen()  # should be right before print boards
             game.turn_counter += 1
 
+
     # game loop broken
     # hero is dead or game won2
     # final screen? # add to high scores

@@ -11,7 +11,6 @@ from classes.Object.Item.Item import Item
 
 # tests
 from classes.Object.Creature.Hero.Hero import Hero
-from classes.Object.Creature.Monster.Monsters import Arnold
 
 
 class NPC(Monster):

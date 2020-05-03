@@ -6,11 +6,9 @@ from macros import MOVES_TYPES
 from classes.Object.Item.Item import Item
 
 
-
 class Monster(Creature):
     color_on_board = COLOR.RED
     color_in_battle = COLOR.RED
-    field_move_possible = True
     field_color = BG_COLOR.BLUE
     type_of = OBJECT_TYPES.MONSTER  # probably to delete
 

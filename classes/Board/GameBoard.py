@@ -13,9 +13,6 @@ from classes.Object.Creature.Monster.Monster import Monster
 from classes.Object.Item.Item import Treasure
 from utils.sounds import play_music, pause_music, unpause_music
 
-
-
-
 class Board:
     def __init__(self, game, board_map, width, height, hero):
         self.game = game
@@ -297,18 +294,19 @@ class Board:
             }
             return boards[str(board_id)]()
 
-        def labirynth():
-            board.name = "Labyrynth"
+        def labyrinth():
+            board.name = "Labyrinth"
             board.monsters = [
                 Monster.troll(7, 7, game.difficulty_level),
-                Monster.rat(9, 7)
             ]
             # board.npc = [
             #     NPC.troll_king(2, 3, game.difficulty_level),
             #     NPC.fake_wall(2, 4, name="Hole in the wall"),
             #     NPC.king(2, 5)
             # ]
-
+            board.treasures = [
+                Treasure(position_x=10, position_y=0 )
+            ]
             return board
 
         def plain():
@@ -317,8 +315,13 @@ class Board:
                 NPC("Guard", "G", 4, 8),
                 NPC('Guard', 'G', 4, 10)
             ]
-            board.add_object_in_random_pos(Monster.rat, count=4)
-            board.add_object_in_random_pos(Monster.snake, count=4)
+            board.treasures = [
+                Treasure(position_x=5, position_y=8, is_locked=True),
+                Treasure(position_x=5, position_y=10)
+            ]
+            board.add_object_in_random_pos(Monster.rat, count=1)
+            board.add_object_in_random_pos(Monster.snake, count=1)
+
             return board
 
         def troll_cave_entry():
@@ -327,6 +330,10 @@ class Board:
                 Monster.troll(2, 5, game.difficulty_level),
                 Monster.troll(5, 12, game.difficulty_level),
                 Monster.troll(9, 8, game.difficulty_level),
+            ]
+            board.treasures = [
+                Treasure(position_x=4, position_y=15),
+                Treasure(position_x=7, position_y=15, is_locked=True)
             ]
             board.monsters[0].move_type = MOVES_TYPES.STAY
             board.monsters[1].move_type = MOVES_TYPES.STAY
@@ -344,16 +351,17 @@ class Board:
                 Monster.troll(5, 6, game.difficulty_level),
                 Monster.troll(5, 4, game.difficulty_level)
                               ]
-            board.monsters[0].move_type = MOVES_TYPES.STAY
             board.npc = [
                 NPC.troll_king(5, 5, game.difficulty_level),
                 NPC.fake_wall(6, 11, name="Hole in the wall"),
             ]
+            board.monsters[0].move_type = MOVES_TYPES.STAY
+
             return board
 
         def the_great_bridge():
             board.name = "The great bridge"
-            board.add_object_in_random_pos(Monster.snake, count=6)
+            board.add_object_in_random_pos(Monster.snake, count=2)
             return board
 
         def city():
@@ -361,10 +369,17 @@ class Board:
 
             board.npc = [
                 NPC.king(1, 10),
+                NPC("Guard", "G", 2, 6),
+                NPC('Guard', 'G', 2, 14)
                 #  NPC.eastern_guard(11, 20)
             ]
+            board.treasures = [
+                Treasure(position_x=1, position_y=4),
+                Treasure(position_x=1, position_y=5),
+                Treasure(position_x=1, position_y=15),
+                Treasure(position_x=1, position_y=16),
+            ]
             board.add_object_in_random_pos(Monster.rat, count=3)
-            board.treasures = []
             return board
 
         def highway_to_hell():

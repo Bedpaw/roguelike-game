@@ -103,7 +103,7 @@ class Item:
 
     @classmethod
     def key(cls):
-        return cls(cls, item_type="key", name="Golden key")
+        return cls(item_type="key", name="Golden key")
 
     @classmethod
     def quest_item(cls, name):
@@ -138,6 +138,8 @@ class Treasure(MyObject):
         super().__init__(name, symbol_on_map, position_x, position_y)
         self.message_in_field = message_in_field
         self.is_locked = is_locked
+        self.color_on_board = COLOR.YELLOW
+        self.field_move_possible = True
 
     def open_treasure(self, hero):
         """

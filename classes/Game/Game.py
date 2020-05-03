@@ -3,6 +3,7 @@ from classes.Object.Creature.Hero.Hero import Hero
 from games_config.board_factory import create_new_board
 from utils.data_manager import *
 from time import sleep
+from macros import BATTLE_MODES
 
 
 class Game:
@@ -20,6 +21,7 @@ class Game:
         self.endgame = False    # to toogle, when hero/final boss dead
         self.board_changed = False
         self.true_player_position = []  # for loading data
+        self.battle_mode = BATTLE_MODES.IMMEDIATE_FIGHT
 
     def next_board(self):
         self.current_board_index += 1
