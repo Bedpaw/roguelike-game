@@ -104,26 +104,26 @@ class Board:
             return False
 
         elif isinstance(caller, Hero):
-                if isinstance(obj_in_pos, Fire):
-                    self.hero.hp -= 20
-                    return True
-                if isinstance(obj_in_pos, NPC):
-                    if obj_in_pos.on_meet(self.hero):  # return True if hero start fight with NPC else False
-                        self.npc.remove(obj_in_pos)
+            if isinstance(obj_in_pos, Fire):
+                self.hero.hp -= 20
+                return True
+            if isinstance(obj_in_pos, NPC):
+                if obj_in_pos.on_meet(self.hero):  # return True if hero start fight with NPC else False
+                    self.npc.remove(obj_in_pos)
 
-                        return True
-                    self.print_board()
-                    return False
-                elif isinstance(obj_in_pos, Treasure):
-                    if obj_in_pos.open_treasure(self.hero):  # return True if hero took treasure
-                        self.treasures.remove(obj_in_pos)
-                        return True
-                    self.print_board()
-                    return False
-                elif isinstance(obj_in_pos, Monster):
-                    battle(caller, obj_in_pos, BATTLE_MODES.MANUAL_FIGHT)
-                    self.monsters.remove(obj_in_pos)
                     return True
+                self.print_board()
+                return False
+            elif isinstance(obj_in_pos, Treasure):
+                if obj_in_pos.open_treasure(self.hero):  # return True if hero took treasure
+                    self.treasures.remove(obj_in_pos)
+                    return True
+                self.print_board()
+                return False
+            elif isinstance(obj_in_pos, Monster):
+                battle(caller, obj_in_pos, BATTLE_MODES.MANUAL_FIGHT)
+                self.monsters.remove(obj_in_pos)
+                return True
 
         elif isinstance(caller, Monster):
             if isinstance(obj_in_pos, Fire):

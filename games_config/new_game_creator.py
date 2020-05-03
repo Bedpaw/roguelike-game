@@ -10,12 +10,7 @@ from utils.hero_selection import get_user_hero_choice
 def create_new_game(player_name):
     # GAME HISTORY?
     print('Welcome in our game!')
-    game_name = input('Please input folder name for saves: \n'
-                      '> ')
-
-    create_new_folder(f'db/saves/{player_name}/{game_name}')
-    create_new_folder(f'db/saves/{player_name}/{game_name}/BOARDS')
-    create_new_folder(f'db/saves/{player_name}/{game_name}/BOARDS/BOARD0')
+    create_new_folder(f'db/saves/{player_name}')
 
     print('Please choose difficulty level: ')
     choose_difficult = int_input('[1] EASY\n'
@@ -32,12 +27,9 @@ def create_new_game(player_name):
     elif choose_difficult == 4:
         difficulty_level = DIFFICULTY_LEVEL.IMPOSSIBLE
 
-    hero = get_user_hero_choice()
-
-
     hero = create_new_hero()
     game = Game(player_name=player_name,
-                game_name=game_name,
+                game_name="RESUME_GAME",
                 difficulty_level=difficulty_level,
                 start_board_index=0,
                 hero=hero)
