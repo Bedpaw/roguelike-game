@@ -30,7 +30,8 @@ class Board:
         # --------------------------------
         self.game_board_in_class = [[Field()]] + copy.deepcopy(self.board_map) + [[Field()]]
         self.game_board_in_class[self.pos_x][self.pos_y] = self.hero
-        self.name = "Mongolscy przemytnicy rzeżuchy "
+        self.name = "Set_me_name"
+        self.last_move_message = []
         self.monsters = []
         self.npc = []
         self.treasures = []
@@ -43,6 +44,7 @@ class Board:
         self.make_empty_list()
         self.add_object_to_board(self.monsters)
         self.add_object_to_board(self.npc)
+        self.add_object_to_board(self.treasures)
         self.game_board_in_class[self.pos_x][self.pos_y] = self.hero
         self.hero.position_x = self.pos_x
         self.hero.position_y = self.pos_y
@@ -55,11 +57,12 @@ class Board:
                 x, y = monster.move(params=monster.move_param)
                 # Skip move if no valid option in 10 trys
                 moves_counter += 1
-                if moves_counter == 10:
+                if moves_counter == 50:
                     valid = True
                 if self.check_move_possibility(monster, x, y):
                     monster.position_x = x
                     monster.position_y = y
+                    self.update_board()
                     valid = True
 
     def make_empty_list(self):
@@ -70,6 +73,14 @@ class Board:
         for object_item in object_items:
             self.game_board_in_class[object_item.position_x][object_item.position_y] = object_item
 
+    def print_last_message(self):
+        additonal_info = ''
+        for message in self.last_move_message:
+            additonal_info += f"     {message}"
+        if additonal_info != '':
+            print(additonal_info)
+        self.last_move_message = []
+
     def check_move_possibility(self, caller, positionX, positionY):
         """
         :param caller:Hero or Monster
@@ -77,52 +88,47 @@ class Board:
         :param positionY:HORIZONTAL <->
         :return: True if move is possible, False if it isn't
         """
-        # Idea for making one for for checking everything instead for loops do it by checking proper value in given caller
+        # BOARD BORDERS
         if positionX < 1 or positionY < 0 or positionY > self.width - 1 or positionX > self.height:
-            return False
-
-        check_position = self.game_board_in_class[positionX][positionY]  # after 1 if, because index out of range
-
-        if not check_position.field_move_possible:
-            return False
-
-        else:
             if isinstance(caller, Hero):
+                self.last_move_message.append("AUUU!")
+            return False
+        obj_in_pos = self.game_board_in_class[positionX][positionY]
+        if not obj_in_pos.field_move_possible:
+            return False
 
-                for i, monster in enumerate(self.monsters):
-                    if monster.position_x == positionX and monster.position_y == positionY:
-                        cprint(f"You attacked {monster.name}!", ERROR, start_enter=1, wait_after=1)
-                        battle(caller, monster, BATTLE_MODES.IMMEDIATE_FIGHT)
-                        if not monster.is_on_board:
-                            del self.monsters[i]
-                        return True
-                for i, one_npc in enumerate(self.npc):
-                    if one_npc.position_x == positionX and one_npc.position_y == positionY:
-                        if one_npc.on_meet(self.hero):  # return True if hero start fight with NPC else False
-                            if not one_npc.is_on_board:
-                                del self.npc[i]
-                                return True
-                        self.print_board()
-                        return False
-
-            elif isinstance(caller, Monster):
-                if isinstance(check_position, NPC) or isinstance(check_position, Monster):
-                    return False
-                if self.pos_x == positionX and self.pos_y == positionY:
-                    cprint(f'{self.hero.name} has been attacked by {caller.name}!', ERROR, start_enter=1, wait_after=1)
-                    # pause_music()
-                    battle(self.hero, caller, BATTLE_MODES.IMMEDIATE_FIGHT)
-                    # unpause_music()
-                    self.monsters.remove(caller)  # Not sure if this will work with many monsters
+        elif isinstance(caller, Hero):
+            if isinstance(obj_in_pos, NPC):
+                if obj_in_pos.on_meet(self.hero):  # return True if hero start fight with NPC else False
+                    self.npc.remove(obj_in_pos)
                     return True
+                self.print_board()
+                return False
+            elif isinstance(obj_in_pos, Treasure):
+                if obj_in_pos.open_treasure(self.hero):  # return True if hero took treasure
+                    self.treasures.remove(obj_in_pos)
+                    return True
+                self.print_board()
+                return False
+            elif isinstance(obj_in_pos, Monster):
+                battle(caller, obj_in_pos, BATTLE_MODES.IMMEDIATE_FIGHT)
+                self.monsters.remove(obj_in_pos)
+                return True
 
-            # monster vs npc validation
-            # item in the feature(monster i hero)
-            return True
+        elif isinstance(caller, Monster):
+
+            if isinstance(obj_in_pos, NPC) or isinstance(obj_in_pos, Monster) or isinstance(obj_in_pos, Treasure):
+                return False
+            elif isinstance(obj_in_pos, Hero):
+                battle(obj_in_pos, caller, BATTLE_MODES.IMMEDIATE_FIGHT, hero_start=False)
+                self.monsters.remove(caller)
+                return True
+        return True
 
     def get_user_choice(self):
         valid_key = False  # change to True if key is valid AND move is possible
         while not valid_key:
+            self.print_last_message()
             key_pressed = key_service.key_pressed()
 
             if key_pressed in ['w', 's', 'a', 'd', 'p', 'm', 'o', 'x', 'z']:
@@ -161,12 +167,12 @@ class Board:
                     valid_key = True
 
                 # Normal move
-
                 else:
                     new_x_pos, new_y_pos = self.hero.move(key_pressed)
                     if self.check_move_possibility(self.hero, new_x_pos, new_y_pos):
                         self.pos_x = new_x_pos
                         self.pos_y = new_y_pos
+                        self.update_board()
                         valid_key = True
 
     def print_board(self):
@@ -214,7 +220,6 @@ class Board:
             if i == 9:
                     additonal_info = f"{' ' * 2}|H|:HP |M|:MANA"
 
-
             middle_fileds += additonal_info
 
             if i is len(self.game_board_in_class) - 1:
@@ -246,13 +251,13 @@ class Board:
             mid.append(f"{item[1]}{' ' * (max_row_length - item[0])}{border_field}")
         print(''.join(mid), new_empty_line)
 
-
         # LAST MESSAGE FROM HERO
         # TODO
 
         # BOTTOM PRINT AND LOGIC
         # print(f"{border_field}{' ' * (max_row_length -4)}{border_field}")
         print(f"{new_empty_line[1:]}\n{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}")
+
 
 
 
@@ -282,7 +287,7 @@ class Board:
 
         def switcher(board_id):
             boards = {
-                "0": labirynth,
+                "0": labyrinth,
                 "1": plain,
                 "2": troll_cave_entry,
                 "3": troll_cave,
