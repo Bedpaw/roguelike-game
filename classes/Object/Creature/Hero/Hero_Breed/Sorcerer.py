@@ -12,7 +12,7 @@ class Sorcerer(Hero):
                  phys_dmg=13,
                  luck=3,
                  dodge_chance=3,
-                 defense=8,
+                 defense=18,
                  stamina=15,
                  energy=28,
                  magic_dmg=2,
@@ -61,7 +61,7 @@ class Sorcerer(Hero):
             6: ['Inferno', 100, self.magic_dmg, 8, 60],
             7: ['Ice Storm', 120, self.magic_dmg, 10, 66],
             8: ['Decay', 150, self.magic_dmg, 12, 75],
-            0: ['HP potion: ', self.hp, 'MANA potion: ', self.mana]
+            9: ['HP potion: ', self.hp, 'MANA potion: ', self.mana]
         }
 
         # level up attributes

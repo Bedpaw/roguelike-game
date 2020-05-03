@@ -110,7 +110,6 @@ class Board:
                 if isinstance(obj_in_pos, NPC):
                     if obj_in_pos.on_meet(self.hero):  # return True if hero start fight with NPC else False
                         self.npc.remove(obj_in_pos)
-
                         return True
                     self.print_board()
                     return False
@@ -131,7 +130,7 @@ class Board:
             if isinstance(obj_in_pos, NPC) or isinstance(obj_in_pos, Monster) or isinstance(obj_in_pos, Treasure):
                 return False
             elif isinstance(obj_in_pos, Hero):
-                battle(obj_in_pos, caller, BATTLE_MODES.IMMEDIATE_FIGHT, hero_start=False)
+                battle(obj_in_pos, caller, BATTLE_MODES.MANUAL_FIGHT, hero_start=False)
                 self.monsters.remove(caller)
                 return True
         return True
