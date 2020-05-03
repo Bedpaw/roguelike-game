@@ -52,18 +52,17 @@ class Creature(MyObject):
             return False
 
     def print_hp(self):
-        if self.hp < 0:
-            self.hp = 0
 
         hp_left_prec = (self.hp / self.max_hp) * 100
         hp_message = f'{self.name}: {self.hp}/{self.max_hp} HP\n'
 
         if hp_left_prec >= 60:
             cprint(hp_message, COLOR.GREEN)
-        elif hp_left_prec <= 30:
+        elif hp_left_prec <= 30 and hp_left_prec > 0:
             cprint(hp_message, COLOR.RED, STYLES.BOLD)
-        else:
-            cprint(hp_message, COLOR.YELLOW)
+        elif self.hp <= 0:
+            null_hp_message = f'{self.name}: 0/{self.max_hp} HP\n'
+            cprint(null_hp_message, COLOR.YELLOW)
 
     def attack(self, target, dmg):
         cprint(f'{self.name} attack!', self.color_in_battle)
@@ -75,7 +74,10 @@ class Creature(MyObject):
         # Check for critical attack
         elif random_true(self.luck):
             cprint(f'{self.name} critical strike with double damage!', COLOR.RED, STYLES.BOLD)
-            target.hp -= 2 * (dmg - target.defense)
+            if dmg >= target.defense - 5:
+                target.hp -= 2 * (dmg - target.defense)
+            else:
+                target.hp -= 5
 
         # Normal attack
         else:

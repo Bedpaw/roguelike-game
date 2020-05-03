@@ -12,7 +12,7 @@ class Gate():
 
 class Field():
     symbol_on_map = '0'
-    color_on_board = COLORS.COLOR.CWHITE
+    color_on_board = ''
     field_color = COLORS.BG_COLOR.GREEN
     field_move_possible = True
 

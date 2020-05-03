@@ -35,17 +35,21 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
                 spell_name_print = ''
                 max_key = 2
                 for k, v in hero.spells.items():
-                    if k is 0:
-                        # 0: ['HP potion: ', self.hp, 'MANA potion: ', self.mana]
+                    if k is 9:
                         spell_name_print += f"{' '*8}[{k}] HP Potions | MANA Potions \n{' '*12}H:{hero.hp} {' '*6}B: {hero.mana}"
                     else:
                         if hero.energy >= v[4]:
                             max_key += 1
-                            spell_name_print += f"{' '* 8}[{k}] {v[0]} (mana cost:{v[1]})\n"
+                            spell_name_print += f"{' '* 8}[{k}] {v[0]} [dmg:{v[2]*v[3]}] (mana cost:{v[1]})\n"
 
                 spell_name_print += '\nWhat should I do master?: '
                 hero_attack = int_input(spell_name_print, number_of_options=max_key)
                 spell_mana_cost = hero.spells[hero_attack][1]
+                wait(1)
+
+                # if hero_attack == '9':
+                #     print("You have pressed number 999")
+                #     time.sleep(1)
 
                 if spell_mana_cost >= hero.mana:
                     print(f"You dont have enough mana ({hero.mana}) to use this spell.")
@@ -82,8 +86,10 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
     # Battle start messages
     if hero_start:
         cprint(f"You attacked {monster.name}!", ERROR, start_enter=1, wait_after=1)
+        who_start = True
     else:
         cprint(f'{hero.name} has been attacked by {monster.name}!', ERROR, start_enter=1, wait_after=1)
+        who_start = False
 
     cprint(f"Battle start! {hero.name} vs {monster.name}", COLOR.PURPLE, start_enter=1, end_enter=1)
     hero.start_fight_message()
@@ -96,24 +102,32 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
         round_counter += 1
         cprint(f"Round: {round_counter}", COLOR.PURPLE)
         wait(1)
-
-        hero_move()
+        if who_start:
+            hero_move()
+            who_start = False
+        # else:
+        #     monster.attack(hero, monster.strength)
+        #     who_start = True
 
         if monster.is_alive():
             monster.print_hp()
             wait(1)
             monster.attack(hero, monster.strength)
             hero.print_hp()
+            hero.print_mana()
+            who_start = True
             wait(1)
         else:
             monster.print_hp()
             wait(1)
             monster.on_defeat()
+            break
 
         if not hero.is_alive():
             hero.print_hp()
             print("FUNCTION ENDING GAME")
-            break
+            return True
+
 
     # Battle end
     cprint(f'You have got {monster.exp} exp.', SUCCESS)
