@@ -1,0 +1,9 @@
+Hello traveller, what are you doing here?
+  [1] I want to go eastern trail, please tell your guards to let me go
+    It's impossible, east is too dangerous now for travellers... &01
+      [1] But I'm brave and strong I can go!
+        I SAID IT'S IMPOSSIBLE! Enough blood has already drained in this land &0
+          [1] Ok, ok... don't be so angry &END
+      [2] I will stay town then... &END
+  [2] I hear a lot about you alchemical talent king. Can I buy something from your collection? &TRADE
+  [3] Good question... I will just go out &END

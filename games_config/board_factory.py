@@ -1,4 +1,3 @@
-from classes.Object.Creature.Monster.Monsters import Monster
 from classes.Board.GameBoard import Board
 from classes.Board.Fields import get_map
 from classes.Object.Creature.NPC.NPC import NPC

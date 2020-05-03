@@ -7,10 +7,10 @@ from utils.decorations import cprint
 from utils.validation import int_input
 from macros import DIFFICULTY_LEVEL
 from utils.utils import clear_screen
+from classes.Object.Item.Item import Item
 
 # tests
 from classes.Object.Creature.Hero.Hero import Hero
-from classes.Object.Creature.Monster.Monsters import Arnold
 
 
 class NPC(Monster):
@@ -38,17 +38,22 @@ class NPC(Monster):
                  color_on_board=COLOR.PURPLE,
                  field_color=BG_COLOR.BLUE,
                  quest_func=None
-
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility, luck, move_type, move_param, exp,
                          loot, on_fight_message, on_die_message)
 
+        if quest_func is None:
+            quest_func = []
         self.dialog_index = dialog_index
         self.start_dialog = self.conversation_folder_path + conversation_file_name
         self.dialogs_path = [self.start_dialog]
         self.color_on_board = color_on_board
         self.field_color = field_color
+        if quest_func is None:
+            self.quest_func = []
+        else:
+            self.quest_func = quest_func
 
     def on_meet(self, hero):
         """
@@ -73,7 +78,7 @@ class NPC(Monster):
         Run function despite of conversation result
         :param func:STRING: returned from txt.file string interpretation of functions
         :param hero: that take part in conversation with NPC
-        :return:pass
+        :return:False if hero can't move after conversation else True
         """
         if func == "BATTLE":
             battle(hero, self)
@@ -82,8 +87,9 @@ class NPC(Monster):
             self.__trade(hero)
         if func == "END":
             clear_screen()
-        if func == "QUEST":
-            self.quest_func
+        if func.startswith("QUEST"):
+            quest_index = func.split('T')[1]
+            self.quest_func[int(quest_index)](hero)
         return False
 
     def __trade(self, hero):
@@ -135,27 +141,49 @@ class NPC(Monster):
                         cprint(option, color)
             # HEADERS
             elif i % 2 == 0:
+                # print("ENDS", ends_index)
+                # print("OPTIONS", next_header_options)
                 number_of_options = len(next_header_options)  # input validation
                 user_choice = int_input(f'{hero.color_on_board}{STYLES.BOLD}{hero.name}: {STYLES.RESET}',
                                         number_of_options)
+                if i == 2:
+                    # check if user pick function ending conversation
+                    if user_choice - 1 in ends_index:
+                        #   print(functions_to_output[ends_index.index(user_choice - 1)])
+                        return functions_to_output[ends_index.index(user_choice - 1)]
 
-                # check if user pick function ending conversation
-                if user_choice - 1 in ends_index:
-                    return functions_to_output[ends_index.index(user_choice - 1)]
+                    move_index = 1
+                    for index in ends_index:
+                        if index < user_choice:
+                            move_index += 1
 
-                move_index = 1
-                for index in ends_index:
-                    if index < user_choice:
-                        move_index += 1
-                next_header_options = []
+                    # Take from text information about header to output and his options index
+                    next_header_text, options_index = indentation[user_choice - move_index].split("&")
+                    next_header_options = []
+                    for index in options_index:
+                        next_header_options.append(int(index))
+                    # Print header
+                    cprint(f'\n{self.name}: {next_header_text}\n', self.in_conversation_color, STYLES.BOLD)
 
-                # Take from text information about header to output and his options index
-                next_header_text, options_index = indentation[user_choice - move_index].split("&")
-                for index in options_index:
-                    next_header_options.append(int(index))
+                else:
+                    # check if user pick function ending conversation
+                    if next_header_options[user_choice - 1] in ends_index:
+                        #   print(functions_to_output[ends_index.index(next_header_options[user_choice - 1])])
+                        return functions_to_output[ends_index.index(next_header_options[user_choice - 1])]
 
-                # Print header
-                cprint(f'\n{self.name}: {next_header_text}\n', self.in_conversation_color, STYLES.BOLD)
+                    move_index = 0
+                    for index in ends_index:
+                        if index < next_header_options[user_choice - 1]:
+                            move_index += 1
+
+                    # Take from text information about header to output and his options index
+                    next_header_text, options_index = indentation[
+                        next_header_options[user_choice - 1] - move_index].split("&")
+                    next_header_options = []
+                    for index in options_index:
+                        next_header_options.append(int(index))
+                    # Print header
+                    cprint(f'\n{self.name}: {next_header_text}\n', self.in_conversation_color, STYLES.BOLD)
 
     @staticmethod
     def read_dialog_from_file(text_file):
@@ -227,26 +255,44 @@ class NPC(Monster):
     @classmethod
     def troll_king(cls, pos_x, pos_y, dif_lvl=DIFFICULTY_LEVEL.NORMAL):
         dif_dep = cls.difficulty_depends  # shortcut only
-        return cls(name="Troll king",
-                   position_x=pos_x,
-                   position_y=pos_y,
-                   symbol_on_map="T",
-                   strength=dif_dep(70, dif_lvl),
-                   max_hp=dif_dep(500, dif_lvl),
-                   hp=dif_dep(500, dif_lvl),
-                   move_type=MOVES_TYPES.RANDOM_STRAIGHT,
+        troll_king = cls(name="Troll king",
+                         position_x=pos_x,
+                         position_y=pos_y,
+                         symbol_on_map="T",
+                         strength=dif_dep(70, dif_lvl),
+                         max_hp=dif_dep(500, dif_lvl),
+                         hp=dif_dep(500, dif_lvl),
+                         move_type=MOVES_TYPES.RANDOM_STRAIGHT,
 
-                   exp=300,
-                   loot={
-                       'coins': 500,
-                       'troll_king_brain': 1,
-                   },
-                   color_on_board=COLOR.CYAN,
-                   conversation_file_name='troll_king.txt',
-                   on_fight_message="UGA HA!",
-                   on_die_message='Ughh, yough bum bum troll kingo... yough ken eat his braaajn nowww'
+                         exp=300,
+                         loot={
+                             'coins': 500,
+                             'quest': Item.quest_item('Troll brain')
+                         },
+                         color_on_board=COLOR.CYAN,
+                         conversation_file_name='troll_king.txt',
+                         on_fight_message="UGA HA!",
+                         on_die_message='Ughh, yough bum bum troll kingo... yough ken eat his braaajn nowww'
 
-                   )
+                         )
+
+        def __dialog_path(hero):
+            if hero.quest_taken_by_name("TROLL KING"):
+                troll_king.dialog_index = 1
+                hero.backpack.append(Item.quest_item('Troll brain'))  # MOCK
+            else:
+                troll_king.dialog_index = 0
+
+            dialog_path = troll_king.dialogs_path[troll_king.dialog_index]
+            return troll_king.read_dialog_from_file(dialog_path)
+
+        troll_king.__dialog_path = __dialog_path
+
+        troll_king.dialogs_path = [
+            f'{troll_king.conversation_folder_path}troll_king_before_quest.txt',
+            f'{troll_king.conversation_folder_path}troll_king.txt'
+        ]
+        return troll_king
 
     @classmethod
     def fake_wall(cls, pos_x, pos_y, name):
@@ -258,17 +304,28 @@ class NPC(Monster):
             field_color=BG_COLOR.LIGHTGREY)
 
         fake_wall.dialogs_path = [
-                                  f'{fake_wall.conversation_folder_path}troll_cave_hole_dialog1.txt',
-                                  f'{fake_wall.conversation_folder_path}troll_cave_hole_dialog2.txt'
-                                  ]
+            f'{fake_wall.conversation_folder_path}troll_cave_hole_dialog1.txt',
+            f'{fake_wall.conversation_folder_path}troll_cave_hole_dialog2.txt'
+        ]
 
         def __dialog_path(hero):
-            if hero.quests:   # mock
+            if hero.quest_taken_by_name("GOLDEN RING") and not hero.quest_done_by_name("GOLDEN RING"):
                 fake_wall.dialog_index = 1
+            else:
+                fake_wall.dialog_index = 0
             dialog_path = fake_wall.dialogs_path[fake_wall.dialog_index]
             return fake_wall.read_dialog_from_file(dialog_path)
 
         fake_wall.__dialog_path = __dialog_path
+
+        def quest0(hero):
+            for quest in hero.quests:
+                if quest['name'] == "GOLDEN RING":
+                    quest['COMPLETED'] = True
+                    hero.backpack.append(Item.quest_item("Golden ring"))
+                    print(f'That was disgusting, but you have found golden ring')
+
+        fake_wall.quest_func = [quest0]
 
         return fake_wall
 
@@ -282,13 +339,119 @@ class NPC(Monster):
             color_on_board=COLOR.YELLOW,
         )
         king.dialogs_path = [
-            f'{king.conversation_folder_path}king_before_quest.txt'
+            f'{king.conversation_folder_path}king/king_before_quest.txt',
+            f'{king.conversation_folder_path}king/king_get_ring.txt',
+            f'{king.conversation_folder_path}king/king_get_troll_brain.txt',
+            f'{king.conversation_folder_path}king/king_before_golden_ring_quest.txt',
+            f'{king.conversation_folder_path}king/king_before_troll_king_quest.txt',
+            f'{king.conversation_folder_path}king/king_before_GR_after_kill_Troll.txt',
+            f'{king.conversation_folder_path}king/king_after_quests_before_kill_Troll.txt',
+            f'{king.conversation_folder_path}king/king_after_quests.txt',
+
         ]
 
+        def quest0(hero):
+            if hero.quest_taken_by_name("GOLDEN RING"):
+                hero.coins += 1000
+                hero.remove_from_backpack('Golden ring')
+                hero.backpack.append(Item.quest_item("King's store patent"))
+                cprint(hero.backpack, wait_after=1)
+                return
+            hero.quests.append({
+                'name': "GOLDEN RING",
+                'description': "King Andrei lost his ring, when he was fighting with trolls."
+                               "Probably one one them hide it somewhere in Troll cave - find it and bring to king "
+                               "Andrei",
+                'COMPLETED': False,
+                'reward': {
+                    'quest': "King's store patent",
+                    'gold': 1000
+                }
+            })
+            cprint(hero.quests, wait_after=2)
 
-# path = '../../../../db/conversations/example1.txt'
-# guard = NPC("Guard", "A", 1, 1)
-# monster = Arnold("Guard", "A", 2, 2)
-# hero = Hero("Andrzej", "A", 3, 4)
+        def quest1(hero):
+            if hero.quest_taken_by_name("TROLL KING") and not hero.quest_done_by_name("TROLL KING"):
+                print('im here')
+                hero.coins += 1000
+                hero.remove_from_backpack('Troll brain')
+                hero.backpack.append(Item.quest_item("King's brave patent"))
+                for quest in hero.quests:
+                    if quest['name'] == "TROLL KING":
+                        quest["COMPLETED"] = True
+                cprint(hero.backpack, wait_after=1)
+                return
+            hero.quests.append({
+                'name': "TROLL KING",
+                'description': "King Andrei has been wounded in fight with Troll King,"
+                               "kill this monster to show King that you are brave enough to go east!",
+                'COMPLETED': False,
+                'reward': {
+                    'quest': "King's brave patent",
+                    'sword': 'Trolls slayer',  # TODO add item
+                    'gold': 1000
+                }
+            })
 
-# guard.on_meet(hero)
+        def __trade(hero):
+            if hero.is_in_backpack("King's store patent"):
+                print("trade")
+            else:
+                print("You need store patent if you want to trade with me")
+
+
+        def __dialog_path(hero):
+            GOLDEN_RING_TAKEN = hero.quest_taken_by_name('GOLDEN RING')
+            GOLDEN_RING_DONE = hero.quest_done_by_name('GOLDEN RING')
+            TROLL_KING_TAKEN = hero.quest_taken_by_name('TROLL KING')
+            TROLL_KING_DONE = hero.quest_done_by_name('TROLL KING')
+
+            if not TROLL_KING_TAKEN and not GOLDEN_RING_TAKEN:
+                print("0")
+                king.dialog_index = 0
+            elif hero.is_in_backpack('Golden ring'):
+                print("1")
+                king.dialog_index = 1
+            elif hero.is_in_backpack('Troll brain'):
+                print('2')
+                king.dialog_index = 2
+            elif TROLL_KING_TAKEN and not GOLDEN_RING_TAKEN and not TROLL_KING_DONE:
+                print("3")
+                print(hero.quests)
+                king.dialog_index = 3
+            elif not TROLL_KING_TAKEN and GOLDEN_RING_TAKEN:
+                print("4")
+                king.dialog_index = 4
+            elif TROLL_KING_DONE and not GOLDEN_RING_TAKEN:
+                print("5")
+                king.dialog_index = 5
+            elif TROLL_KING_TAKEN and GOLDEN_RING_TAKEN and not TROLL_KING_DONE:
+                print("6")
+                king.dialog_index = 6
+            elif TROLL_KING_DONE and GOLDEN_RING_TAKEN:
+                print("7")
+                king.dialog_index = 7
+            dialog_path = king.dialogs_path[king.dialog_index]
+            return king.read_dialog_from_file(dialog_path)
+
+        king.__trade = __trade
+        king.__dialog_path = __dialog_path
+        king.quest_func = [quest0, quest1]
+        return king
+
+    @classmethod
+    def eastern_guard(cls, pos_x, pos_y):
+        eastern_guard = cls(
+            name="Eastern_guard",
+            position_x=pos_x,
+            position_y=pos_y,
+            symbol_on_map='G',
+            field_color=BG_COLOR.LIGHTGREY)
+
+        def on_meet(hero):
+            if hero.quest_done_by_name("TROLL KING"):
+                return True
+            else:
+                print("STOP, you can't move east!")
+        eastern_guard.on_meet = on_meet
+        return eastern_guard

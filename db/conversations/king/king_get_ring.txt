@@ -1,0 +1,3 @@
+Hello again, did you find my ring?
+  [1] Yes king, here is your ring! &QUEST0
+  [2] No, I had more important things to do &END

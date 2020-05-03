@@ -3,13 +3,12 @@ from utils.decorations import cprint
 from macros import OBJECT_TYPES, DIFFICULTY_LEVEL
 from macros.COLORS import *
 from macros import MOVES_TYPES
-
+from classes.Object.Item.Item import Item
 
 
 class Monster(Creature):
     color_on_board = COLOR.RED
     color_in_battle = COLOR.RED
-    field_move_possible = True
     field_color = BG_COLOR.BLUE
     type_of = OBJECT_TYPES.MONSTER  # probably to delete
 
@@ -83,6 +82,7 @@ class Monster(Creature):
                    exp=150,
                    loot={
                        'coins': 250,
+                        "belt": Item.belt(7)
                    },
                    )
 
@@ -102,7 +102,7 @@ class Monster(Creature):
                    exp=1000,
                    loot={
                        'key': 1,
-                       # "gloves": Item.gloves(6)
+                       "gloves": Item.gloves(6)
                    },
                    on_fight_message="YOU LITTLE RAT!",
                    on_die_message="I will be back...",
@@ -117,6 +117,9 @@ class Monster(Creature):
                    move_param=[3, [0]],
                    symbol_on_map="R",
                    agility=50,
+                   loot={
+                       "boots": Item.boots(4)
+                   },
                    on_fight_message="*pik*pik*")
 
     @classmethod
@@ -131,6 +134,9 @@ class Monster(Creature):
                    strength=dif_dep(20, dif_lvl),
                    agility=80,
                    luck=30,
+                   loot={
+                       "gloves": Item.shield(9)
+                   },
                    on_fight_message="sssss",
                    on_die_message="sssss",
                    )

@@ -1,12 +1,12 @@
 from random import *
 # from classes.Object.Creature.Hero.Hero import Hero
-from classes.Object.Creature.Monster.Monster import Monster
+# from classes.Object.Creature.Monster.Monster import Monster
 from classes.Object.Object import MyObject
 from macros.COLORS import *
 from utils.validation import int_input
 
 # hero = Hero(name="Franek")
-monster = Monster(name="Goblin")
+# monster = Monster(name="Goblin")
 
 
 class Item:
@@ -20,6 +20,7 @@ class Item:
                  strength=0,
                  agility=0,
                  stamina=0,
+                 mana=0,
                  energy=0):
         self.item_type = item_type
         self.name = name
@@ -29,6 +30,7 @@ class Item:
         self.agility = agility
         self.energy = energy
         self.stamina = stamina
+        self.mana = mana
 
     def add_power(self, hero):
         hero.strength += self.strength
@@ -37,6 +39,7 @@ class Item:
         hero.agility += self.agility
         hero.energy += self.energy
         hero.stamina += self.stamina
+        hero.mana += self.mana
 
     def del_power(self, hero):
         hero.strength -= self.strength
@@ -45,6 +48,7 @@ class Item:
         hero.agility -= self.agility
         hero.energy -= self.energy
         hero.stamina -= self.stamina
+        hero.mana -=self.mana
 
     @classmethod
     def gloves(cls, agility=5):
@@ -92,18 +96,23 @@ class Item:
         return cls(energy=energy, item_type="gloves", name=choice(names))
 
     @classmethod
-    def healing_potion(cls, stamina=150):
-        names = ["Papa Smurf's healing potion", "EXTRA COOL potion", "Porter beer + cocaine", "Honey and milk"]
-        return cls(stamina=stamina, item_type="healing_potion", name=choice(names))
+    def healing_potion(cls, hp=150):
+        names = "Papa Smurf's healing potion"
+        # ["Papa Smurf's healing potion", "EXTRA COOL potion", "Porter beer + cocaine", "Honey and milk"]
+        return cls(stamina=hp, item_type="healing_potion", name=choice(names))
 
     @classmethod
-    def mana(cls, energy=150):
+    def mana(cls, mana=150):
         names = ["Power is back potion", "Gummibear potion"]
-        return cls(energy=energy, item_type="mana", name=choice(names))
+        return cls(mana=mana, item_type="mana", name=choice(names))
 
     @classmethod
     def key(cls):
-        return cls(cls, item_type="key", name="Golden key")
+        return cls(item_type="key", name="Golden key")
+
+    @classmethod
+    def quest_item(cls, name):
+        return cls(item_type="quest", name=name)
 
 
 treasure = [
@@ -134,6 +143,8 @@ class Treasure(MyObject):
         super().__init__(name, symbol_on_map, position_x, position_y)
         self.message_in_field = message_in_field
         self.is_locked = is_locked
+        self.color_on_board = COLOR.YELLOW
+        self.field_move_possible = True
 
     def open_treasure(self, hero):
         """
@@ -147,15 +158,15 @@ class Treasure(MyObject):
             cprint("You have found closed chest, do you want to look into? ", INFO)
             answer = int_input("[1] Yes\n[2] No\n", 2)
             if answer == 1:
-                if hero.is_in_inventory("key"):
+                if hero.is_in_backpack("Golden key"):
                     loot = self.which_item_in_chest(treasure)
-                    if loot[0].item_type in hero.inventory:
-                        if "coins" in loot:
-                            hero.coins += 100
-                            print(f'You have gain 100 coins!')
+                    # if loot[0].item_type in hero.backpack:
+                    if loot[0].item_type == "coins":
+                        hero.coins += 100
+                        print(f'You have gain 100 coins!')
                     else:
                         print(f'You took from chest {loot[0].name}')
-                        hero.inventory[loot[0].item_type] = loot[0]
+                        hero.backpack.append(loot[0])
                     return True
                 else:
                     print(f"You don't have key in your inventory")
@@ -167,7 +178,7 @@ class Treasure(MyObject):
             loot = self.which_item_in_chest(treasure)
             cprint("You have found a chest and you've opened it", INFO)
             print(f'You took from chest {loot[0].name}')
-            hero.inventory[loot[0].item_type] = loot[0]
+            hero.backpack.append(loot[0])
             return True
 
     def which_item_in_chest(self, treasure):  # losuje item z dostępnych w grze

@@ -6,8 +6,8 @@ But who knows what will happen with it next ...
 
 Maybe it will be known as "Best RPG terminal game in whole history?"
 
-Scheme of the game was prepaired by Paweł, then Wojtek started to create colorful board.
+Scheme of the game was prepared by Paweł, then Wojtek started to create colorful board.
 Monsters were born in Paweł's mind and breeds of Heroes were an idea of Wojtek.
-Items, logo, and menu created Pati.
+Items, logo, and menu were created by Pati.
 
 Thanks for reading!

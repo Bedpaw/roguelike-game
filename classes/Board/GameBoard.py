@@ -10,9 +10,9 @@ from classes.Board.Fields import Field
 from classes.Object.Creature.Hero.Hero import Hero
 from classes.Object.Creature.NPC.NPC import NPC
 from classes.Object.Creature.Monster.Monster import Monster
+from classes.Object.Item.Item import Treasure
 from utils.sounds import play_music, pause_music, unpause_music
 import time
-
 
 
 class Board:
@@ -29,7 +29,8 @@ class Board:
         # --------------------------------
         self.game_board_in_class = [[Field()]] + copy.deepcopy(self.board_map) + [[Field()]]
         self.game_board_in_class[self.pos_x][self.pos_y] = self.hero
-        self.name = "Mongolscy przemytnicy rzeżuchy "
+        self.name = "Set_me_name"
+        self.last_move_message = []
         self.monsters = []
         self.npc = []
         self.treasures = []
@@ -42,6 +43,7 @@ class Board:
         self.make_empty_list()
         self.add_object_to_board(self.monsters)
         self.add_object_to_board(self.npc)
+        self.add_object_to_board(self.treasures)
         self.game_board_in_class[self.pos_x][self.pos_y] = self.hero
         self.hero.position_x = self.pos_x
         self.hero.position_y = self.pos_y
@@ -54,11 +56,12 @@ class Board:
                 x, y = monster.move(params=monster.move_param)
                 # Skip move if no valid option in 10 trys
                 moves_counter += 1
-                if moves_counter == 10:
+                if moves_counter == 50:
                     valid = True
                 if self.check_move_possibility(monster, x, y):
                     monster.position_x = x
                     monster.position_y = y
+                    self.update_board()
                     valid = True
 
     def make_empty_list(self):
@@ -75,6 +78,14 @@ class Board:
             time.sleep(1)
         pass
 
+    def print_last_message(self):
+        additonal_info = ''
+        for message in self.last_move_message:
+            additonal_info += f"     {message}"
+        if additonal_info != '':
+            print(additonal_info)
+        self.last_move_message = []
+
 
     def check_move_possibility(self, caller, positionX, positionY):
         """
@@ -83,70 +94,65 @@ class Board:
         :param positionY:HORIZONTAL <->
         :return: True if move is possible, False if it isn't
         """
-        # Idea for making one for for checking everything instead for loops do it by checking proper value in given caller
+        # BOARD BORDERS
         if positionX < 1 or positionY < 0 or positionY > self.width - 1 or positionX > self.height:
-            return False
-
-        check_position = self.game_board_in_class[positionX][positionY]  # after 1 if, because index out of range
-
-        if not check_position.field_move_possible:
-            return False
-
-        else:
             if isinstance(caller, Hero):
+                self.last_move_message.append("AUUU!")
+            return False
+        obj_in_pos = self.game_board_in_class[positionX][positionY]
+        if not obj_in_pos.field_move_possible:
+            return False
 
-                if isinstance(check_position, Fire):
+        elif isinstance(caller, Hero):
+                if isinstance(obj_in_pos, Fire):
                     self.hero.hp -= 20
                     return True
+                if isinstance(obj_in_pos, NPC):
+                    if obj_in_pos.on_meet(self.hero):  # return True if hero start fight with NPC else False
+                        self.npc.remove(obj_in_pos)
 
-                for i, monster in enumerate(self.monsters):
-                    if monster.position_x == positionX and monster.position_y == positionY:
-                        cprint(f"You attacked {monster.name}!", ERROR, start_enter=1, wait_after=1)
-                        battle(caller, monster, BATTLE_MODES.MANUAL_FIGHT)
-                        if not monster.is_on_board:
-                            del self.monsters[i]
                         return True
-                for i, one_npc in enumerate(self.npc):
-                    if one_npc.position_x == positionX and one_npc.position_y == positionY:
-                        if one_npc.on_meet(self.hero):  # return True if hero start fight with NPC else False
-                            if not one_npc.is_on_board:
-                                del self.npc[i]
-                                return True
-                        self.print_board()
-                        return False
-
-            elif isinstance(caller, Monster):
-
-                if isinstance(check_position, Fire):
+                    self.print_board()
                     return False
-                if isinstance(check_position, NPC) or isinstance(check_position, Monster):
+                elif isinstance(obj_in_pos, Treasure):
+                    if obj_in_pos.open_treasure(self.hero):  # return True if hero took treasure
+                        self.treasures.remove(obj_in_pos)
+                        return True
+                    self.print_board()
                     return False
-
-                if self.game_board_in_class[positionX][positionY] == Fire:
-                    return False
-
-                if self.pos_x == positionX and self.pos_y == positionY:
-                    cprint(f'{self.hero.name} has been attacked by {caller.name}!', ERROR, start_enter=1, wait_after=1)
-                    # pause_music()
-                    battle(self.hero, caller, BATTLE_MODES.IMMEDIATE_FIGHT)
-                    # unpause_music()
-                    self.monsters.remove(caller)  # Not sure if this will work with many monsters
+                elif isinstance(obj_in_pos, Monster):
+                    battle(caller, obj_in_pos, BATTLE_MODES.MANUAL_FIGHT)
+                    self.monsters.remove(obj_in_pos)
                     return True
 
-            # monster vs npc validation
-            # item in the feature(monster i hero)
-            return True
+        elif isinstance(caller, Monster):
+            if isinstance(obj_in_pos, Fire):
+                return False
+            if isinstance(obj_in_pos, NPC) or isinstance(obj_in_pos, Monster) or isinstance(obj_in_pos, Treasure):
+                return False
+            elif isinstance(obj_in_pos, Hero):
+                battle(obj_in_pos, caller, BATTLE_MODES.IMMEDIATE_FIGHT, hero_start=False)
+                self.monsters.remove(caller)
+                return True
+        return True
 
     def get_user_choice(self):
         valid_key = False  # change to True if key is valid AND move is possible
         while not valid_key:
+            self.print_last_message()
             key_pressed = key_service.key_pressed()
 
-            if key_pressed in ['w', 's', 'a', 'd', 'p', 'm', 'o']:
-
-                if key_pressed == 'p':
+            if key_pressed in ['w', 's', 'a', 'd', 'p', 'm', 'o', 'x', 'z', 'j', 'h']:
+                # Z and X are cheats for testing
+                if key_pressed == 'z':
+                    self.pos_x = 1
+                    self.pos_y = 0
+                elif key_pressed == 'x':
+                    self.pos_x = self.height
+                    self.pos_y = self.width - 1
+                elif key_pressed == 'p':
                     exit()
-                if key_pressed == 'o':
+                elif key_pressed == 'o':
                     cprint("Game saved...", wait_after=1)
                     self.game.save_game()
 
@@ -156,6 +162,11 @@ class Board:
                     elif self.hero.points_for_level > 0:
                         self.hero.show_stats_with_add_points()
                         self.print_board()
+                elif key_pressed == "h":
+                    self.hero.use_hpotion()
+                elif key_pressed == "j":
+                    self.hero.use_mana()
+
 
 
                 # Move from first gate
@@ -173,7 +184,6 @@ class Board:
                     valid_key = True
 
                 # Normal move
-
                 else:
                     new_x_pos, new_y_pos = self.hero.move(key_pressed)
 
@@ -181,6 +191,7 @@ class Board:
                         self.lava_detector(new_x_pos, new_y_pos)
                         self.pos_x = new_x_pos
                         self.pos_y = new_y_pos
+                        self.update_board()
                         valid_key = True
 
     def print_board(self):
@@ -228,7 +239,6 @@ class Board:
             if i == 9:
                     additonal_info = f"{' ' * 2}|H|:HP |M|:MANA"
 
-
             middle_fileds += additonal_info
 
             if i is len(self.game_board_in_class) - 1:
@@ -260,13 +270,13 @@ class Board:
             mid.append(f"{item[1]}{' ' * (max_row_length - item[0])}{border_field}")
         print(''.join(mid), new_empty_line)
 
-
         # LAST MESSAGE FROM HERO
         # TODO
 
         # BOTTOM PRINT AND LOGIC
         # print(f"{border_field}{' ' * (max_row_length -4)}{border_field}")
         print(f"{new_empty_line[1:]}\n{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}")
+
 
 
 
@@ -296,29 +306,46 @@ class Board:
 
         def switcher(board_id):
             boards = {
-                "0": labirynth,
+                "0": labyrinth,
                 "1": plain,
                 "2": troll_cave_entry,
                 "3": troll_cave,
                 "4": the_great_bridge,
-                "5": city
+                "5": city,
+                "6": highway_to_hell,
             }
             return boards[str(board_id)]()
 
-        def labirynth():
-            board.name = "Labyrynth"
+        def labyrinth():
+            board.name = "Labyrinth"
             board.monsters = [
                 Monster.troll(1,2, game.difficulty_level),
-                Monster.rat(9, 7)
+                Monster.rat(9, 7),
+                Monster.troll(7, 7, game.difficulty_level),
             ]
-
+            # board.npc = [
+            #     NPC.troll_king(2, 3, game.difficulty_level),
+            #     NPC.fake_wall(2, 4, name="Hole in the wall"),
+            #     NPC.king(2, 5)
+            # ]
+            board.treasures = [
+                Treasure(position_x=10, position_y=0 )
+            ]
             return board
 
         def plain():
             board.name = "Plain"
-            board.npc = [NPC("Guard", "G", 4, 8), NPC('Guard', 'G', 4, 10)]
-            board.add_object_in_random_pos(Monster.rat, count=4)
-            board.add_object_in_random_pos(Monster.snake, count=4)
+            board.npc = [
+                NPC("Guard", "G", 4, 8),
+                NPC('Guard', 'G', 4, 10)
+            ]
+            board.treasures = [
+                Treasure(position_x=5, position_y=8, is_locked=True),
+                Treasure(position_x=5, position_y=10)
+            ]
+            board.add_object_in_random_pos(Monster.rat, count=1)
+            board.add_object_in_random_pos(Monster.snake, count=1)
+
             return board
 
         def troll_cave_entry():
@@ -327,6 +354,10 @@ class Board:
                 Monster.troll(2, 5, game.difficulty_level),
                 Monster.troll(5, 12, game.difficulty_level),
                 Monster.troll(9, 8, game.difficulty_level),
+            ]
+            board.treasures = [
+                Treasure(position_x=4, position_y=15),
+                Treasure(position_x=7, position_y=15, is_locked=True)
             ]
             board.monsters[0].move_type = MOVES_TYPES.STAY
             board.monsters[1].move_type = MOVES_TYPES.STAY
@@ -337,29 +368,49 @@ class Board:
 
         def troll_cave():
             board.name = "Troll cave"
-            board.monsters = [Monster.troll_warrior(1, 2, game.difficulty_level),
-                              Monster.troll(4, 5, game.difficulty_level),
-                              Monster.troll(6, 5, game.difficulty_level),
-                              Monster.troll(5, 6, game.difficulty_level),
-                              Monster.troll(5, 4, game.difficulty_level)
+            board.monsters = [
+                Monster.troll_warrior(1, 2, game.difficulty_level),
+                Monster.troll(4, 5, game.difficulty_level),
+                Monster.troll(6, 5, game.difficulty_level),
+                Monster.troll(5, 6, game.difficulty_level),
+                Monster.troll(5, 4, game.difficulty_level)
                               ]
-            board.monsters[0].move_type = MOVES_TYPES.STAY
             board.npc = [
                 NPC.troll_king(5, 5, game.difficulty_level),
-                NPC.fake_wall(6, 11, name="Hole in the wall")
+                NPC.fake_wall(6, 11, name="Hole in the wall"),
             ]
+            board.monsters[0].move_type = MOVES_TYPES.STAY
+
             return board
 
         def the_great_bridge():
             board.name = "The great bridge"
-            board.add_object_in_random_pos(Monster.rat, count=6)
-
+            board.add_object_in_random_pos(Monster.snake, count=2)
             return board
 
         def city():
             board.name = "City"
 
+            board.npc = [
+                NPC.king(1, 10),
+                NPC("Guard", "G", 2, 6),
+                NPC('Guard', 'G', 2, 14)
+                #  NPC.eastern_guard(11, 20)
+            ]
+            board.treasures = [
+                Treasure(position_x=1, position_y=4),
+                Treasure(position_x=1, position_y=5),
+                Treasure(position_x=1, position_y=15),
+                Treasure(position_x=1, position_y=16),
+            ]
+            board.add_object_in_random_pos(Monster.rat, count=3)
+            return board
+
+        def highway_to_hell():
+            board.name = "highway_to_hell"
+            board.monsters =[] #TODO
+            board.treasures = [] #TODO
+
             return board
 
         return switcher(board_id)
-

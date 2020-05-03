@@ -6,12 +6,12 @@ from macros.COLORS import *
 from classes.Object.Creature.Hero.Hero_Breed.Sorcerer import Sorcerer
 
 from utils.sounds import *
-from pygame.mixer import music
-from pygame.mixer import Sound
-from classes.Object.Item.Item import Item
 
+# from pygame.mixer import music
+# from pygame.mixer import Sound
 
-def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT):
+def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True):
+
     """
     :param hero:[object]
     :param monster:[object]
@@ -75,12 +75,16 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT):
         # else:
         #     hero.attack(monster)
 
-
-
-    # Battle start messages
     # music.pause()
     # music.load('db/sounds/battle.mp3')
     # music.play(-1)
+
+    # Battle start messages
+    if hero_start:
+        cprint(f"You attacked {monster.name}!", ERROR, start_enter=1, wait_after=1)
+    else:
+        cprint(f'{hero.name} has been attacked by {monster.name}!', ERROR, start_enter=1, wait_after=1)
+
     cprint(f"Battle start! {hero.name} vs {monster.name}", COLOR.PURPLE, start_enter=1, end_enter=1)
     hero.start_fight_message()
     monster.start_fight_message()
@@ -124,4 +128,3 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT):
     # return play_music("db/sounds/main_menu_start.mp3", infinite=True)
     # Item.add_to_inventory(hero, monster)
     pass
-

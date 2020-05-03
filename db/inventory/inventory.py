@@ -11,5 +11,5 @@ def print_inventory():
 def show_exp_and_lvl():
     pass
 
-def show inventory():
-    pass
+# def show inventory():
+#     pass
