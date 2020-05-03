@@ -1,5 +1,6 @@
 from utils.validation import int_input
 import os
+import pickle
 
 
 def get_game_name(player_name):
@@ -10,6 +11,18 @@ def get_game_name(player_name):
 
     game_choice = int_input(f'Please choose game to load:\n{games_as_string}> ', len(games_names))
     return games_names[game_choice - 1]
+
+
+def load_game(player_name, resume_game=False):
+    if resume_game:
+        game_name = "RESUME_GAME.pickle"
+    else:
+        game_name = get_game_name(player_name)
+    path_with_game_data = f'db/saves/{player_name}/{game_name}'
+    pickle_in = open(path_with_game_data, "rb")
+    game = pickle.load(pickle_in)
+    pickle_in.close()
+    return game
 
 
 def create_new_folder(path):

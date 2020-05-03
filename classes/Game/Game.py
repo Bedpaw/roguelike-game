@@ -41,7 +41,7 @@ class Game:
         if autosave and self.turn_counter % 100 == 0:
             game_name = "AUTOSAVE"
             cprint("Game saved...", wait_after=1)
-        if autosave:
+        elif autosave:
             game_name = "RESUME_GAME"
         else:
             game_name = input('Please input folder name for saves: \n'
