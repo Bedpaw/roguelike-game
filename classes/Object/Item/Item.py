@@ -32,23 +32,7 @@ class Item:
         self.stamina = stamina
         self.mana = mana
 
-    def add_power(self, hero):
-        hero.strength += self.strength
-        hero.hp += self.hp
-        hero.max_hp += self.max_hp
-        hero.agility += self.agility
-        hero.energy += self.energy
-        hero.stamina += self.stamina
-        hero.mana += self.mana
 
-    def del_power(self, hero):
-        hero.strength -= self.strength
-        hero.hp -= self.hp
-        hero.max_hp -= self.max_hp
-        hero.agility -= self.agility
-        hero.energy -= self.energy
-        hero.stamina -= self.stamina
-        hero.mana -=self.mana
 
     @classmethod
     def gloves(cls, agility=5):
@@ -126,7 +110,7 @@ treasure = [
     Item.boots,
     Item.healing_potion,
     Item.mana,
-    Item.key
+    # Item.key
 ]
 
 

@@ -312,6 +312,7 @@ class Hero(Creature):
             print(self.coins)
             print(self.backpack)
 
+
     def is_in_backpack(self, item_name):
         for item in self.backpack:
             if item.name == item_name:
@@ -321,6 +322,11 @@ class Hero(Creature):
     def remove_from_backpack(self, item_name):
         for i, item in enumerate(self.backpack):
             if item.name == item_name:
+                del self.backpack[i]
+
+    def remove_from_backpack_type(self, item_type):
+        for i, item in enumerate(self.backpack):
+            if item.item_type == item_type:
                 del self.backpack[i]
 
 
@@ -339,25 +345,26 @@ class Hero(Creature):
                     return True
         return False
 
-    # def is_in_backpack(self, item):
-    #     if item in self.backpack:
-    #         return True
+    def is_in_backpack_type(self, item_type):
+        for item in self.backpack:
+            if item.type == item_type:
+                return True
+            else:
+                return False
+
+    # def use_hpotion(self, item_type):
+    #
+    #     if self.is_in_backpack_type(item_type="hpotion"):
+    #         item_type.add_power()
+    #         self.remove_from_backpack("hpotion")
     #     else:
-    #         return False
-
-    def use_hpotion(self):
-        hpotion = Item.healing_potion()
-        if self.is_in_backpack(hpotion):
-            hpotion.add_power()
-            self.remove_from_backpack(hpotion)
-        else:
-            cprint("You don't have any healing potion in your backpack!", COLOR.RED)
-
-    def use_mana(self):
-        mana = Item.mana()
-        if self.is_in_backpack(mana):
-            mana.add_power()
-            self.remove_from_backpack(mana)
+    #         cprint("You don't have any healing potion in your backpack!", COLOR.RED)
+    #
+    # def use_mana(self, item_type):
+    #     mana = Item.mana()
+    #     if self.is_in_backpack("mana"):
+    #         mana.add_power()
+    #         self.remove_from_backpack(mana)
 
         else:
             cprint("You don't have any mana potion in your backpack!", COLOR.RED)
@@ -369,9 +376,21 @@ class Hero(Creature):
             else:
                 self.backpack.append(item)
 
+    def add_power(self, item_type):
+        self.strength += item_type.strength
+        self.hp += item_type.hp
+        self.max_hp += item_type.max_hp
+        self.agility += item_type.agility
+        self.energy += item_type.energy
+        self.stamina += item_type.stamina
+        self.mana += item_type.mana
 
-    # def remove_from_backpack(self, item):
-    #     if self.is_in_backpack(item):
-    #         del item
-
+    def del_power(self, item_type):
+        self.strength -= item_type.strength
+        self.hp -= item_type.hp
+        self.max_hp -= item_type.max_hp
+        self.agility -= item_type.agility
+        self.energy -= item_type.energy
+        self.stamina -= item_type.stamina
+        self.mana -= item_type.mana
 
