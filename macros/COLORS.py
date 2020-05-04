@@ -1,4 +1,3 @@
-# import rhinoscriptsytnax as rs
 from utils.decorations import cprint
 
 
@@ -34,8 +33,6 @@ class COLOR:
     BROWN = ""
     DARKGREEN = ''
 
-# cprint("ELOELOELO",COLOR.BROWN)
-# cprint("ELOELOELO",COLOR.ORANGE)
 
 class BG_COLOR:
     WHITE = '\033[107m'

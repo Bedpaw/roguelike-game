@@ -1,11 +1,10 @@
 from classes.Object.Creature.Hero.Hero import Hero
 
-
-
 # Difficulty level as param if need
 import time
 from macros import COLORS
-from utils.key_service import *
+from utils.key_service import key_pressed
+from utils.utils import clear_screen
 from classes.Object.Creature.Hero.Hero_Breed.Knight import Knight
 from classes.Object.Creature.Hero.Hero_Breed.Sorcerer import Sorcerer
 from classes.Object.Creature.Hero.Hero_Breed.Palladin import Palladin
@@ -15,6 +14,7 @@ select_type = {
     "1": [COLORS.COLOR.BLUE, "Sorcerer", COLORS.STYLES.RESET, Sorcerer],
     "2": [COLORS.COLOR.GREEN, "Palladin", COLORS.STYLES.RESET, Palladin]
 }
+
 
 def create_new_hero():
     valid_key = False  # change to True if key is valid AND move is possible

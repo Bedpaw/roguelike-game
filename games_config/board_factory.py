@@ -29,7 +29,8 @@ def create_new_board(game, board_index, loading=False, current_board=False):
         board_map=board_map,
         width=board_width,
         height=board_height,
-        hero=game.hero)
+        hero=game.hero,
+        loading=loading)
 
     if not loading:
         pass

@@ -62,7 +62,8 @@ class Hero(Creature):
             "boots": None
             }
         self.coins = coins
-        self.backpack = [Item.healing_potion()] #rzeczy noszone nie dodaja statsow
+        self.start_pack = [Item.healing_potion()] * 5 + [Item.mana()] * 5
+        self.backpack = [] + self.start_pack #rzeczy noszone nie dodaja statsow
         self.spells ={}
 
 
@@ -73,28 +74,17 @@ class Hero(Creature):
 
     on_fight_message = "Time to stop this creature!"
 
-    def print_hp(self):
-        if self.hp < 0:
-            self.hp = 0
+    def print_mana(self):
+
         if self.mana < 0:
             self.mana = 0
-
-        hp_left_prec = (self.hp / self.max_hp) * 100
-        hp_message = f'{self.name}: {self.hp}/{self.max_hp} HP'
 
         mana_left_prec = (self.mana / self.magic_dmg) * 100
         mana_message = f'{self.name}: {self.mana}/{self.max_mana} MANA\n'
 
-        if hp_left_prec >= 60:
-            cprint(hp_message, COLOR.GREEN)
-        elif hp_left_prec <= 30:
-            cprint(hp_message, COLOR.RED, STYLES.BOLD)
-        else:
-            cprint(hp_message, COLOR.YELLOW)
-
         if mana_left_prec >= 60:
             cprint(mana_message, COLOR.GREEN)
-        elif hp_left_prec <= 30:
+        elif mana_left_prec <= 30:
             cprint(mana_message, COLOR.RED, STYLES.BOLD)
         else:
             cprint(mana_message, COLOR.YELLOW)
@@ -134,7 +124,7 @@ class Hero(Creature):
         self.level_up_attributes()
         self.exp_to_next_level = self.exp + int(self.exp_to_next_level * 1.3)
         cprint(f"You have received {self.level} level!", SUCCESS)
-        self.points_for_level += 5
+        self.points_for_level += 10
 
 
     def print_add_points(self):

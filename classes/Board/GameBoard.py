@@ -9,6 +9,7 @@ from events.Battle import battle
 from classes.Board.Fields import Field
 from classes.Object.Creature.Hero.Hero import Hero
 from classes.Object.Creature.NPC.NPC import NPC
+from classes.Object.Creature.NPC.NPCS import NPCS
 from classes.Object.Creature.Monster.Monster import Monster
 from classes.Object.Item.Item import Treasure
 from utils.sounds import play_music, pause_music, unpause_music
@@ -86,7 +87,6 @@ class Board:
             print(additonal_info)
         self.last_move_message = []
 
-
     def check_move_possibility(self, caller, positionX, positionY):
         """
         :param caller:Hero or Monster
@@ -104,26 +104,25 @@ class Board:
             return False
 
         elif isinstance(caller, Hero):
-                if isinstance(obj_in_pos, Fire):
-                    self.hero.hp -= 20
+            if isinstance(obj_in_pos, Fire):
+                self.hero.hp -= 20
+                return True
+            if isinstance(obj_in_pos, NPC):
+                if obj_in_pos.on_meet(self.hero):  # return True if hero start fight with NPC else False
+                    self.npc.remove(obj_in_pos)
                     return True
-                if isinstance(obj_in_pos, NPC):
-                    if obj_in_pos.on_meet(self.hero):  # return True if hero start fight with NPC else False
-                        self.npc.remove(obj_in_pos)
-
-                        return True
-                    self.print_board()
-                    return False
-                elif isinstance(obj_in_pos, Treasure):
-                    if obj_in_pos.open_treasure(self.hero):  # return True if hero took treasure
-                        self.treasures.remove(obj_in_pos)
-                        return True
-                    self.print_board()
-                    return False
-                elif isinstance(obj_in_pos, Monster):
-                    battle(caller, obj_in_pos, BATTLE_MODES.MANUAL_FIGHT)
-                    self.monsters.remove(obj_in_pos)
+                self.print_board()
+                return False
+            elif isinstance(obj_in_pos, Treasure):
+                if obj_in_pos.open_treasure(self.hero):  # return True if hero took treasure
+                    self.treasures.remove(obj_in_pos)
                     return True
+                self.print_board()
+                return False
+            elif isinstance(obj_in_pos, Monster):
+                battle(caller, obj_in_pos, BATTLE_MODES.MANUAL_FIGHT)
+                self.monsters.remove(obj_in_pos)
+                return True
 
         elif isinstance(caller, Monster):
             if isinstance(obj_in_pos, Fire):
@@ -131,7 +130,7 @@ class Board:
             if isinstance(obj_in_pos, NPC) or isinstance(obj_in_pos, Monster) or isinstance(obj_in_pos, Treasure):
                 return False
             elif isinstance(obj_in_pos, Hero):
-                battle(obj_in_pos, caller, BATTLE_MODES.IMMEDIATE_FIGHT, hero_start=False)
+                battle(obj_in_pos, caller, BATTLE_MODES.MANUAL_FIGHT, hero_start=False)
                 self.monsters.remove(caller)
                 return True
         return True
@@ -153,9 +152,7 @@ class Board:
                 elif key_pressed == 'p':
                     exit()
                 elif key_pressed == 'o':
-                    cprint("Game saved...", wait_after=1)
                     self.game.save_game()
-
                 elif key_pressed == 'm':
                     if self.hero.points_for_level == 0:
                         self.hero.show_stats_breed()
@@ -166,8 +163,6 @@ class Board:
                     self.hero.use_hpotion()
                 elif key_pressed == "j":
                     self.hero.use_mana()
-
-
 
                 # Move from first gate
                 elif key_pressed == 'd' and self.pos_x == 0 and self.pos_y == 0:
@@ -212,32 +207,33 @@ class Board:
 
             for j, field in enumerate(list_of_fields):
                 if field.symbol_on_map not in symbols_to_txt_draw.keys():
-                    middle_fileds += self.board_map[i-1][j].field_color + field.color_on_board + field.symbol_on_map + STYLES.RESET
+                    middle_fileds += self.board_map[i - 1][
+                                         j].field_color + field.color_on_board + field.symbol_on_map + STYLES.RESET
                 else:
                     middle_fileds += field.field_color + field.color_on_board + field.symbol_on_map + STYLES.RESET
 
             additonal_info = ''
 
             if i == 1:
-                additonal_info = f"{' '*2}Nickname: {self.hero.name}  "
+                additonal_info = f"{' ' * 2}Nickname: {self.hero.name}  "
             if i == 2:
-                additonal_info = f"{' '*2}Level: {self.hero.level}  "
+                additonal_info = f"{' ' * 2}Level: {self.hero.level}  "
             if i == 3:
-                additonal_info = f"{' '*2}Class: {self.hero.breed}  "
+                additonal_info = f"{' ' * 2}Class: {self.hero.breed}  "
             if i == 4:
-                additonal_info = f"{' '*2}HP: {int(self.hero.hp)}/{int(self.hero.max_hp)}  "
+                additonal_info = f"{' ' * 2}HP: {int(self.hero.hp)}/{int(self.hero.max_hp)}  "
             if i == 5:
-                additonal_info = f"{' '*2}MANA: {int(self.hero.mana)}/{int(self.hero.max_mana)}  "
+                additonal_info = f"{' ' * 2}MANA: {int(self.hero.mana)}/{int(self.hero.max_mana)}  "
             if i == 6:
-                additonal_info = f"{' '* 2}EXP: {self.hero.exp}/{self.hero.exp_to_next_level}  "
+                additonal_info = f"{' ' * 2}EXP: {self.hero.exp}/{self.hero.exp_to_next_level}  "
             if i == 7:
                 additonal_info = f"{' ' * 2}CORDS: x:{self.hero.position_x} | y:{self.hero.position_y}"
-                additonal_info += f"{' ' *(6 - len(str(self.hero.position_x)) - len(str(self.hero.position_y)))}"
+                additonal_info += f"{' ' * (6 - len(str(self.hero.position_x)) - len(str(self.hero.position_y)))}"
             if i == 8:
                 if self.hero.points_for_level > 0:
                     additonal_info = f"{' ' * 2}Press [m] to add points  "
             if i == 9:
-                    additonal_info = f"{' ' * 2}|H|:HP |M|:MANA"
+                additonal_info = f"{' ' * 2}|H|:HP |M|:MANA"
 
             middle_fileds += additonal_info
 
@@ -254,13 +250,12 @@ class Board:
         if len(self.name) + 2 > max_row_length:
             max_row_length = len(self.name) + 2
 
-
         # GENERAL
-        new_empty_line = f"\n{border_field}{' ' * (max_row_length -4)}{border_field}"
+        new_empty_line = f"\n{border_field}{' ' * (max_row_length - 4)}{border_field}"
         # TOP PRINT AND LOGIC
         map_name = f"{border_field}{' ' * 2}Mapa: {self.name}{' ' * (max_row_length - len(self.name) - 12)}{border_field}"
         top = f"{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}\n"
-        logo = f"{border_field}{' ' * 2}{self.logo}{STYLES.RESET}{' ' * (max_row_length - len(self.logo)-6)}{border_field}\n"
+        logo = f"{border_field}{' ' * 2}{self.logo}{STYLES.RESET}{' ' * (max_row_length - len(self.logo) - 6)}{border_field}\n"
         top += logo + map_name + new_empty_line
         print(top)
 
@@ -277,12 +272,8 @@ class Board:
         # print(f"{border_field}{' ' * (max_row_length -4)}{border_field}")
         print(f"{new_empty_line[1:]}\n{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}")
 
-
-
-
         # BOTTOM
         # print(f"{' '*13}{overscore*(self.width+3)}\n")
-
 
     def random_free_position(self):
         free_position = False
@@ -301,7 +292,7 @@ class Board:
                 self.monsters.append(obj)
 
     @classmethod
-    def board_switcher(cls, board_id, game, board_map, width, height, hero):
+    def board_switcher(cls, board_id, game, board_map, width, height, hero, loading):
         board = cls(game, board_map, width, height, hero)
 
         def switcher(board_id):
@@ -314,22 +305,20 @@ class Board:
                 "5": city,
                 "6": highway_to_hell,
             }
-            return boards[str(board_id)]()
+            if loading:
+                board.name = boards[str(board_id)].__name__
+                return board
+            else:
+                return boards[str(board_id)]()
 
         def labyrinth():
             board.name = "Labyrinth"
             board.monsters = [
-                Monster.troll(1,2, game.difficulty_level),
                 Monster.rat(9, 7),
                 Monster.troll(7, 7, game.difficulty_level),
             ]
-            # board.npc = [
-            #     NPC.troll_king(2, 3, game.difficulty_level),
-            #     NPC.fake_wall(2, 4, name="Hole in the wall"),
-            #     NPC.king(2, 5)
-            # ]
             board.treasures = [
-                Treasure(position_x=10, position_y=0 )
+                Treasure(position_x=10, position_y=0)
             ]
             return board
 
@@ -374,10 +363,10 @@ class Board:
                 Monster.troll(6, 5, game.difficulty_level),
                 Monster.troll(5, 6, game.difficulty_level),
                 Monster.troll(5, 4, game.difficulty_level)
-                              ]
+            ]
             board.npc = [
-                NPC.troll_king(5, 5, game.difficulty_level),
-                NPC.fake_wall(6, 11, name="Hole in the wall"),
+                NPCS.troll_king(5, 5, game.difficulty_level),
+                NPCS.fake_wall(6, 11, name="Hole in the wall"),
             ]
             board.monsters[0].move_type = MOVES_TYPES.STAY
 
@@ -392,7 +381,7 @@ class Board:
             board.name = "City"
 
             board.npc = [
-                NPC.king(1, 10),
+                NPCS.king(1, 10),
                 NPC("Guard", "G", 2, 6),
                 NPC('Guard', 'G', 2, 14)
                 #  NPC.eastern_guard(11, 20)
@@ -408,8 +397,8 @@ class Board:
 
         def highway_to_hell():
             board.name = "highway_to_hell"
-            board.monsters =[] #TODO
-            board.treasures = [] #TODO
+            board.monsters = []  # TODO
+            board.treasures = []  # TODO
 
             return board
 
