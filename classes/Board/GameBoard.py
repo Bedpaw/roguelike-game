@@ -269,6 +269,7 @@ class Board:
         # LAST MESSAGE FROM HERO
 
         last_message = 'Testowa wiadomosc ktora przekracza zakres'
+
         number_of_lines = math.ceil(len(last_message)/(max_row_length-6))
         one_line_len = int(len(last_message)/number_of_lines)
 
