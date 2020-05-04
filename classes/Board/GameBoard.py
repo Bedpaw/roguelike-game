@@ -1,6 +1,7 @@
 from classes.Board.Fields import *
 from random import randint
 import copy
+import math
 from macros import OBJECT_TYPES, BATTLE_MODES, MOVES_TYPES
 from utils import key_service
 from utils.decorations import cprint
@@ -271,14 +272,19 @@ class Board:
 
         # LAST MESSAGE FROM HERO
 
-        last_message = 'Testowa wiadomosc ktora przekracza zakres 1 linijki, dlugo by sie tu rozpisywac ale nie ma czasu na glupoty :)'
-        number_of_lines = int(len(last_message)/(max_row_length+6))
-        last_message_chunks = [last_message[i:i+number_of_lines] for i in range(0, len(last_message), number_of_lines)]
+        last_message = 'Testowa wiadomosc ktora przekracza zakres'
+        number_of_lines = math.ceil(len(last_message)/(max_row_length-6))
+        one_line_len = int(len(last_message)/number_of_lines)
 
-        print(last_message_chunks)
-        time.sleep(4)
+        last_message_chunks = [last_message[i: i + one_line_len]
+                               for i in range(0, len(last_message), one_line_len)]
 
-        # place_holder_for_message = f"{border_field}{border_field}"
+        last_message_chunks = [f"{border_field}{' '* int((max_row_length - 4 - math.ceil(len(item)))/2)}{item}" \
+                               f"{' '* int((max_row_length - 3 - math.floor(len(item)))/2)}{border_field}"
+                               for item in last_message_chunks]
+        last_message_chunks = [f"{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}"] + last_message_chunks
+        print('\n'.join(last_message_chunks))
+
 
         # BOTTOM PRINT AND LOGIC
         # print(f"{border_field}{' ' * (max_row_length -4)}{border_field}")
