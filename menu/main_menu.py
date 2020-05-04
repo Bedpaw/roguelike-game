@@ -9,16 +9,9 @@ from utils.data_manager import load_game
 def about_us(player_name):
     with open("menu/about_us.txt", "r") as f:
         print(f.read())
-    answer = input("Please press T for back to main menu")
-    if answer.upper() == "T":
+    answer = input("Please press E for back to main menu")
+    if answer.upper() == "E":
         run_main_menu(player_name)
-
-
-def welcome_image():
-    with open("menu/welcome_image.txt", "r") as f:
-        for row in f:
-            cprint((row[:-1]), BG_COLOR.WHITE, COLOR.LIGHTGREEN, STYLES.BOLD)
-
 
 def high_scores():
     pass  # TODO after W gives me data

@@ -4,6 +4,7 @@ from macros.COLORS import *
 from utils.decorations import cprint, ctext
 from macros import MOVES_TYPES, OBJECT_TYPES
 from utils.key_service import *
+from utils.utils import clear_screen
 
 from utils.validation import int_input
 import time
@@ -63,7 +64,7 @@ class Hero(Creature):
             }
         self.coins = coins
         self.start_pack = [Item.healing_potion()] * 5 + [Item.mana()] * 5
-        self.backpack = [] + self.start_pack #rzeczy noszone nie dodaja statsow
+        self.backpack = [Item.healing_potion(200)] + self.start_pack #rzeczy noszone nie dodaja statsow
         self.spells ={}
 
 
@@ -284,6 +285,21 @@ class Hero(Creature):
                 print(f"%s   ({k}:{v})" % (' ' * 8))
         pass
 
+    # -------- QUESTS ------------- #
+
+    def quest_taken_by_name(self, name):
+        for quest in self.quests:
+            if quest['name'] == name:
+                return True
+        return False
+
+    def quest_done_by_name(self, name):
+        for quest in self.quests:
+            if quest['name'] == name:
+                if quest['COMPLETED']:
+                    return True
+        return False
+
     # -------------------------- ITEMS -------------------------------------------
     def put_on_from_backpack(self, item):
         choosed_item = None
@@ -295,12 +311,12 @@ class Hero(Creature):
         choosed_item.add_power(self)
 
 #not finished
-    def print_inventory(self, item):
+    def print_inventory(self):
         for k, v in self.inventory.items():
-            cprint("--------------------------")
             cprint(f"|{k}| {v.name}|", COLOR.CYAN)
-            print(self.coins)
-            print(self.backpack)
+        print(f'You have {self.coins} in your pouch")')
+        print(f'You have these items in your backpack:')
+        print(item.name for item in self.backpack)
 
 
     def is_in_backpack(self, item_name):
@@ -319,42 +335,25 @@ class Hero(Creature):
             if item.item_type == item_type:
                 del self.backpack[i]
 
-
-    # -------- QUESTS ------------- #
-
-    def quest_taken_by_name(self, name):
-        for quest in self.quests:
-            if quest['name'] == name:
-                return True
-        return False
-
-    def quest_done_by_name(self, name):
-        for quest in self.quests:
-            if quest['name'] == name:
-                if quest['COMPLETED']:
-                    return True
-        return False
-
     def is_in_backpack_type(self, item_type):
         for item in self.backpack:
-            if item.type == item_type:
+            if item.item_type == item_type:
                 return True
-            else:
-                return False
+        return False
 
-    # def use_hpotion(self, item_type):
-    #
-    #     if self.is_in_backpack_type(item_type="hpotion"):
-    #         item_type.add_power()
-    #         self.remove_from_backpack("hpotion")
-    #     else:
-    #         cprint("You don't have any healing potion in your backpack!", COLOR.RED)
-    #
-    # def use_mana(self, item_type):
-    #     mana = Item.mana()
-    #     if self.is_in_backpack("mana"):
-    #         mana.add_power()
-    #         self.remove_from_backpack(mana)
+    def use_hpotion(self, item_type="healing_potion"):
+
+        if not self.is_in_backpack_type(item_type):
+            self.add_power(Item.healing_potion())
+            self.remove_from_backpack_type(item_type)
+        else:
+            cprint("You don't have any healing potion in your backpack!", COLOR.RED)
+
+    def use_mana(self, item_type="mana"):
+
+        if self.is_in_backpack_type(item_type):
+            self.add_power(Item.mana())
+            self.remove_from_backpack(item_type)
 
         else:
             cprint("You don't have any mana potion in your backpack!", COLOR.RED)
@@ -366,21 +365,21 @@ class Hero(Creature):
             else:
                 self.backpack.append(item)
 
-    def add_power(self, item_type):
-        self.strength += item_type.strength
-        self.hp += item_type.hp
-        self.max_hp += item_type.max_hp
-        self.agility += item_type.agility
-        self.energy += item_type.energy
-        self.stamina += item_type.stamina
-        self.mana += item_type.mana
+    def add_power(self, item):
+        self.strength += item.strength
+        self.hp += item.hp
+        self.max_hp += item.max_hp
+        self.agility += item.agility
+        self.energy += item.energy
+        self.stamina += item.stamina
+        self.mana += item.mana
 
-    def del_power(self, item_type):
-        self.strength -= item_type.strength
-        self.hp -= item_type.hp
-        self.max_hp -= item_type.max_hp
-        self.agility -= item_type.agility
-        self.energy -= item_type.energy
-        self.stamina -= item_type.stamina
-        self.mana -= item_type.mana
+    def del_power(self, item):
+        self.strength -= item.strength
+        self.hp -= item.hp
+        self.max_hp -= item.max_hp
+        self.agility -= item.agility
+        self.energy -= item.energy
+        self.stamina -= item.stamina
+        self.mana -= item.mana
 

@@ -81,9 +81,8 @@ class Item:
 
     @classmethod
     def healing_potion(cls, hp=150):
-        names = "Papa Smurf's healing potion"
-        # ["Papa Smurf's healing potion", "EXTRA COOL potion", "Porter beer + cocaine", "Honey and milk"]
-        return cls(stamina=hp, item_type="healing_potion", name=choice(names))
+        names = "Papa Smurf's healing potion", "EXTRA COOL potion", "Porter beer + cocaine", "Honey and milk"
+        return cls(hp=hp, item_type="healing_potion", name=choice(names))
 
     @classmethod
     def mana(cls, mana=150):
@@ -127,7 +126,7 @@ class Treasure(MyObject):
         super().__init__(name, symbol_on_map, position_x, position_y)
         self.message_in_field = message_in_field
         self.is_locked = is_locked
-        self.color_on_board = COLOR.YELLOW
+        self.color_on_board = COLOR.LIGHTCYAN
         self.field_move_possible = True
 
     def open_treasure(self, hero):
@@ -164,6 +163,7 @@ class Treasure(MyObject):
             print(f'You took from chest {loot[0].name}')
             hero.backpack.append(loot[0])
             return True
+
 
     def which_item_in_chest(self, treasure):  # losuje item z dostępnych w grze
         loot = []
