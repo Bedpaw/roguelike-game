@@ -14,7 +14,7 @@ class Palladin(Hero):
                  dodge_chance=3,
                  defense=8,
                  stamina=20,
-                 energy=20,
+                 energy=200,
                  magic_dmg=2,
                  mana=60,
                  max_mana=60,
@@ -49,6 +49,17 @@ class Palladin(Hero):
             1: [2, 2, 2],
             2: 8,
             3: [1, 5]
+        }
+        self.spells = {
+            1: ['Physical damage', 0, 'physical', 1.2, 1],
+            2: ['Mana Rays', 10, 'magic_and_physical', 0.05, 24],
+            3: ['Fire Slash',  20, 'magic_and_physical', 0.07, 38],
+            4: ['Uppercut', 25, 'magic_and_physical', 0.1, 48],
+            5: ['Lunge', 40, 'magic_and_physical', 0.12, 54],
+            6: ['Fire Burst', 50,'magic_and_physical', 0.14, 60],
+            7: ['Hell Fire', 100, 'magic_and_physical', 0.2, 66],
+            # 8: ['Block and Heal',40 ,'energy_and_stamina',1 ,50],
+            9: ['HP potion: ', self.hp, 'MANA potion: ', self.mana]
         }
 
         # level up attributes

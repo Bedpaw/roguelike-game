@@ -270,7 +270,15 @@ class Board:
         print(''.join(mid), new_empty_line)
 
         # LAST MESSAGE FROM HERO
-        # TODO
+
+        last_message = 'Testowa wiadomosc ktora przekracza zakres 1 linijki, dlugo by sie tu rozpisywac ale nie ma czasu na glupoty :)'
+        number_of_lines = int(len(last_message)/(max_row_length+6))
+        last_message_chunks = [last_message[i:i+number_of_lines] for i in range(0, len(last_message), number_of_lines)]
+
+        print(last_message_chunks)
+        time.sleep(4)
+
+        # place_holder_for_message = f"{border_field}{border_field}"
 
         # BOTTOM PRINT AND LOGIC
         # print(f"{border_field}{' ' * (max_row_length -4)}{border_field}")
