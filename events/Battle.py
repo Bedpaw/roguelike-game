@@ -28,10 +28,21 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
         if battle_mode == BATTLE_MODES.AUTOMATE_FIGHT:
             time.sleep(wait_time)
 
+
     def battle_image():
         with open("events/battle.txt", "r") as f:
             for row in f:
                 cprint((row[:-1]), COLOR.RED, STYLES.BOLD)
+
+    def calculate_dmg(v2, v3):
+        if v2 == 'magic':
+            return hero.magic_dmg * v3
+        elif v2 == 'physical':
+            return hero.phys_dmg * v3
+        elif v2 == 'magic_and_physical':
+            return hero.magic_dmg * hero.phys_dmg * v3
+        elif v2 == 'energy_and_stamina':
+            return (hero.energy * hero.stamina)/2
 
     def hero_move():
 
@@ -46,7 +57,8 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
                     else:
                         if hero.energy >= v[4]:
                             max_key += 1
-                            spell_name_print += f"{' '* 8}[{k}] {v[0]} [dmg:{v[2]*v[3]}] (mana cost:{v[1]})\n"
+                            skill = calculate_dmg(v[2], v[3])
+                            spell_name_print += f"{' '* 8}[{k}] {v[0]} [dmg:{int(skill)}] (mana cost:{v[1]})\n"
 
                 spell_name_print += '\nWhat should I do master?: '
                 hero_attack = int_input(spell_name_print, number_of_options=max_key)
@@ -65,25 +77,11 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
                     hero.mana -= spell_mana_cost
                     valid = False
 
-
-            # print(hero.spells.items())
-            # time.sleep(10)
-            # print(f"You have choiced {spell_name_choice[0]}")
-            # time.sleep(1)
-
-            # 0 = Name,
-            # 1 = mana cost,
-            # 2 = kind of dmg,
-            # 3 = dmg_ratio
-
-            calc_dmg = hero.spells[hero_attack][2] * hero.spells[hero_attack][3]
+            calc_dmg = calculate_dmg(hero.spells[hero_attack][2], hero.spells[hero_attack][3])
             hero.attack(monster, calc_dmg)
             # attack = Sound('db/sounds/battle/sword_attack.wav')
             # attack.play()
 
-        #
-        # else:
-        #     hero.attack(monster)
 
     # music.pause()
     # music.load('db/sounds/battle.mp3')

@@ -63,8 +63,8 @@ class Hero(Creature):
             "boots": None
             }
         self.coins = coins
-        self.start_pack = [Item.healing_potion()] * 5 + [Item.mana()] * 5
-        self.backpack = [Item.healing_potion(200)] #rzeczy noszone nie dodaja statsow
+        # self.start_pack = [Item.healing_potion()] * 5 + [Item.mana()] * 5
+        self.backpack = [Item.healing_potion(200)] + ([Item.healing_potion()] * 5) + ([Item.mana()] * 5)
         self.spells ={}
 
 
@@ -313,8 +313,8 @@ class Hero(Creature):
 #not finished
     def print_inventory(self):
         for k, v in self.inventory.items():
-            cprint(f"|{k}| {v.name}|", COLOR.CYAN)
-        print(f'You have {self.coins} in your pouch")')
+            cprint(f"|{k}| {v}|", COLOR.CYAN)
+        print(f'You have {self.coins} in your pouch')
         print(f'You have these items in your backpack:')
         print(item.name for item in self.backpack)
 
@@ -343,7 +343,7 @@ class Hero(Creature):
 
     def use_hpotion(self, item_type="healing_potion"):
 
-        if not self.is_in_backpack_type(item_type):
+        if self.is_in_backpack_type(item_type):
             self.add_power(Item.healing_potion())
             self.remove_from_backpack_type(item_type)
         else:
@@ -358,12 +358,12 @@ class Hero(Creature):
         else:
             cprint("You don't have any mana potion in your backpack!", COLOR.RED)
 
-    def add_to_backpack(self, loot, item):
+    def add_to_backpack(self, loot):
         for k, v in loot.items():
             if k == "coins":
                 self.coins += v
             else:
-                self.backpack.append(item)
+                self.backpack.append(v)
 
     def add_power(self, item):
         self.strength += item.strength

@@ -52,12 +52,13 @@ class Knight(Hero):
             3: [1, 2]
         }
         self.spells = {
-            1: ['Physical damage', 0, self.phys_dmg, 1, 1],
-            2: ['Cyclon Cutting', 10, self.phys_dmg, 1.2, 10],
-            3: ['Twisting Slash', 15, self.phys_dmg, 1.5, 15],
-            4: ['Regular Blow',  20, self.phys_dmg, 1.8, 20],
-            5: ['Death Stab',  30, self.phys_dmg, 2.5, 35],
-            0: ['HP potion: ', self.hp, 'MANA potion: ', self.mana]
+            1: ['Physical damage', 0, 'physical', 1.5, 1],
+            2: ['Cyclon Cutting', 7, 'physical', 2, 10],
+            3: ['Twisting Slash', 12, 'physical', 2.5, 15],
+            4: ['Regular Blow',  15, 'physical', 3, 20],
+            5: ['Death Stab',  20, 'physical', 8, 40],
+            # 6: ['Soul of barrier', 30, 'energy_and_stamina', 2, 45]
+            9: ['HP potion: ', self.hp, 'MANA potion: ', self.mana]
         }
 
         # level up attributes
