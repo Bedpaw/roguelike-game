@@ -64,7 +64,7 @@ class Hero(Creature):
             }
         self.coins = coins
         self.start_pack = [Item.healing_potion()] * 5 + [Item.mana()] * 5
-        self.backpack = [Item.healing_potion(200)] + self.start_pack #rzeczy noszone nie dodaja statsow
+        self.backpack = [Item.healing_potion(200)] #rzeczy noszone nie dodaja statsow
         self.spells ={}
 
 
