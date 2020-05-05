@@ -25,9 +25,11 @@ class Game:
         self.hero.position_y = 0
         if len(self.boards) <= self.current_board_index:
             self.boards.append(create_new_board(self, self.current_board_index))
+        self.current_board().last_move_message = [f'You have moved to {self.current_board().name}']
 
     def previous_board(self):
         self.current_board_index -= 1
+        self.current_board().last_move_message = [f'You have moved back to {self.current_board().name}']
         self.hero.position_x = self.current_board().height
         self.hero.position_y = self.current_board().width - 1  # out of range
         self.board_changed = True

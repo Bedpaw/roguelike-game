@@ -66,14 +66,16 @@ class Hero(Creature):
         # self.start_pack = [Item.healing_potion()] * 5 + [Item.mana()] * 5
         self.backpack = [Item.healing_potion(200)] + ([Item.healing_potion()] * 5) + ([Item.mana()] * 5)
         self.spells ={}
+        self.game = None  #mock
 
 
     field_color = BG_COLOR.RED
     type_of = OBJECT_TYPES.HERO
     color_on_board = STYLES.BOLD + COLOR.CBLACK
-
-
     on_fight_message = "Time to stop this creature!"
+
+    def add_to_message_box(self, message):
+        self.game.current_board().last_move_message.append(message)
 
     def print_mana(self):
 
@@ -372,6 +374,7 @@ class Hero(Creature):
                     self.inventory[k] = v
             self.backpack.append(v)
             self.add_power(loot)
+
 
     def add_power(self, item):
         self.strength += item.strength
