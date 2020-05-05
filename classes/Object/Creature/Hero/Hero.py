@@ -302,6 +302,8 @@ class Hero(Creature):
 
     # -------------------------- ITEMS -------------------------------------------
     def put_on_from_backpack(self, item):
+        """choosing by player what to wear"""
+
         choosed_item = None
         input("Which item you want to put on you?")
         if item in self.backpack:
@@ -314,9 +316,10 @@ class Hero(Creature):
     def print_inventory(self):
         for k, v in self.inventory.items():
             cprint(f"|{k}| {v}|", COLOR.CYAN)
-        print(f'You have {self.coins} in your pouch')
+        print(self.coins) # czemu nie printuje? ;(
         print(f'You have these items in your backpack:')
-        print(item.name for item in self.backpack)
+        for item in self.backpack:
+            print(item.item_type, item.name)
 
 
     def is_in_backpack(self, item_name):
@@ -336,45 +339,39 @@ class Hero(Creature):
                 del self.backpack[i]
 
     def is_in_backpack_type(self, item_type):
+        """checking if item is in hero backpack"""
+
         for item in self.backpack:
             if item.item_type == item_type:
                 return True
         return False
 
     def use_hpotion(self, item_type="healing_potion"):
-
-        if self.is_in_backpack_type(item_type):
-            self.add_power(Item.healing_potion())
-            self.remove_from_backpack_type(item_type)
-        else:
-            cprint("You don't have any healing potion in your backpack!", COLOR.RED)
+        while self.hp > 0:
+            if self.is_in_backpack_type(item_type):
+                self.add_power(Item.healing_potion())
+                self.remove_from_backpack_type(item_type)
+            else:
+                cprint("You don't have any healing potion in your backpack!", COLOR.RED)
 
     def use_mana(self, item_type="mana"):
-
-        if self.is_in_backpack_type(item_type):
-            self.add_power(Item.mana())
-            self.remove_from_backpack(item_type)
-
-        else:
-            cprint("You don't have any mana potion in your backpack!", COLOR.RED)
+        while self.hp > 0:
+            if self.is_in_backpack_type(item_type):
+                self.add_power(Item.mana())
+                self.remove_from_backpack(item_type)
+            else:
+                cprint("You don't have any mana potion in your backpack!", COLOR.RED)
 
     def add_to_backpack(self, loot):
+        """ Adding loots from Monsters and NPC to backpack and to inventory hero"""
         for k, v in loot.items():
             if k == "coins":
                 self.coins += v
             else:
-                if k in self.inventory.keys() and k != None:
-
+                if k in self.inventory.keys() and v is None:
                     self.inventory[k] = v
-                self.backpack.append(v)
-                "shield": None,
-                "helmet": None,
-                "gloves": None,
-                "armor": None,
-                "belt": None,
-                "boots": None
-
-
+            self.backpack.append(v)
+            self.add_power(loot)
 
     def add_power(self, item):
         self.strength += item.strength
