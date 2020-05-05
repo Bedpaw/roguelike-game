@@ -3,6 +3,7 @@ from utils.decorations import cprint
 from utils.validation import int_input
 from macros import BATTLE_MODES
 from macros.COLORS import *
+from utils import key_service
 from classes.Object.Creature.Hero.Hero_Breed.Sorcerer import Sorcerer
 
 from utils.sounds import *
@@ -37,6 +38,13 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
         elif v2 == 'energy_and_stamina':
             return (hero.energy * hero.stamina)/2
 
+    def use_potions():
+        key_pressed = key_service.key_pressed()
+        if key_pressed.lower() == 'h':
+            hero.use_hpotion()
+        elif key_pressed.lower() == 'j':
+            hero.use_mana()
+
     def hero_move():
 
         if battle_mode == BATTLE_MODES.MANUAL_FIGHT:
@@ -54,24 +62,27 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
                             spell_name_print += f"{' '* 8}[{k}] {v[0]} [dmg:{int(skill)}] (mana cost:{v[1]})\n"
 
                 spell_name_print += '\nWhat should I do master?: '
-                hero_attack = int_input(spell_name_print, number_of_options=max_key)
-                spell_mana_cost = hero.spells[hero_attack][1]
-                wait(1)
+                max_key_options = [item for item in range(1, max_key)]
+                max_key_options += [9]
 
-                # if hero_attack == '9':
-                #     print("You have pressed number 999")
-                #     time.sleep(1)
-
-                if spell_mana_cost >= hero.mana:
-                    print(f"You dont have enough mana ({hero.mana}) to use this spell.")
-                    time.sleep(1)
-                    valid = True
+                hero_attack = int_input(spell_name_print, '', options=max_key_options)
+                if hero_attack == 9:
+                    use_potions()
+                    continue
                 else:
-                    hero.mana -= spell_mana_cost
-                    valid = False
+                    spell_mana_cost = hero.spells[hero_attack][1]
+                    wait(1)
 
-            calc_dmg = calculate_dmg(hero.spells[hero_attack][2], hero.spells[hero_attack][3])
-            hero.attack(monster, calc_dmg)
+                    if spell_mana_cost >= hero.mana:
+                        print(f"You dont have enough mana ({hero.mana}) to use this spell.")
+                        time.sleep(1)
+                        valid = True
+                    else:
+                        hero.mana -= spell_mana_cost
+                        valid = False
+
+                calc_dmg = calculate_dmg(hero.spells[hero_attack][2], hero.spells[hero_attack][3])
+                hero.attack(monster, calc_dmg)
             # attack = Sound('db/sounds/battle/sword_attack.wav')
             # attack.play()
 
