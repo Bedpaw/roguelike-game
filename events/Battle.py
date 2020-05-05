@@ -90,7 +90,7 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
     if hero_start:
         clear_screen()
         battle_image()
-        time.sleep(2)
+        time.sleep(1.5)
         clear_screen()
 
         cprint(f"You attacked {monster.name}!", ERROR, start_enter=1, wait_after=1)
@@ -98,7 +98,7 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
     else:
         clear_screen()
         battle_image()
-        time.sleep(2)
+        time.sleep(1.5)
         clear_screen()
 
         cprint(f'{hero.name} has been attacked by {monster.name}!', ERROR, start_enter=1, wait_after=1)

@@ -366,6 +366,7 @@ class Hero(Creature):
 
     def add_to_backpack(self, loot):
         """ Adding loots from Monsters and NPC to backpack and to inventory hero"""
+
         for k, v in loot.items():
             if k == "coins":
                 self.coins += v
