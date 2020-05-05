@@ -363,7 +363,18 @@ class Hero(Creature):
             if k == "coins":
                 self.coins += v
             else:
+                if k in self.inventory.keys() and k != None:
+
+                    self.inventory[k] = v
                 self.backpack.append(v)
+                "shield": None,
+                "helmet": None,
+                "gloves": None,
+                "armor": None,
+                "belt": None,
+                "boots": None
+
+
 
     def add_power(self, item):
         self.strength += item.strength
