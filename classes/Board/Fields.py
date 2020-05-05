@@ -22,6 +22,7 @@ class Wall_Horizontal():
     color_on_board = ''
     field_color = COLORS.BG_COLOR.LIGHTGREY
     field_move_possible = False
+    on_move_message = "You hit a wall!"
 
 
 class River():
@@ -29,6 +30,7 @@ class River():
     color_on_board = COLORS.COLOR.BLUE
     field_color = COLORS.BG_COLOR.BLUE
     field_move_possible = False
+    on_move_message = "This water is too deep!"
 
 
 class Bridge():
@@ -43,6 +45,7 @@ class Wall_Vertical():
     color_on_board = ''
     field_color = COLORS.BG_COLOR.LIGHTGREY
     field_move_possible = False
+    on_move_message = "You hit a wall!"
 
 
 class Fire():
@@ -51,6 +54,7 @@ class Fire():
     color_on_board = COLORS.COLOR.RED
     field_color = COLORS.BG_COLOR.ORANGE
     field_move_possible = True
+    on_move_message = "You have step on lava -20 hp!"
 
 class Lava_pavement():
     symbol_on_map = "#"
@@ -71,7 +75,7 @@ class Tree_Right():
     field_move_possible = True
 
 
-map_file = 'classes/Board/Map_drawing/level1_map.txt'
+map_file = 'classes/Board/Map_drawing/level1_map.txt' # :TODO REMOVE?
 
 symbols_to_txt_draw = {
     '0': Field(),

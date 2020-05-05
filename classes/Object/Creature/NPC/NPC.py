@@ -56,6 +56,7 @@ class NPC(Monster):
         :param hero:
         :return:pass
         """
+        clear_screen()
         conversation_effects = self.__conversation(self.dialog_path(hero), hero)
         return self.__do_after_conversation(conversation_effects, hero)
 

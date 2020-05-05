@@ -7,11 +7,11 @@ from classes.Object.Creature.Hero.Hero_Breed.Sorcerer import Sorcerer
 
 from utils.sounds import *
 
+
 # from pygame.mixer import music
 # from pygame.mixer import Sound
 
 def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True):
-
     """
     :param hero:[object]
     :param monster:[object]
@@ -35,7 +35,7 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
         elif v2 == 'magic_and_physical':
             return hero.magic_dmg * hero.phys_dmg * v3
         elif v2 == 'energy_and_stamina':
-            return (hero.energy * hero.stamina)/2
+            return (hero.energy * hero.stamina) / 2
 
     def hero_move():
 
@@ -46,12 +46,12 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
                 max_key = 2
                 for k, v in hero.spells.items():
                     if k is 9:
-                        spell_name_print += f"{' '*8}[{k}] HP Potions | MANA Potions \n{' '*12}H:{hero.hp} {' '*6}B: {hero.mana}"
+                        spell_name_print += f"{' ' * 8}[{k}] HP Potions | MANA Potions \n{' ' * 12}H:{hero.hp} {' ' * 6}B: {hero.mana}"
                     else:
                         if hero.energy >= v[4]:
                             max_key += 1
                             skill = calculate_dmg(v[2], v[3])
-                            spell_name_print += f"{' '* 8}[{k}] {v[0]} [dmg:{int(skill)}] (mana cost:{v[1]})\n"
+                            spell_name_print += f"{' ' * 8}[{k}] {v[0]} [dmg:{int(skill)}] (mana cost:{v[1]})\n"
 
                 spell_name_print += '\nWhat should I do master?: '
                 hero_attack = int_input(spell_name_print, number_of_options=max_key)
@@ -74,7 +74,6 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
             hero.attack(monster, calc_dmg)
             # attack = Sound('db/sounds/battle/sword_attack.wav')
             # attack.play()
-
 
     # music.pause()
     # music.load('db/sounds/battle.mp3')
@@ -125,7 +124,6 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
             print("FUNCTION ENDING GAME")
             return True
 
-
     # Battle end
     cprint(f'You have got {monster.exp} exp.', SUCCESS)
     # music.load('db/sounds/battle/win_battle.mp3')
@@ -134,6 +132,7 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
     # music.stop()
     # music.unpause()
     hero.get_exp(monster.exp)
+    hero.add_to_message_box(f"Glorious victory! {monster.name} has been vanquished!")
 
     # hero.add_items(monster.loot) TODO: to implement
     # return play_music("db/sounds/main_menu_start.mp3", infinite=True)
