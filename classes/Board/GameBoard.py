@@ -265,7 +265,6 @@ class Board:
                                      "Angry trolls are watching you...",
                                      ]
         if not self.last_move_message:
-
             self.last_move_message.append(choice(nothing_happened_messages))
         for last_message in self.last_move_message:
             number_of_lines = math.ceil(len(last_message)/(max_row_length-6))
