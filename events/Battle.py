@@ -3,6 +3,7 @@ from utils.decorations import cprint
 from utils.validation import int_input
 from macros import BATTLE_MODES
 from macros.COLORS import *
+from utils.utils import clear_screen
 from classes.Object.Creature.Hero.Hero_Breed.Sorcerer import Sorcerer
 
 from utils.sounds import *
@@ -26,6 +27,12 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
         """
         if battle_mode == BATTLE_MODES.AUTOMATE_FIGHT:
             time.sleep(wait_time)
+
+
+    def battle_image():
+        with open("events/battle.txt", "r") as f:
+            for row in f:
+                cprint((row[:-1]), COLOR.RED, STYLES.BOLD)
 
     def calculate_dmg(v2, v3):
         if v2 == 'magic':
@@ -81,9 +88,19 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
 
     # Battle start messages
     if hero_start:
+        clear_screen()
+        battle_image()
+        time.sleep(2)
+        clear_screen()
+
         cprint(f"You attacked {monster.name}!", ERROR, start_enter=1, wait_after=1)
         who_start = True
     else:
+        clear_screen()
+        battle_image()
+        time.sleep(2)
+        clear_screen()
+
         cprint(f'{hero.name} has been attacked by {monster.name}!', ERROR, start_enter=1, wait_after=1)
         who_start = False
 

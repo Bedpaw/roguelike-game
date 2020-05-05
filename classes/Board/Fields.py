@@ -58,8 +58,8 @@ class Fire():
 
 class Lava_pavement():
     symbol_on_map = "#"
-    field_color = COLORS.BG_COLOR.RED
-    color_on_board = COLORS.COLOR.DARKGREY
+    field_color = COLORS.BG_COLOR.LIGHTGREY
+    color_on_board = COLORS.COLOR.RED
     field_move_possible = True
 
 class Tree_Left():
