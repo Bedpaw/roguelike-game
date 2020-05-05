@@ -15,7 +15,7 @@ class Knight(Hero):
                  dodge_chance=3,
                  defense=8,
                  stamina=25,
-                 energy=10,
+                 energy=50,
                  magic_dmg=2,
                  mana=50,
                  max_mana=50,
@@ -47,7 +47,7 @@ class Knight(Hero):
         # extra_atributes per point
         self.stats_ratio = {
             0: 2,
-            1: [1, 2, 3],
+            1: [1, 0.1, 3],
             2: 10,
             3: [1, 2]
         }
@@ -57,7 +57,7 @@ class Knight(Hero):
             3: ['Twisting Slash', 12, 'physical', 2.5, 15],
             4: ['Regular Blow',  15, 'physical', 3, 20],
             5: ['Death Stab',  20, 'physical', 8, 40],
-            # 6: ['Soul of barrier', 30, 'energy_and_stamina', 2, 45]
+            6: ['Barrier (+100 defense)', 50, 'energy_and_stamina', 2, 50],
             9: ['HP potion: ', self.hp, 'MANA potion: ', self.mana]
         }
 

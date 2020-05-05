@@ -42,8 +42,11 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
             return hero.phys_dmg * v3
         elif v2 == 'magic_and_physical':
             return hero.magic_dmg * hero.phys_dmg * v3
-        elif v2 == 'energy_and_stamina':
-            return (hero.energy * hero.stamina)/2
+        # elif v2 == 'energy_and_stamina':
+        #     return (hero.energy * hero.stamina)/2
+
+    def block_skill_counter():
+        pass
 
     def use_potions():
         key_pressed = key_service.key_pressed()
@@ -74,9 +77,12 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
                         spell_name_print += f"{' '*4}[key:qunatity]  H:{how_many_potions('healing_potion')}{' '*11}M: {how_many_potions('mana')}"
                     else:
                         if hero.energy >= v[4]:
+                            if v[2] == 'energy_and_stamina':
+                                spell_name_print += f"{' ' * 8}[{k}] {v[0]} (mana cost:{v[1]})\n"
+                            else:
+                                skill = calculate_dmg(v[2], v[3])
+                                spell_name_print += f"{' '* 8}[{k}] {v[0]} [dmg:{int(skill)}] (mana cost:{v[1]})\n"
                             max_key += 1
-                            skill = calculate_dmg(v[2], v[3])
-                            spell_name_print += f"{' '* 8}[{k}] {v[0]} [dmg:{int(skill)}] (mana cost:{v[1]})\n"
 
                 spell_name_print += '\nWhat should I do master?: '
                 max_key_options = [item for item in range(1, max_key)]
@@ -98,8 +104,14 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
                         hero.mana -= spell_mana_cost
                         valid = False
 
-                calc_dmg = calculate_dmg(hero.spells[hero_attack][2], hero.spells[hero_attack][3])
-                hero.attack(monster, calc_dmg)
+                # protect against use second time ........ TODO
+                if hero.spells[hero_attack][2] == 'energy_and_stamina':
+                    # hero.special_buff_dmg = calc_dmg
+                    hero.special_buff(hero.special_buff_dmg, '+')
+                    hero.special_buff_flag = True
+                else:
+                    calc_dmg = calculate_dmg(hero.spells[hero_attack][2], hero.spells[hero_attack][3])
+                    hero.attack(monster, calc_dmg)
             # attack = Sound('db/sounds/battle/sword_attack.wav')
             # attack.play()
 
@@ -139,12 +151,19 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
         wait(1)
         if who_start:
             hero_move()
+            # print(f"{hero.defense}")
+            # time.sleep(2)
             who_start = False
         # else:
         #     monster.attack(hero, monster.strength)
         #     who_start = True
 
         if monster.is_alive():
+            if hero.special_buff_flag:
+                hero.special_buff_iter += 1
+                if hero.special_buff_iter > 3:
+                    hero.special_buff(hero.special_buff_dmg, '-')
+                    hero.special_buff_flag = False
             monster.print_hp()
             wait(1)
             monster.attack(hero, monster.strength)
@@ -155,6 +174,9 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
         else:
             monster.print_hp()
             wait(1)
+            # hero.special_buff(hero.special_buff_dmg, '-')
+            # hero.special_buff_iter = 0
+            # hero.special_buff_flag = False
             monster.on_defeat()
             break
 
