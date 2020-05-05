@@ -4,6 +4,7 @@ from macros.COLORS import *
 from utils.decorations import cprint, ctext
 from macros import MOVES_TYPES, OBJECT_TYPES
 from utils.key_service import *
+from utils.utils import clear_screen
 
 from utils.validation import int_input
 import time
@@ -62,8 +63,7 @@ class Hero(Creature):
             "boots": None
             }
         self.coins = coins
-        self.start_pack = [Item.healing_potion()] * 5 + [Item.mana()] * 5
-        self.backpack = [] + self.start_pack #rzeczy noszone nie dodaja statsow
+        self.backpack = [Item.healing_potion(200)] + ([Item.healing_potion()] * 5) + ([Item.mana()] * 5)
         self.spells ={}
 
 
@@ -284,36 +284,6 @@ class Hero(Creature):
                 print(f"%s   ({k}:{v})" % (' ' * 8))
         pass
 
-    # -------------------------- ITEMS -------------------------------------------
-    def put_on_from_backpack(self, item):
-        choosed_item = None
-        input("Which item you want to put on you?")
-        if item in self.backpack:
-            for item.item_type in self.inventory:
-                pass #dokonczyc
-
-        choosed_item.add_power(self)
-
-#not finished
-    def print_inventory(self, item):
-        for k, v in self.inventory.items():
-            cprint("--------------------------")
-            cprint(f"|{k}| {v.name}|", COLOR.CYAN)
-            print(self.coins)
-            print(self.backpack)
-
-    def is_in_backpack(self, item_name):
-        for item in self.backpack:
-            if item.name == item_name:
-                return True
-        return False
-
-    def remove_from_backpack(self, item_name):
-        for i, item in enumerate(self.backpack):
-            if item.name == item_name:
-                del self.backpack[i]
-
-
     # -------- QUESTS ------------- #
 
     def quest_taken_by_name(self, name):
@@ -329,39 +299,86 @@ class Hero(Creature):
                     return True
         return False
 
-    # def is_in_backpack(self, item):
-    #     if item in self.backpack:
-    #         return True
-    #     else:
-    #         return False
+    # -------------------------- ITEMS -------------------------------------------
+    def put_on_from_backpack(self, item):
+        choosed_item = None
+        input("Which item you want to put on you?")
+        if item in self.backpack:
+            for item.item_type in self.inventory:
+                pass #dokonczyc
 
-    def use_hpotion(self):
-        hpotion = Item.healing_potion()
-        if self.is_in_backpack(hpotion):
-            hpotion.add_power()
-            self.remove_from_backpack(hpotion)
+        choosed_item.add_power(self)
+
+#not finished
+    def print_inventory(self):
+        for k, v in self.inventory.items():
+            cprint(f"|{k}| {v}|", COLOR.CYAN)
+        print(f'You have {self.coins} in your pouch')
+        print(f'You have these items in your backpack:')
+        print(item.name for item in self.backpack)
+
+
+    def is_in_backpack(self, item_name):
+        for item in self.backpack:
+            if item.name == item_name:
+                return True
+        return False
+
+    def remove_from_backpack(self, item_name):
+        for i, item in enumerate(self.backpack):
+            if item.name == item_name:
+                del self.backpack[i]
+
+    def remove_from_backpack_type(self, item_type):
+        for i, item in enumerate(self.backpack):
+            if item.item_type == item_type:
+                del self.backpack[i]
+
+    def is_in_backpack_type(self, item_type):
+        for item in self.backpack:
+            if item.item_type == item_type:
+                return True
+        return False
+
+    def use_hpotion(self, item_type="healing_potion"):
+
+        if self.is_in_backpack_type(item_type):
+            self.add_power(Item.healing_potion())
+            self.remove_from_backpack_type(item_type)
         else:
             cprint("You don't have any healing potion in your backpack!", COLOR.RED)
 
-    def use_mana(self):
-        mana = Item.mana()
-        if self.is_in_backpack(mana):
-            mana.add_power()
-            self.remove_from_backpack(mana)
+    def use_mana(self, item_type="mana"):
+
+        if self.is_in_backpack_type(item_type):
+            self.add_power(Item.mana())
+            self.remove_from_backpack(item_type)
 
         else:
             cprint("You don't have any mana potion in your backpack!", COLOR.RED)
 
-    def add_to_backpack(self, loot, item):
+    def add_to_backpack(self, loot):
         for k, v in loot.items():
             if k == "coins":
                 self.coins += v
             else:
-                self.backpack.append(item)
+                self.backpack.append(v)
 
+    def add_power(self, item):
+        self.strength += item.strength
+        self.hp += item.hp
+        self.max_hp += item.max_hp
+        self.agility += item.agility
+        self.energy += item.energy
+        self.stamina += item.stamina
+        self.mana += item.mana
 
-    # def remove_from_backpack(self, item):
-    #     if self.is_in_backpack(item):
-    #         del item
-
+    def del_power(self, item):
+        self.strength -= item.strength
+        self.hp -= item.hp
+        self.max_hp -= item.max_hp
+        self.agility -= item.agility
+        self.energy -= item.energy
+        self.stamina -= item.stamina
+        self.mana -= item.mana
 

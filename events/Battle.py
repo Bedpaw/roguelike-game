@@ -4,8 +4,9 @@ from utils.validation import int_input
 from macros import BATTLE_MODES
 from macros.COLORS import *
 from utils import key_service
-from classes.Object.Creature.Hero.Hero_Breed.Sorcerer import Sorcerer
+from utils.utils import clear_screen
 
+from classes.Object.Creature.Hero.Hero_Breed.Sorcerer import Sorcerer
 from utils.sounds import *
 
 # from pygame.mixer import music
@@ -28,6 +29,12 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
         if battle_mode == BATTLE_MODES.AUTOMATE_FIGHT:
             time.sleep(wait_time)
 
+
+    def battle_image():
+        with open("events/battle.txt", "r") as f:
+            for row in f:
+                cprint((row[:-1]), COLOR.RED, STYLES.BOLD)
+
     def calculate_dmg(v2, v3):
         if v2 == 'magic':
             return hero.magic_dmg * v3
@@ -45,6 +52,13 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
         elif key_pressed.lower() == 'j':
             hero.use_mana()
 
+    def how_many_potions(kind_of_potion):
+        counter = 0
+        for potion in hero.backpack:
+            if potion.item_type == kind_of_potion:
+                counter += 1
+        return counter
+
     def hero_move():
 
         if battle_mode == BATTLE_MODES.MANUAL_FIGHT:
@@ -54,7 +68,10 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
                 max_key = 2
                 for k, v in hero.spells.items():
                     if k is 9:
-                        spell_name_print += f"{' '*8}[{k}] HP Potions | MANA Potions \n{' '*12}H:{hero.hp} {' '*6}B: {hero.mana}"
+                        spell_name_print += f"{' '*8}[{k}]{' '*2}Hero HP:{hero.hp}{' '*4}| {' '*2}Hero Mana: {hero.mana}\n"
+                        spell_name_print += f"{' '*11}{'-' *40}\n"
+                        spell_name_print += f"{' '*20}HP Potions |  MANA Potions \n"
+                        spell_name_print += f"{' '*4}[key:qunatity]  H:{how_many_potions('healing_potion')}{' '*11}M: {how_many_potions('mana')}"
                     else:
                         if hero.energy >= v[4]:
                             max_key += 1
@@ -93,9 +110,19 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
 
     # Battle start messages
     if hero_start:
+        clear_screen()
+        battle_image()
+        time.sleep(2)
+        clear_screen()
+
         cprint(f"You attacked {monster.name}!", ERROR, start_enter=1, wait_after=1)
         who_start = True
     else:
+        clear_screen()
+        battle_image()
+        time.sleep(2)
+        clear_screen()
+
         cprint(f'{hero.name} has been attacked by {monster.name}!', ERROR, start_enter=1, wait_after=1)
         who_start = False
 

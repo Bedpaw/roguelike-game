@@ -36,7 +36,7 @@ class Board:
         self.monsters = []
         self.npc = []
         self.treasures = []
-        self.logo = 'Ziomeczki & ziomale'
+        self.logo = "ANGRY TROLLS!"
 
     def special_ground_effect(self):
         pass
@@ -142,7 +142,7 @@ class Board:
             self.print_last_message()
             key_pressed = key_service.key_pressed()
 
-            if key_pressed in ['w', 's', 'a', 'd', 'p', 'm', 'o', 'x', 'z', 'j', 'h']:
+            if key_pressed in ['w', 's', 'a', 'd', 'p', 'm', 'o', 'x', 'z', 'j', 'h', 'i']:
                 # Z and X are cheats for testing
                 if key_pressed == 'z':
                     self.pos_x = 1
@@ -154,16 +154,20 @@ class Board:
                     exit()
                 elif key_pressed == 'o':
                     self.game.save_game()
-                elif key_pressed == 'm':
+                elif key_pressed == 'j':
                     if self.hero.points_for_level == 0:
                         self.hero.show_stats_breed()
                     elif self.hero.points_for_level > 0:
                         self.hero.show_stats_with_add_points()
                         self.print_board()
                 elif key_pressed == "h":
-                    self.hero.use_hpotion()
-                elif key_pressed == "j":
-                    self.hero.use_mana()
+                    self.hero.use_hpotion("healing_potion")
+                    self.print_board()
+                elif key_pressed == "m":
+                    self.hero.use_mana("mana")
+                    self.print_board()
+                elif key_pressed == "i":
+                    self.hero.print_inventory()
 
                 # Move from first gate
                 elif key_pressed == 'd' and self.pos_x == 0 and self.pos_y == 0:
@@ -232,9 +236,9 @@ class Board:
                 additonal_info += f"{' ' * (6 - len(str(self.hero.position_x)) - len(str(self.hero.position_y)))}"
             if i == 8:
                 if self.hero.points_for_level > 0:
-                    additonal_info = f"{' ' * 2}Press [m] to add points  "
+                    additonal_info = f"{' ' * 2}Press [j] to add points  "
             if i == 9:
-                additonal_info = f"{' ' * 2}|H|:HP |M|:MANA"
+                additonal_info = f"{' ' * 2}|H|:HP |M|:MANA |I|:Inventory"
 
             middle_fileds += additonal_info
 
@@ -319,6 +323,7 @@ class Board:
                 "4": the_great_bridge,
                 "5": city,
                 "6": highway_to_hell,
+                "7": demonic_maze
             }
             if loading:
                 board.name = boards[str(board_id)].__name__
@@ -329,6 +334,7 @@ class Board:
         def labyrinth():
             board.name = "Labyrinth"
             board.monsters = [
+                Monster.troll(1, 3, game.difficulty_level),
                 Monster.rat(9, 7),
                 Monster.troll(7, 7, game.difficulty_level),
             ]
@@ -412,9 +418,27 @@ class Board:
 
         def highway_to_hell():
             board.name = "highway_to_hell"
-            board.monsters = []  # TODO
-            board.treasures = []  # TODO
+            board.monsters = [Monster.troll_warrior(1, 2, game.difficulty_level),
+                              Monster.rat(4, 5, game.difficulty_level),
+                              Monster.troll_warrior(7, 15, game.difficulty_level),
+                              Monster.rat(11, 8, game.difficulty_level)
+                              ]
+            board.treasures = [Treasure(position_x=7, position_y=4, is_locked=True),
+                               Treasure(position_x=5, position_y=11)]
+            return board
 
+
+        def demonic_maze():
+            board.name = "Demonic maze"
+            board.monsters = [Monster.troll_warrior(1, 18, game.difficulty_level),
+                              Monster.rat(3, 10, game.difficulty_level),
+                              Monster.troll_warrior(7, 15, game.difficulty_level),
+                              Monster.troll_warrior(11, 2, game.difficulty_level)
+                              ]
+            board.treasures = [Treasure(position_x=2, position_y=18, is_locked=True),
+                               Treasure(position_x=8, position_y=20),
+                               Treasure(position_x=2, position_y=10, is_locked=True)
+                               ]
             return board
 
         return switcher(board_id)
