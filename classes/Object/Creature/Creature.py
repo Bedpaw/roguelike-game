@@ -6,6 +6,7 @@ from macros import MOVES_TYPES
 from macros.COLORS import *
 from classes.Object.Creature.Hero import Hero
 
+
 class Creature(MyObject):
     def __init__(self, name="Set_me_name", symbol_on_map="M", position_x=-1, position_y=-1,
                  strength=5, hp=100, max_hp=100, agility=10, luck=10,
@@ -48,7 +49,9 @@ class Creature(MyObject):
         if self.hp > 0:
             return True
         else:
-            self.delete_from_board()
+            self.delete_from_board()    # :TODO delete?
+            if isinstance(self, Hero.Hero): # TODO fix imports
+                self.game.endgame = True
             return False
 
     def print_hp(self):
@@ -58,7 +61,7 @@ class Creature(MyObject):
 
         if hp_left_prec >= 60:
             cprint(hp_message, COLOR.GREEN)
-        elif hp_left_prec <= 30 and hp_left_prec > 0:
+        elif 30 >= hp_left_prec > 0:
             cprint(hp_message, COLOR.RED, STYLES.BOLD)
         elif self.hp <= 0:
             null_hp_message = f'{self.name}: 0/{self.max_hp} HP\n'
@@ -74,12 +77,15 @@ class Creature(MyObject):
         # Check for critical attack
         elif random_true(self.luck):
             cprint(f'{self.name} critical strike with double damage!', COLOR.RED, STYLES.BOLD)
-            if dmg >= target.defense - 5:
+            if dmg >= target.defense:
                 target.hp -= 2 * (dmg - target.defense)
             else:
                 target.hp -= 5
 
         # Normal attack
         else:
-            target.hp -= (dmg - target.defense)
+            if dmg >= target.defense:
+                target.hp -= (dmg - target.defense)
+            else:
+                target.hp -= 5
         pass

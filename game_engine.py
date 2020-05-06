@@ -8,3 +8,4 @@ def game_engine(game):
             my_board.move_monsters()
             game.turn_counter += 1
             game.save_game(autosave=True)
+    game.show_end_game_scenario()

@@ -63,10 +63,13 @@ class Hero(Creature):
             "boots": None
             }
         self.coins = coins
-        # self.start_pack = [Item.healing_potion()] * 5 + [Item.mana()] * 5
         self.backpack = [Item.healing_potion(200)] + ([Item.healing_potion()] * 5) + ([Item.mana()] * 5)
         self.spells ={}
+        self.special_buff_iter = 0
+        self.special_buff_flag = False
+        self.special_buff_dmg = 100
         self.game = None  #mock
+
 
 
     field_color = BG_COLOR.RED
@@ -134,9 +137,9 @@ class Hero(Creature):
         choice_possiblities = ['strength', 'agility', 'stamina', 'energy']
         for k, v in self.stats_info().items():
             if isinstance(v, list) and k == choice_possiblities[self.current_choice_index]:
-                print(f"%s{COLOR.CBLACK}{STYLES.BOLD}{BG_COLOR.LIGHTGREY}{k} {v[1]}{v[3]}{v[2]}" % (' ' * 8))
+                print(f"%s{COLOR.CBLACK}{STYLES.BOLD}{BG_COLOR.LIGHTGREY}{k} {int(v[1])}{v[3]}{v[2]}" % (' ' * 8))
             elif isinstance(v, list):
-                print(f"%s{COLOR.CBLACK}{STYLES.BOLD}{v[0]}{k} {v[1]}{v[3]}{v[2]}" % (' ' * 8))
+                print(f"%s{COLOR.CBLACK}{STYLES.BOLD}{v[0]}{k} {int(v[1])}{v[3]}{v[2]}" % (' ' * 8))
             else:
                 print(f"%s   ({k}:{v})" % (' ' * 8))
 
@@ -165,7 +168,7 @@ class Hero(Creature):
         W = 119
         ENTER = 13
 
-        while stats_key_pressed is not 'm':
+        while stats_key_pressed is not 'j':
             clear_screen()
 
             print('Select by [w]/[s] and press[enter] to select skill.')
@@ -191,7 +194,7 @@ class Hero(Creature):
 
             if ord(stats_key_pressed) == ENTER:
                 return True, self.current_choice_index
-            if stats_key_pressed == 'm':
+            if stats_key_pressed == 'j':
                 return False, self.current_choice_index
 
     def get_exp(self, exp):
@@ -211,6 +214,13 @@ class Hero(Creature):
 
     def start_fight_message(self):
         cprint(f'{self.name}: {self.on_fight_message}', self.color_in_battle)
+
+    def special_buff(self, skill_buff, add_sub):
+        operator_choice = {
+            '+': operator.add,
+            '-': operator.sub
+        }
+        self.defense = operator_choice[add_sub](self.defense, 100)
 
     def special_attack(self, target):
         """
@@ -235,8 +245,8 @@ class Hero(Creature):
                 "stamina": [BG_COLOR.ORANGE, self.stamina, STYLES.RESET, plus_minus],
                 "hp": f"{self.hp}/{self.max_hp}",
                 "energy": [BG_COLOR.BLUE, self.energy, STYLES.RESET, plus_minus],
-                "magic dmg": self.magic_dmg,
-                "max_mana": self.max_mana
+                "magic dmg": int(self.magic_dmg),
+                "max_mana": int(self.max_mana)
                 }
 
     def show_stats_with_add_points(self):
@@ -267,10 +277,12 @@ class Hero(Creature):
                 elif ord(add_rmv) == 13:
                     val = False
                     labled = True
-                elif add_rmv == 'm':
-
+                elif add_rmv == 'j':
                     val = False
                     labled = False
+                else:
+                    print('You have select wrong keys possible: j, +, -, enter')
+                    time.sleep(2)
 
                 self.print_add_points()
 

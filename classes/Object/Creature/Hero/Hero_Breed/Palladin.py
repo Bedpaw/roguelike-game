@@ -46,7 +46,7 @@ class Palladin(Hero):
         # extra_atributes per point
         self.stats_ratio = {
             0: 1,
-            1: [2, 2, 2],
+            1: [2, 0.2, 2],
             2: 8,
             3: [1, 5]
         }

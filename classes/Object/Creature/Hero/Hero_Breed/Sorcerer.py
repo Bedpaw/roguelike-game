@@ -46,9 +46,9 @@ class Sorcerer(Hero):
         # extra_atributes per point
         self.stats_ratio = {
             0: 1,
-            1: [3, 2, 1],
+            1: [3, 0.4, 1],
             2: 6,
-            3: [2, 5]
+            3: [3, 5]
         }
 
         # 0 = Name, 1 = mana cost, 2 = kind of dmg, 3 = dmg_ratio, 4 = energy required
