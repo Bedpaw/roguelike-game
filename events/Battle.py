@@ -12,7 +12,7 @@ from utils.sounds import *
 # from pygame.mixer import music
 # from pygame.mixer import Sound
 
-def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True):
+def battle(hero, monster, battle_mode, hero_start=True):
     """
     :param hero:[object]
     :param monster:[object]

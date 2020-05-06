@@ -1,7 +1,9 @@
 from games_config.board_factory import create_new_board
 from utils.decorations import cprint
+from utils.utils import clear_screen
 from macros import BATTLE_MODES
 import pickle
+# from menu.main_menu import run_main_menu
 
 
 class Game:
@@ -16,7 +18,7 @@ class Game:
         self.endgame = False    # to toogle, when hero/final boss dead
         self.board_changed = False
         self.true_player_position = []  # for loading data
-        self.battle_mode = BATTLE_MODES.IMMEDIATE_FIGHT
+        self.battle_mode = BATTLE_MODES.MANUAL_FIGHT
 
     def next_board(self):
         self.current_board_index += 1
@@ -52,3 +54,15 @@ class Game:
         pickle_out = open(f'{self.save_folder_path}{game_name}.pickle', "wb")
         pickle.dump(self, pickle_out)
         pickle_out.close()
+
+    def show_end_game_scenario(self):
+        clear_screen()
+        if self.hero.is_alive():
+            print("You won")
+            input()
+        else:
+            print("You lose")
+            input()
+        # send stats to highscores :TODO PATI
+        del self
+

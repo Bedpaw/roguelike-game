@@ -77,7 +77,7 @@ class NPC(Monster):
         :return:False if hero can't move after conversation else True
         """
         if func == "BATTLE":
-            battle(hero, self)
+            battle(hero, self, hero.game.battle_mode)
             return True
         if func == "TRADE":
             self.__trade(hero)

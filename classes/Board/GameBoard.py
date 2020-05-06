@@ -53,6 +53,8 @@ class Board:
 
     def move_monsters(self):
         for monster in self.monsters:
+            if not self.hero.is_alive():
+                break
             valid = False
             moves_counter = 0
             while not valid:
@@ -62,6 +64,7 @@ class Board:
                 if moves_counter == 50:
                     valid = True
                 if self.check_move_possibility(monster, x, y):
+
                     monster.position_x = x
                     monster.position_y = y
                     self.update_board()
@@ -77,6 +80,8 @@ class Board:
 
     def lava_detector(self):
         self.hero.hp -= 20
+        if not self.hero.is_alive():
+            self.game.endgame = True
         self.last_move_message.append(Fire.on_move_message)
         pass
 
@@ -116,7 +121,7 @@ class Board:
                 self.print_board()
                 return False
             elif isinstance(obj_in_pos, Monster):
-                battle(caller, obj_in_pos, self, BATTLE_MODES.MANUAL_FIGHT)
+                battle(caller, obj_in_pos, self, self.game.battle_mode)
                 self.monsters.remove(obj_in_pos)
                 return True
 
@@ -126,7 +131,7 @@ class Board:
             if isinstance(obj_in_pos, NPC) or isinstance(obj_in_pos, Monster) or isinstance(obj_in_pos, Treasure):
                 return False
             elif isinstance(obj_in_pos, Hero):
-                battle(obj_in_pos, caller, BATTLE_MODES.MANUAL_FIGHT, hero_start=False)
+                battle(obj_in_pos, caller, self.game.battle_mode, hero_start=False)
                 self.monsters.remove(caller)
                 return True
         return True
