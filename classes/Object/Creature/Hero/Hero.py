@@ -165,7 +165,7 @@ class Hero(Creature):
         W = 119
         ENTER = 13
 
-        while stats_key_pressed is not 'm':
+        while stats_key_pressed is not 'j':
             clear_screen()
 
             print('Select by [w]/[s] and press[enter] to select skill.')
@@ -191,7 +191,7 @@ class Hero(Creature):
 
             if ord(stats_key_pressed) == ENTER:
                 return True, self.current_choice_index
-            if stats_key_pressed == 'm':
+            if stats_key_pressed == 'j':
                 return False, self.current_choice_index
 
     def get_exp(self, exp):
@@ -242,8 +242,8 @@ class Hero(Creature):
                 "stamina": [BG_COLOR.ORANGE, self.stamina, STYLES.RESET, plus_minus],
                 "hp": f"{self.hp}/{self.max_hp}",
                 "energy": [BG_COLOR.BLUE, self.energy, STYLES.RESET, plus_minus],
-                "magic dmg": self.magic_dmg,
-                "max_mana": self.max_mana
+                "magic dmg": int(self.magic_dmg),
+                "max_mana": int(self.max_mana)
                 }
 
     def show_stats_with_add_points(self):

@@ -52,7 +52,7 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
         key_pressed = key_service.key_pressed()
         if key_pressed.lower() == 'h':
             hero.use_hpotion()
-        elif key_pressed.lower() == 'j':
+        elif key_pressed.lower() == 'm':
             hero.use_mana()
 
     def how_many_potions(kind_of_potion):
@@ -106,9 +106,14 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
 
                 # protect against use second time ........ TODO
                 if hero.spells[hero_attack][2] == 'energy_and_stamina':
-                    # hero.special_buff_dmg = calc_dmg
-                    hero.special_buff(hero.special_buff_dmg, '+')
-                    hero.special_buff_flag = True
+
+                    if hero.special_buff_iter > 0 and hero.special_buff_iter <= 6:
+                        print('You have already this buff on')
+                        time.sleep(3)
+                        continue
+                    else:
+                        hero.special_buff_flag = True
+                        hero.special_buff(hero.special_buff_dmg, '+')
                 else:
                     calc_dmg = calculate_dmg(hero.spells[hero_attack][2], hero.spells[hero_attack][3])
                     hero.attack(monster, calc_dmg)
@@ -149,34 +154,35 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
         round_counter += 1
         cprint(f"Round: {round_counter}", COLOR.PURPLE)
         wait(1)
+
+        if hero.special_buff_flag:
+            if hero.special_buff_iter >= 0 and hero.special_buff_iter <= 6:
+                hero.special_buff_iter += 1
+            else:
+                hero.special_buff(hero.special_buff_dmg, '-')
+                hero.special_buff_iter = 0
+                hero.special_buff_flag = False
+
         if who_start:
             hero_move()
-            # print(f"{hero.defense}")
-            # time.sleep(2)
             who_start = False
-        # else:
-        #     monster.attack(hero, monster.strength)
-        #     who_start = True
 
         if monster.is_alive():
-            if hero.special_buff_flag:
-                hero.special_buff_iter += 1
-                if hero.special_buff_iter > 3:
-                    hero.special_buff(hero.special_buff_dmg, '-')
-                    hero.special_buff_flag = False
             monster.print_hp()
             wait(1)
             monster.attack(hero, monster.strength)
             hero.print_hp()
+            print('hero defense', hero.defense)
             hero.print_mana()
             who_start = True
             wait(1)
         else:
+            if hero.special_buff_flag:
+                hero.special_buff_iter = 0
+                hero.special_buff(hero.special_buff_dmg, '-')
+                hero.special_buff_flag = False
             monster.print_hp()
             wait(1)
-            # hero.special_buff(hero.special_buff_dmg, '-')
-            # hero.special_buff_iter = 0
-            # hero.special_buff_flag = False
             monster.on_defeat()
             break
 
