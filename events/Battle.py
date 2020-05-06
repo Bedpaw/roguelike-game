@@ -9,11 +9,11 @@ from utils.utils import clear_screen
 from classes.Object.Creature.Hero.Hero_Breed.Sorcerer import Sorcerer
 from utils.sounds import *
 
+
 # from pygame.mixer import music
 # from pygame.mixer import Sound
 
 def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True):
-
     """
     :param hero:[object]
     :param monster:[object]
@@ -26,7 +26,7 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
         :param wait_time:[float] amount of time to wait in seconds
         :return: pass
         """
-        if battle_mode == BATTLE_MODES.AUTOMATE_FIGHT:
+        if battle_mode == BATTLE_MODES.MANUAL_FIGHT:
             time.sleep(wait_time)
 
 
@@ -42,8 +42,8 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
             return hero.phys_dmg * v3
         elif v2 == 'magic_and_physical':
             return hero.magic_dmg * hero.phys_dmg * v3
-        # elif v2 == 'energy_and_stamina':
-        #     return (hero.energy * hero.stamina)/2
+        elif v2 == 'energy_and_stamina':
+            return (hero.energy * hero.stamina)/2
 
     def block_skill_counter():
         pass
@@ -62,10 +62,13 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
                 counter += 1
         return counter
 
+
     def hero_move():
 
         if battle_mode == BATTLE_MODES.MANUAL_FIGHT:
             valid = True
+            print('Tu sobie printuje')
+            time.sleep(2)
             while valid:
                 spell_name_print = ''
                 max_key = 2
@@ -75,6 +78,7 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
                         spell_name_print += f"{' '*11}{'-' *40}\n"
                         spell_name_print += f"{' '*20}HP Potions |  MANA Potions \n"
                         spell_name_print += f"{' '*4}[key:qunatity]  H:{how_many_potions('healing_potion')}{' '*11}M: {how_many_potions('mana')}"
+
                     else:
                         if hero.energy >= v[4]:
                             if v[2] == 'energy_and_stamina':
@@ -83,6 +87,10 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
                                 skill = calculate_dmg(v[2], v[3])
                                 spell_name_print += f"{' '* 8}[{k}] {v[0]} [dmg:{int(skill)}] (mana cost:{v[1]})\n"
                             max_key += 1
+
+                            # skill = calculate_dmg(v[2], v[3])
+                            # spell_name_print += f"{' ' * 8}[{k}] {v[0]} [dmg:{int(skill)}] (mana cost:{v[1]})\n"
+
 
                 spell_name_print += '\nWhat should I do master?: '
                 max_key_options = [item for item in range(1, max_key)]
@@ -120,7 +128,6 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
             # attack = Sound('db/sounds/battle/sword_attack.wav')
             # attack.play()
 
-
     # music.pause()
     # music.load('db/sounds/battle.mp3')
     # music.play(-1)
@@ -131,9 +138,8 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
         battle_image()
         time.sleep(2)
         clear_screen()
-
         cprint(f"You attacked {monster.name}!", ERROR, start_enter=1, wait_after=1)
-        who_start = True
+
     else:
         clear_screen()
         battle_image()
@@ -141,7 +147,7 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
         clear_screen()
 
         cprint(f'{hero.name} has been attacked by {monster.name}!', ERROR, start_enter=1, wait_after=1)
-        who_start = False
+
 
     cprint(f"Battle start! {hero.name} vs {monster.name}", COLOR.PURPLE, start_enter=1, end_enter=1)
     hero.start_fight_message()
@@ -163,9 +169,7 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
                 hero.special_buff_iter = 0
                 hero.special_buff_flag = False
 
-        if who_start:
-            hero_move()
-            who_start = False
+        hero_move()
 
         if monster.is_alive():
             monster.print_hp()
@@ -174,7 +178,6 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
             hero.print_hp()
             print('hero defense', hero.defense)
             hero.print_mana()
-            who_start = True
             wait(1)
         else:
             if hero.special_buff_flag:
@@ -191,7 +194,6 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
             print("FUNCTION ENDING GAME")
             return True
 
-
     # Battle end
     cprint(f'You have got {monster.exp} exp.', SUCCESS)
     # music.load('db/sounds/battle/win_battle.mp3')
@@ -200,6 +202,7 @@ def battle(hero, monster, battle_mode=BATTLE_MODES.MANUAL_FIGHT, hero_start=True
     # music.stop()
     # music.unpause()
     hero.get_exp(monster.exp)
+    hero.add_to_message_box(f"Glorious victory! {monster.name} has been vanquished!")
 
     # hero.add_items(monster.loot) TODO: to implement
     # return play_music("db/sounds/main_menu_start.mp3", infinite=True)

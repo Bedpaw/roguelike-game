@@ -74,12 +74,15 @@ class Creature(MyObject):
         # Check for critical attack
         elif random_true(self.luck):
             cprint(f'{self.name} critical strike with double damage!', COLOR.RED, STYLES.BOLD)
-            if dmg >= target.defense - 5:
+            if dmg >= target.defense:
                 target.hp -= 2 * (dmg - target.defense)
             else:
                 target.hp -= 5
 
         # Normal attack
         else:
-            target.hp -= (dmg - target.defense)
+            if dmg >= target.defense:
+                target.hp -= (dmg - target.defense)
+            else:
+                target.hp -= 5
         pass

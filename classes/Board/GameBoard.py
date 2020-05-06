@@ -1,10 +1,9 @@
 from classes.Board.Fields import *
-from random import randint
+from random import randint, choice
 import copy
 import math
 from macros import OBJECT_TYPES, BATTLE_MODES, MOVES_TYPES
 from utils import key_service
-from utils.decorations import cprint
 from macros.COLORS import *
 from events.Battle import battle
 from classes.Board.Fields import Field
@@ -15,6 +14,7 @@ from classes.Object.Creature.Monster.Monster import Monster
 from classes.Object.Item.Item import Treasure
 from utils.sounds import play_music, pause_music, unpause_music
 import time
+from utils.utils import clear_screen
 
 
 class Board:
@@ -36,7 +36,8 @@ class Board:
         self.monsters = []
         self.npc = []
         self.treasures = []
-        self.logo = "ANGRY TROLLS!"
+        self.logo = "ANGRY TROLLS!"         # :TODO W -> delete?
+
 
     def special_ground_effect(self):
         pass
@@ -74,19 +75,10 @@ class Board:
         for object_item in object_items:
             self.game_board_in_class[object_item.position_x][object_item.position_y] = object_item
 
-    def lava_detector(self, x, y):
-        if self.game_board_in_class[x][y] == Fire:
-            print(f"You have step on lava -20 hp!")
-            time.sleep(1)
+    def lava_detector(self):
+        self.hero.hp -= 20
+        self.last_move_message.append(Fire.on_move_message)
         pass
-
-    def print_last_message(self):
-        additonal_info = ''
-        for message in self.last_move_message:
-            additonal_info += f"     {message}"
-        if additonal_info != '':
-            print(additonal_info)
-        self.last_move_message = []
 
     def check_move_possibility(self, caller, positionX, positionY):
         """
@@ -98,15 +90,18 @@ class Board:
         # BOARD BORDERS
         if positionX < 1 or positionY < 0 or positionY > self.width - 1 or positionX > self.height:
             if isinstance(caller, Hero):
-                self.last_move_message.append("AUUU!")
+                self.last_move_message.append(f" You hit a wall! {self.hero.name}: AUU!")
+                self.print_board()
             return False
         obj_in_pos = self.game_board_in_class[positionX][positionY]
         if not obj_in_pos.field_move_possible:
+            self.last_move_message.append(obj_in_pos.on_move_message)
+            self.print_board()
             return False
 
         elif isinstance(caller, Hero):
             if isinstance(obj_in_pos, Fire):
-                self.hero.hp -= 20
+                self.lava_detector()
                 return True
             if isinstance(obj_in_pos, NPC):
                 if obj_in_pos.on_meet(self.hero):  # return True if hero start fight with NPC else False
@@ -121,7 +116,7 @@ class Board:
                 self.print_board()
                 return False
             elif isinstance(obj_in_pos, Monster):
-                battle(caller, obj_in_pos, BATTLE_MODES.MANUAL_FIGHT)
+                battle(caller, obj_in_pos, self, BATTLE_MODES.MANUAL_FIGHT)
                 self.monsters.remove(obj_in_pos)
                 return True
 
@@ -139,7 +134,7 @@ class Board:
     def get_user_choice(self):
         valid_key = False  # change to True if key is valid AND move is possible
         while not valid_key:
-            self.print_last_message()
+            # self.print_last_message()
             key_pressed = key_service.key_pressed()
 
             if key_pressed in ['w', 's', 'a', 'd', 'p', 'm', 'o', 'x', 'z', 'j', 'h', 'i']:
@@ -186,17 +181,16 @@ class Board:
                 # Normal move
                 else:
                     new_x_pos, new_y_pos = self.hero.move(key_pressed)
-
                     if self.check_move_possibility(self.hero, new_x_pos, new_y_pos):
-                        self.lava_detector(new_x_pos, new_y_pos)
                         self.pos_x = new_x_pos
                         self.pos_y = new_y_pos
                         self.update_board()
                         valid_key = True
 
     def print_board(self):
+        self.update_board()
+        clear_screen()
         border_field = f"{BG_COLOR.BLUE}  {STYLES.RESET}"
-
         # MIDDLE LOGIC
         middle_border = []
         max_row_length = 0
@@ -271,20 +265,25 @@ class Board:
         print(''.join(mid), new_empty_line)
 
         # LAST MESSAGE FROM HERO
+        nothing_happened_messages = ["Nothing happened... this time around",
+                                     f"{self.hero.name}: Did I hear something?",
+                                     "Angry trolls are watching you...",
+                                     ]
+        if not self.last_move_message:
+            self.last_move_message.append(choice(nothing_happened_messages))
+        for last_message in self.last_move_message:
+            number_of_lines = math.ceil(len(last_message)/(max_row_length-6))
+            one_line_len = int(len(last_message)/number_of_lines)
 
-        last_message = 'Testowa wiadomosc ktora przekracza zakres'
+            last_message_chunks = [last_message[i: i + one_line_len]
+                                   for i in range(0, len(last_message), one_line_len)]
 
-        number_of_lines = math.ceil(len(last_message)/(max_row_length-6))
-        one_line_len = int(len(last_message)/number_of_lines)
-
-        last_message_chunks = [last_message[i: i + one_line_len]
-                               for i in range(0, len(last_message), one_line_len)]
-
-        last_message_chunks = [f"{border_field}{' '* int((max_row_length - 4 - math.ceil(len(item)))/2)}{item}" \
-                               f"{' '* int((max_row_length - 3 - math.floor(len(item)))/2)}{border_field}"
-                               for item in last_message_chunks]
-        last_message_chunks = [f"{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}"] + last_message_chunks
-        print('\n'.join(last_message_chunks))
+            last_message_chunks = [f"{border_field}{' '* int((max_row_length - 4 - math.ceil(len(item)))/2)}{item}" \
+                                   f"{' '* int((max_row_length - 3 - math.floor(len(item)))/2)}{border_field}"
+                                   for item in last_message_chunks]
+            last_message_chunks = [f"{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}"] + last_message_chunks
+            print('\n'.join(last_message_chunks))
+        self.last_move_message = []
 
 
         # BOTTOM PRINT AND LOGIC
@@ -326,13 +325,15 @@ class Board:
                 "7": demonic_maze
             }
             if loading:
-                board.name = boards[str(board_id)].__name__
+                board.name = boards[str(board_id)].__name__ # :TODO useless probably
                 return board
             else:
                 return boards[str(board_id)]()
 
         def labyrinth():
             board.name = "Labyrinth"
+            board.last_move_message.append(f"You have moved to {board.name}")
+
             board.monsters = [
                 Monster.troll(1, 3, game.difficulty_level),
                 Monster.rat(9, 7),
@@ -345,6 +346,7 @@ class Board:
 
         def plain():
             board.name = "Plain"
+            board.last_move_message.append(f"You have moved to {board.name}")
             board.npc = [
                 NPC("Guard", "G", 4, 8),
                 NPC('Guard', 'G', 4, 10)
@@ -360,6 +362,7 @@ class Board:
 
         def troll_cave_entry():
             board.name = "Troll cave entry"
+            board.last_move_message.append(f"You have moved to {board.name}")
             board.monsters = [
                 Monster.troll(2, 5, game.difficulty_level),
                 Monster.troll(5, 12, game.difficulty_level),
@@ -378,6 +381,7 @@ class Board:
 
         def troll_cave():
             board.name = "Troll cave"
+            board.last_move_message.append(f"You have moved to {board.name}")
             board.monsters = [
                 Monster.troll_warrior(1, 2, game.difficulty_level),
                 Monster.troll(4, 5, game.difficulty_level),
@@ -395,12 +399,13 @@ class Board:
 
         def the_great_bridge():
             board.name = "The great bridge"
+            board.last_move_message.append(f"You have moved to {board.name}")
             board.add_object_in_random_pos(Monster.snake, count=2)
             return board
 
         def city():
             board.name = "City"
-
+            board.last_move_message.append(f"You have moved to {board.name}")
             board.npc = [
                 NPCS.king(1, 10),
                 NPC("Guard", "G", 2, 6),
@@ -418,6 +423,7 @@ class Board:
 
         def highway_to_hell():
             board.name = "highway_to_hell"
+            board.last_move_message.append(f"You have moved to {board.name}")
             board.monsters = [Monster.troll_warrior(1, 2, game.difficulty_level),
                               Monster.rat(4, 5, game.difficulty_level),
                               Monster.troll_warrior(7, 15, game.difficulty_level),
@@ -427,13 +433,13 @@ class Board:
                                Treasure(position_x=5, position_y=11)]
             return board
 
-
         def demonic_maze():
             board.name = "Demonic maze"
+            board.last_move_message.append(f"You have moved to {board.name}")
             board.monsters = [Monster.troll_warrior(1, 18, game.difficulty_level),
                               Monster.rat(3, 10, game.difficulty_level),
                               Monster.troll_warrior(7, 15, game.difficulty_level),
-                              Monster.troll_warrior(11, 2, game.difficulty_level)
+                              Monster.troll_warrior(2, 2, game.difficulty_level)
                               ]
             board.treasures = [Treasure(position_x=2, position_y=18, is_locked=True),
                                Treasure(position_x=8, position_y=20),

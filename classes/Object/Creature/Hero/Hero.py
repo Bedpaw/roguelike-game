@@ -68,14 +68,17 @@ class Hero(Creature):
         self.special_buff_iter = 0
         self.special_buff_flag = False
         self.special_buff_dmg = 100
+        self.game = None  #mock
+
 
 
     field_color = BG_COLOR.RED
     type_of = OBJECT_TYPES.HERO
     color_on_board = STYLES.BOLD + COLOR.CBLACK
-
-
     on_fight_message = "Time to stop this creature!"
+
+    def add_to_message_box(self, message):
+        self.game.current_board().last_move_message.append(message)
 
     def print_mana(self):
 
@@ -277,6 +280,9 @@ class Hero(Creature):
                 elif add_rmv == 'j':
                     val = False
                     labled = False
+                else:
+                    print('You have select wrong keys possible: j, +, -, enter')
+                    time.sleep(2)
 
                 self.print_add_points()
 
@@ -371,7 +377,9 @@ class Hero(Creature):
             if k == "coins":
                 self.coins += v
             else:
-                self.backpack.append(v)
+                if k in self.inventory.keys() and k != None:
+                    self.inventory[k] = v
+                    self.backpack.append(v)
 
     def add_power(self, item):
         self.strength += item.strength

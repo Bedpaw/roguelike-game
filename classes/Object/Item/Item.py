@@ -4,7 +4,7 @@ from random import *
 from classes.Object.Object import MyObject
 from macros.COLORS import *
 from utils.validation import int_input
-
+from utils.utils import clear_screen
 # hero = Hero(name="Franek")
 # monster = Monster(name="Goblin")
 
@@ -137,7 +137,7 @@ class Treasure(MyObject):
         """
 
         if self.is_locked:
-
+            clear_screen()
             cprint("You have found closed chest, do you want to look into? ", INFO)
             answer = int_input("[1] Yes\n[2] No\n", 2)
             if answer == 1:
@@ -146,21 +146,21 @@ class Treasure(MyObject):
                     # if loot[0].item_type in hero.backpack:
                     if loot[0].item_type == "coins":
                         hero.coins += 100
-                        print(f'You have gain 100 coins!')
+                        hero.add_to_message_box(f'You have gain 100 coins!')
                     else:
-                        print(f'You took from chest {loot[0].name}')
+                        hero.add_to_message_box(f'You took from chest {loot[0].name}')
                         hero.backpack.append(loot[0])
                     return True
                 else:
-                    print(f"You don't have key in your inventory")
+                    hero.add_to_message_box(f"You don't have key in your inventory")
                     return False
             else:
-                cprint("You left closed chest on it\'s place")
+                hero.add_to_message_box("You left closed chest on it\'s place")
                 return False
         else:
             loot = self.which_item_in_chest(treasure)
-            cprint("You have found a chest and you've opened it", INFO)
-            print(f'You took from chest {loot[0].name}')
+            hero.add_to_message_box("You have found a chest and you've opened it")
+            hero.add_to_message_box(f'You took from chest {loot[0].name}')
             hero.backpack.append(loot[0])
             return True
 
