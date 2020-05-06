@@ -57,7 +57,7 @@ class Hero(Creature):
         self.inventory = { #rzeczy noszone dodaja statsy
             "shield": None,
             "helmet": None,
-            "gloves": None,
+            "gloves": Item.gloves(7),
             "armor": None,
             "belt": None,
             "boots": None
@@ -316,11 +316,28 @@ class Hero(Creature):
 
 #not finished
     def print_inventory(self):
-        for k, v in self.inventory.items():
-            cprint(f"|{k}| {v}|", COLOR.CYAN)
-        print(self.coins) # czemu nie printuje? ;(
-        print(f'You have these items in your backpack:')
-        for item in self.backpack:
+        clear_screen()
+        cprint("\n+---------------------------------------------------------+", COLOR.PURPLE)
+        cprint("|-----------------|| HERO INVENTORY ||--------------------|", COLOR.PURPLE)
+        cprint("+---------------------------------------------------------+\n", COLOR.PURPLE)
+        if all([v is None for k, v in self.inventory.items()]):
+            cprint("You are naked! Go and find something to put on you!", COLOR.YELLOW)
+        else:
+            for k, v in self.inventory.items():
+                if v is not None:
+                    cprint(f"{k} --> {v.name}", COLOR.CYAN)
+                cprint(f"You are not wearing any {k}", COLOR.CYAN)
+
+        cprint("\n+---------------------------------------------------------+", COLOR.PURPLE)
+        cprint("|----------------|| HERO BACKPACK ||----------------------|", COLOR.PURPLE)
+        cprint("+---------------------------------------------------------+", COLOR.PURPLE)
+        cprint(STYLES.RESET)
+
+        print(f"{self.coins} gold coins are ringing in your pocket")
+        cprint(f'\nYou have these items in your backpack:', COLOR.YELLOW)
+
+        for i, item in enumerate(self.backpack):
+            # policzyć ile razy wystepuje dany typ item type i wypisać tylko liczbę...
             print(item.item_type, item.name)
 
 
