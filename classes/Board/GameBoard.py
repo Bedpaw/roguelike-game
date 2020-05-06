@@ -121,7 +121,7 @@ class Board:
                 self.print_board()
                 return False
             elif isinstance(obj_in_pos, Monster):
-                battle(caller, obj_in_pos, self, self.game.battle_mode)
+                battle(caller, obj_in_pos, self.game.battle_mode)
                 self.monsters.remove(obj_in_pos)
                 return True
 
@@ -340,6 +340,7 @@ class Board:
             board.last_move_message.append(f"You have moved to {board.name}")
 
             board.monsters = [
+                Monster.troll(1, 3, game.difficulty_level),
                 Monster.rat(9, 7),
                 Monster.troll(7, 7, game.difficulty_level),
             ]
