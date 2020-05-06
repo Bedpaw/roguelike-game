@@ -61,6 +61,27 @@ def battle(hero, monster, battle_mode, hero_start=True):
             if potion.item_type == kind_of_potion:
                 counter += 1
         return counter
+    def print_skill_selection():
+        spell_name_print = ''
+        max_key = 2
+        for k, v in hero.spells.items():
+            if k is 9:
+                spell_name_print += f"{' ' * 8}[{k}]{' ' * 2}Hero HP:{hero.hp}{' ' * 4}| {' ' * 2}Hero Mana: {hero.mana}\n"
+                spell_name_print += f"{' ' * 11}{'-' * 40}\n"
+                spell_name_print += f"{' ' * 20}HP Potions |  MANA Potions \n"
+                spell_name_print += f"{' ' * 4}[key:qunatity]  H:{how_many_potions('healing_potion')}{' ' * 11}" \
+                                    f"M: {how_many_potions('mana')}"
+
+            else:
+                if hero.energy >= v[4]:
+                    if v[2] == 'energy_and_stamina':
+                        spell_name_print += f"{' ' * 8}[{k}] {v[0]} (mana cost:{v[1]})\n"
+                    else:
+                        skill = calculate_dmg(v[2], v[3])
+                        spell_name_print += f"{' ' * 8}[{k}] {v[0]} [dmg:{int(skill)}] (mana cost:{v[1]})\n"
+                    max_key += 1
+        spell_name_print += '\nWhat should I do master?: '
+        return max_key, spell_name_print
 
 
     def hero_move():
@@ -68,29 +89,8 @@ def battle(hero, monster, battle_mode, hero_start=True):
         if battle_mode == BATTLE_MODES.MANUAL_FIGHT:
             valid = True
             while valid:
-                spell_name_print = ''
-                max_key = 2
-                for k, v in hero.spells.items():
-                    if k is 9:
-                        spell_name_print += f"{' '*8}[{k}]{' '*2}Hero HP:{hero.hp}{' '*4}| {' '*2}Hero Mana: {hero.mana}\n"
-                        spell_name_print += f"{' '*11}{'-' *40}\n"
-                        spell_name_print += f"{' '*20}HP Potions |  MANA Potions \n"
-                        spell_name_print += f"{' '*4}[key:qunatity]  H:{how_many_potions('healing_potion')}{' '*11}M: {how_many_potions('mana')}"
+                max_key, spell_name_print = print_skill_selection()
 
-                    else:
-                        if hero.energy >= v[4]:
-                            if v[2] == 'energy_and_stamina':
-                                spell_name_print += f"{' ' * 8}[{k}] {v[0]} (mana cost:{v[1]})\n"
-                            else:
-                                skill = calculate_dmg(v[2], v[3])
-                                spell_name_print += f"{' '* 8}[{k}] {v[0]} [dmg:{int(skill)}] (mana cost:{v[1]})\n"
-                            max_key += 1
-
-                            # skill = calculate_dmg(v[2], v[3])
-                            # spell_name_print += f"{' ' * 8}[{k}] {v[0]} [dmg:{int(skill)}] (mana cost:{v[1]})\n"
-
-
-                spell_name_print += '\nWhat should I do master?: '
                 max_key_options = [item for item in range(1, max_key)]
                 max_key_options += [9]
 
@@ -115,7 +115,7 @@ def battle(hero, monster, battle_mode, hero_start=True):
 
                     if hero.special_buff_iter > 0 and hero.special_buff_iter <= 6:
                         print('You have already this buff on')
-                        time.sleep(3)
+                        time.sleep(2)
                         continue
                     else:
                         hero.special_buff_flag = True
@@ -134,14 +134,12 @@ def battle(hero, monster, battle_mode, hero_start=True):
     if hero_start:
         clear_screen()
         battle_image()
-        time.sleep(1.5)
         clear_screen()
         cprint(f"You attacked {monster.name}!", ERROR, start_enter=1, wait_after=1)
 
     else:
         clear_screen()
         battle_image()
-        time.sleep(1.5)
         clear_screen()
 
         cprint(f'{hero.name} has been attacked by {monster.name}!', ERROR, start_enter=1, wait_after=1)
@@ -154,16 +152,16 @@ def battle(hero, monster, battle_mode, hero_start=True):
     # Battle
     round_counter = 0
     while monster.is_alive():
-        wait(1)
         round_counter += 1
         cprint(f"Round: {round_counter}", COLOR.PURPLE)
-        wait(1)
 
         if hero.special_buff_flag:
-            if hero.special_buff_iter >= 0 and hero.special_buff_iter <= 6:
+            if hero.special_buff_iter >= 0 and hero.special_buff_iter <= 3:
                 hero.special_buff_iter += 1
+                print(f"{BG_COLOR.RED}{STYLES.BOLD}{COLOR.WHITE}hero defense + {hero.special_buff_dmg}{STYLES.RESET}\n")
             else:
                 hero.special_buff(hero.special_buff_dmg, '-')
+                print(f"{BG_COLOR.RED}{STYLES.BOLD}{COLOR.WHITE}hero defense - {hero.special_buff_dmg}{STYLES.RESET}\n")
                 hero.special_buff_iter = 0
                 hero.special_buff_flag = False
 
@@ -171,19 +169,17 @@ def battle(hero, monster, battle_mode, hero_start=True):
 
         if monster.is_alive():
             monster.print_hp()
-            wait(1)
             monster.attack(hero, monster.strength)
             hero.print_hp()
-            print('hero defense', hero.defense)
             hero.print_mana()
-            wait(1)
+            # wait(1)
         else:
             if hero.special_buff_flag:
                 hero.special_buff_iter = 0
                 hero.special_buff(hero.special_buff_dmg, '-')
                 hero.special_buff_flag = False
             monster.print_hp()
-            wait(1)
+            # wait(1)
             monster.on_defeat()
             break
 

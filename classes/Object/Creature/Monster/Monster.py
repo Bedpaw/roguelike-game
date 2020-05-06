@@ -16,7 +16,7 @@ class Monster(Creature):
                  strength=10,
                  hp=100,
                  max_hp=100,
-                 agility=0,
+                 agility=10,
                  luck=10,
                  move_type=MOVES_TYPES.RANDOM,
                  move_param=None,
@@ -116,7 +116,7 @@ class Monster(Creature):
                    move_type=MOVES_TYPES.GUARD_HORIZONTAL,
                    move_param=[3, [0]],
                    symbol_on_map="R",
-                   agility=0,
+                   agility=50,
                    loot={
                        "boots": Item.boots(4)
                    },
@@ -132,7 +132,7 @@ class Monster(Creature):
                    hp=dif_dep(50, dif_lvl),
                    max_hp=dif_dep(50, dif_lvl),
                    strength=dif_dep(20, dif_lvl),
-                   agility=0,
+                   agility=80,
                    luck=30,
                    loot={
                        "gloves": Item.shield(9)
