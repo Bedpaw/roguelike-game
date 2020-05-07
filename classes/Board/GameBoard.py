@@ -286,17 +286,12 @@ class Board:
             last_message_chunks = [f"{border_field}{' '* int((max_row_length - 4 - math.ceil(len(item)))/2)}{item}" \
                                    f"{' '* int((max_row_length - 3 - math.floor(len(item)))/2)}{border_field}"
                                    for item in last_message_chunks]
-            last_message_chunks = [f"{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}"] + last_message_chunks
-            print('\n'.join(last_message_chunks))
+        last_message_chunks = [f"{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}"] + last_message_chunks
+        print('\n'.join(last_message_chunks))
         self.last_move_message = []
 
-
-        # BOTTOM PRINT AND LOGIC
-        # print(f"{border_field}{' ' * (max_row_length -4)}{border_field}")
         print(f"{new_empty_line[1:]}\n{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}")
 
-        # BOTTOM
-        # print(f"{' '*13}{overscore*(self.width+3)}\n")
 
     def random_free_position(self):
         free_position = False

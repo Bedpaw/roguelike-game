@@ -96,6 +96,8 @@ def battle(hero, monster, battle_mode, hero_start=True):
 
                 hero_attack = int_input(spell_name_print, options=max_key_options)
                 if hero_attack == 9:
+                    print("Press [h] to use hp potion or [m] to use mana potion")
+                    time.sleep(0.5)
                     use_potions()
                     continue
                 else:
