@@ -273,6 +273,11 @@ class Board:
         nothing_happened_messages = ["Nothing happened... this time around",
                                      f"{self.hero.name}: Did I hear something?",
                                      "Angry trolls are watching you...",
+                                     "Such a strange place...",
+                                     f"{self.hero.name}:I hear hudge creatures near here",
+                                     f"{self.hero.name}:What was that?!",
+                                     "Keep rolin' rolin'",
+                                     f"{self.hero.name}:Toss a coin to your f{self.hero.name}... nanana"
                                      ]
         if not self.last_move_message:
             self.last_move_message.append(choice(nothing_happened_messages))
@@ -332,7 +337,7 @@ class Board:
 
         def labyrinth():
             board.name = "Labyrinth"
-            board.last_move_message.append(f"You have moved to {board.name}")
+            board.last_move_message.append(f"Hm... very nice place")
 
             board.monsters = [
                 Monster.troll(1, 3, game.difficulty_level),
@@ -346,7 +351,7 @@ class Board:
 
         def plain():
             board.name = "Plain"
-            board.last_move_message.append(f"You have moved to {board.name}")
+            board.last_move_message.append(f"I see guards here, let's talk with them!")
             board.npc = [
                 NPC("Guard", "G", 4, 8),
                 NPC('Guard', 'G', 4, 10)
@@ -362,7 +367,7 @@ class Board:
 
         def troll_cave_entry():
             board.name = "Troll cave entry"
-            board.last_move_message.append(f"You have moved to {board.name}")
+            board.last_move_message.append(f"Such a stinky place...")
             board.monsters = [
                 Monster.troll(2, 5, game.difficulty_level),
                 Monster.troll(5, 12, game.difficulty_level),
@@ -381,7 +386,7 @@ class Board:
 
         def troll_cave():
             board.name = "Troll cave"
-            board.last_move_message.append(f"You have moved to {board.name}")
+            board.last_move_message.append(f"Yay, Trolls everywhere!")
             board.monsters = [
                 Monster.troll_warrior(1, 2, game.difficulty_level),
                 Monster.troll(4, 5, game.difficulty_level),
@@ -399,13 +404,13 @@ class Board:
 
         def the_great_bridge():
             board.name = "The great bridge"
-            board.last_move_message.append(f"You have moved to {board.name}")
+            board.last_move_message.append(f"I like to swim, but not today")
             board.add_object_in_random_pos(Monster.snake, count=2)
             return board
 
         def city():
             board.name = "City"
-            board.last_move_message.append(f"You have moved to {board.name}")
+            board.last_move_message.append(f"Thanks God! Normal people around!")
             board.npc = [
                 NPCS.king(1, 10),
                 NPC("Guard", "G", 2, 6),
@@ -423,7 +428,7 @@ class Board:
 
         def highway_to_hell():
             board.name = "highway_to_hell"
-            board.last_move_message.append(f"You have moved to {board.name}")
+            board.last_move_message.append(f"This place was made for such a creatures")
             board.monsters = [Monster.troll_warrior(1, 2, game.difficulty_level),
                               Monster.rat(4, 5, game.difficulty_level),
                               Monster.troll_warrior(7, 15, game.difficulty_level),
@@ -435,7 +440,7 @@ class Board:
 
         def demonic_maze():
             board.name = "Demonic maze"
-            board.last_move_message.append(f"You have moved to {board.name}")
+            board.last_move_message.append(f"I feel odour of sulfur and death")
             board.monsters = [Monster.troll_warrior(1, 18, game.difficulty_level),
                               Monster.rat(3, 10, game.difficulty_level),
                               Monster.troll_warrior(7, 15, game.difficulty_level),

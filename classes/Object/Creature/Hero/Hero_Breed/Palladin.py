@@ -24,6 +24,7 @@ class Palladin(Hero):
                  exp=0,
                  exp_to_next_level=100,
                  breed='Palladin',
+                 coins=100,
 
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
@@ -40,6 +41,7 @@ class Palladin(Hero):
         self.magic_dmg += (self.energy*0.5)
         self.mana += (self.energy*0.5)
         self.max_mana += (self.energy*0.5)
+        self.coins = coins
 
         self.breed = breed
 
