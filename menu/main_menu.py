@@ -10,7 +10,7 @@ from utils.utils import clear_screen
 def about_us():
     with open("menu/about_us.txt", "r") as f:
         print(f.read())
-    input("Press any key to back to main menu")
+    input("Press Enter to back to main menu")
     # if answer.upper() == "E":
     #     run_main_menu(player_name)
 

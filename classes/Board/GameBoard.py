@@ -274,7 +274,7 @@ class Board:
                                      f"{self.hero.name}: Did I hear something?",
                                      "Angry trolls are watching you...",
                                      "Such a strange place...",
-                                     f"{self.hero.name}:I hear hudge creatures around",
+                                     f"{self.hero.name}:I hear hudge creatures near here",
                                      f"{self.hero.name}:What was that?!",
                                      "Keep rolin' rolin'",
                                      f"{self.hero.name}:Toss a coin to your f{self.hero.name}... nanana"

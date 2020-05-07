@@ -25,7 +25,8 @@ class Knight(Hero):
                  exp=0,
                  exp_to_next_level=100,
                  breed='Knight',
-                 spells={}
+                 spells={},
+                 coins=100,
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility,
@@ -41,6 +42,7 @@ class Knight(Hero):
         self.magic_dmg += (self.energy*0.1)
         self.mana += (self.energy*0.2)
         self.max_mana += (self.energy*0.2)
+        self.coins = coins
 
         self.breed = breed
 
