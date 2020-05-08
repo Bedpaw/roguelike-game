@@ -44,13 +44,13 @@ class Game:
     def save_game(self, autosave=False):
         if autosave and self.turn_counter % 100 == 0:
             game_name = "AUTOSAVE"
-            cprint("Game saved...", wait_after=1)
+            self.hero.add_to_message_box("Game saved...")
         elif autosave:
             game_name = "RESUME_GAME"
         else:
             game_name = input('Please input folder name for saves: \n'
                               '> ')
-            cprint("Game saved...", wait_after=1)
+            self.hero.add_to_message_box("Game saved...")
         pickle_out = open(f'{self.save_folder_path}{game_name}.pickle', "wb")
         pickle.dump(self, pickle_out)
         pickle_out.close()
