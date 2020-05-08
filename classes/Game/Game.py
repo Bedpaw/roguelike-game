@@ -1,8 +1,11 @@
 from games_config.board_factory import create_new_board
 from utils.decorations import cprint
 from utils.utils import clear_screen
+from utils.utils import print_image
 from macros import BATTLE_MODES
 import pickle
+import time
+
 # from menu.main_menu import run_main_menu
 
 
@@ -58,10 +61,13 @@ class Game:
     def show_end_game_scenario(self):
         clear_screen()
         if self.hero.is_alive():
-            print("You won")
-            input()
+
+            print_image("classes/Game/crown.txt")
+            time.sleep(2)
         else:
-            print("You lose")
-            input()
-        # send stats to highscores :TODO PATI
+
+            print_image("classes/Game/skull.txt")
+            time.sleep(2)
+
+        # send stats to highscores :TODO
         del self

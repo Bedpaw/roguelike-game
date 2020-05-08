@@ -63,8 +63,9 @@ class Monster(Creature):
                    move_type=MOVES_TYPES.RANDOM_STRAIGHT,
                    exp=100,
                    loot={
-                       "gloves": "Magic gloves",
-                       "coins": 100
+                       "gloves": Item.shield(12),
+                       "coins": 100,
+                       "key": Item.key()
                    },
                    )
 
@@ -118,9 +119,10 @@ class Monster(Creature):
                    symbol_on_map="R",
                    agility=50,
                    loot={
-                       "boots": Item.boots(4)
+                       "boots": Item.boots(4),
+                       "belt": Item.belt(3)
                    },
-                   on_fight_message="*pik*pik*")
+                   on_fight_message="wee wee wee")
 
     @classmethod
     def snake(cls, pos_x, pos_y, dif_lvl=DIFFICULTY_LEVEL.NORMAL):
@@ -135,7 +137,9 @@ class Monster(Creature):
                    agility=80,
                    luck=30,
                    loot={
-                       "gloves": Item.shield(9)
+                       "key": Item.key(),
+                       "gloves": Item.shield(9),
+
                    },
                    on_fight_message="sssss",
                    on_die_message="sssss",
