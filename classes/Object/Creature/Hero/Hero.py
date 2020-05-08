@@ -327,7 +327,7 @@ class Hero(Creature):
                 choosed_item.add_power(self)
         self.print_stats()
 
-#not finished
+
     def how_many_items(self, item_type):
 
         counter = 0
