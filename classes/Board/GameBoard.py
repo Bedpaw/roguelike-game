@@ -15,6 +15,7 @@ from classes.Object.Item.Item import Treasure
 from utils.sounds import play_music, pause_music, unpause_music
 import time
 from utils.utils import clear_screen
+from menu.pause_menu import pause_game_menu
 
 
 class Board:
@@ -39,6 +40,7 @@ class Board:
         self.boss = '[___] o o   ^    -       '
         self.logo = "ANGRY TROLLS!"         # :TODO W -> delete?
         self.counter = 0
+        self.is_boss_on_map = False
 
 
     def special_ground_effect(self):
@@ -47,7 +49,6 @@ class Board:
     def update_board(self):
         self.make_empty_list()
         self.add_object_to_board(self.monsters)
-        # self.add_object_to_board(self.boss)
         self.add_object_to_board(self.npc)
         self.add_object_to_board(self.treasures)
         self.game_board_in_class[self.pos_x][self.pos_y] = self.hero
@@ -125,7 +126,7 @@ class Board:
                 if obj_in_pos.open_treasure(self.hero):  # return True if hero took treasure
                     self.treasures.remove(obj_in_pos)
                     return True
-                self.print_board()
+                # self.print_board()
                 return False
             elif isinstance(obj_in_pos, Monster):
                 battle(caller, obj_in_pos, self.game.battle_mode)
@@ -158,7 +159,7 @@ class Board:
                     self.pos_x = self.height
                     self.pos_y = self.width - 1
                 elif key_pressed == 'p':
-                    exit()
+                    pause_game_menu(self.game)
                 elif key_pressed == 'o':
                     self.game.save_game()
                 elif key_pressed == 'j':
@@ -282,14 +283,24 @@ class Board:
         print(''.join(mid), new_empty_line)
 
         # LAST MESSAGE FROM HERO
-        nothing_happened_messages = ["Nothing happened... this time around",
-                                     f"{self.hero.name}: Did I hear something?",
-                                     "Angry trolls are watching you...",
-                                     "Such a strange place...",
-                                     f"{self.hero.name}:I hear hudge creatures near here",
-                                     f"{self.hero.name}:What was that?!",
-                                     "Keep rolin' rolin'",
-                                     f"{self.hero.name}:Toss a coin to your {self.hero.name}... nanana"
+
+
+        if not self.is_boss_on_map:
+            nothing_happened_messages = ["Nothing happened... this time around",
+                                         f"{self.hero.name}: Did I hear something?",
+                                         "Angry trolls are watching you...",
+                                         "Such a strange place...",
+                                         f"{self.hero.name}: I hear hudge creatures near here",
+                                         f"{self.hero.name}: What was that?!",
+                                         "Keep rolin' rolin'",
+                                         f"{self.hero.name}: Toss a coin to your {self.hero.name}... nanana"
+                                         ]
+        else:
+             nothing_happened_messages = ["Belzedup: Hahahaa, I will eat your brain",
+                                          "Belzedup: XXXDDD",
+                                          "Belzedup: 666! 666!",
+                                          "Belzedup: Come here, I'm waiting for you!"
+
                                      ]
         if not self.last_move_message:
             self.last_move_message.append(choice(nothing_happened_messages))
@@ -464,6 +475,7 @@ class Board:
 
             board.name = "Demonic maze"
             board.last_move_message.append(f"I feel odour of sulfur and death")
+            board.is_boss_on_map = True
             board.monsters = [Monster.troll_warrior(1, 18, game.difficulty_level),
                               Monster.rat(3, 10, game.difficulty_level),
                               Monster.troll_warrior(7, 15, game.difficulty_level),
@@ -477,3 +489,4 @@ class Board:
             return board
 
         return switcher(board_id)
+

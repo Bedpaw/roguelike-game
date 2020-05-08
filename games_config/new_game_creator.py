@@ -16,8 +16,8 @@ def create_new_game(player_name):
     choose_difficult = int_input('[1] EASY\n'
                                  '[2] NORMAL\n'
                                  '[3] HARD\n'
-                                 '[4] IMPOSSIBLE\n'
-                                 '> ', number_of_options=4)
+                                 '[4] IMPOSSIBLE\n\n'
+                                 'Your choice: ', number_of_options=4)
     if choose_difficult == 1:
         difficulty_level = DIFFICULTY_LEVEL.EASY
     elif choose_difficult == 2:

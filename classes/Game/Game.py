@@ -1,8 +1,11 @@
 from games_config.board_factory import create_new_board
 from utils.decorations import cprint
 from utils.utils import clear_screen
+from utils.utils import print_image
 from macros import BATTLE_MODES
 import pickle
+import time
+
 # from menu.main_menu import run_main_menu
 
 
@@ -44,13 +47,13 @@ class Game:
     def save_game(self, autosave=False):
         if autosave and self.turn_counter % 100 == 0:
             game_name = "AUTOSAVE"
-            cprint("Game saved...", wait_after=1)
+            self.hero.add_to_message_box("Game saved...")
         elif autosave:
             game_name = "RESUME_GAME"
         else:
             game_name = input('Please input folder name for saves: \n'
                               '> ')
-            cprint("Game saved...", wait_after=1)
+            self.hero.add_to_message_box("Game saved...")
         pickle_out = open(f'{self.save_folder_path}{game_name}.pickle', "wb")
         pickle.dump(self, pickle_out)
         pickle_out.close()
@@ -58,11 +61,14 @@ class Game:
     def show_end_game_scenario(self):
         clear_screen()
         if self.hero.is_alive():
-            print("You won")
-            input()
+
+            print_image("classes/Game/crown.txt")
+            time.sleep(2)
         else:
-            print("You lose")
-            input()
-        # send stats to highscores :TODO PATI
+
+            print_image("classes/Game/skull.txt")
+            time.sleep(2)
+
+        # send stats to highscores :TODO
         del self
 
