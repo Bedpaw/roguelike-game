@@ -32,7 +32,7 @@ class Hero(Creature):
                  magic_dmg=0,
                  mana=0,
                  max_mana=0,
-                 coins=100,
+                 coins=1000,
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility)
@@ -63,7 +63,8 @@ class Hero(Creature):
             "boots": None
             }
         self.coins = coins
-        self.backpack = [Item.healing_potion(200)] + ([Item.healing_potion()] * 5) + ([Item.mana()] * 5)
+        self.backpack = [Item.healing_potion(200), Item.healing_potion(100),
+                         Item.healing_potion(100), Item.mana(100), Item.mana(150), Item.gloves(7)]
         self.spells ={}
         self.special_buff_iter = 0
         self.special_buff_flag = False
@@ -316,70 +317,130 @@ class Hero(Creature):
 
     # -------------------------- ITEMS -------------------------------------------
     def put_on_from_backpack(self, item):
-        choosed_item = None
-        input("Which item you want to put on you?")
-        if item in self.backpack:
-            for item.item_type in self.inventory:
-                pass #dokonczyc
+        """choosing by player what to wear"""
 
-        choosed_item.add_power(self)
+        choosed_item = input("Which item you want to put on you? gloves/helmet/armor/shield/belt/boots\nYour choice:  ")
+
+        for item.item_type in self.inventory:
+            if str(choosed_item) in item.item_type:
+                self.inventory[str(choosed_item)] = item.name
+                choosed_item.add_power(self)
+        self.print_stats()
 
 #not finished
-    def print_inventory(self):
-        for k, v in self.inventory.items():
-            cprint(f"|{k}| {v}|", COLOR.CYAN)
-        print(f'You have {self.coins} in your pouch')
-        print(f'You have these items in your backpack:')
-        print(item.name for item in self.backpack)
+    def how_many_items(self, item_type):
 
+        counter = 0
+        for item in self.backpack:
+            if item.item_type == item_type:
+                counter += 1
+        return counter
+
+    def print_inventory(self):
+
+        clear_screen()
+        cprint("+---------------------------------------------------------+", COLOR.PURPLE)
+        cprint(f"|----------------|| {self.name.upper()}'S INVENTORY ||-----------------|", COLOR.PURPLE)
+        cprint("+---------------------------------------------------------+\n", COLOR.PURPLE)
+        if all([v is None for k, v in self.inventory.items()]):
+            cprint("You are naked! Go and find something to put on you!", COLOR.YELLOW)
+        else:
+            for k, v in self.inventory.items():
+                if v is not None:
+                    cprint(f"You are wearing {k} called {v.name}", COLOR.CYAN)
+                else:
+                    cprint(f"You are not wearing any {k}", COLOR.CYAN)
+
+        cprint("\n+---------------------------------------------------------+", COLOR.PURPLE)
+        cprint(f"|---------------|| {self.name.upper()}'S BACKPACK ||-------------------|", COLOR.PURPLE)
+        cprint("+---------------------------------------------------------+", COLOR.PURPLE)
+
+        # --- printing coins ----
+
+        if self.coins > 0:
+            print(f"{self.coins} gold coins are ringing in your pocket\n")
+        else:
+            print("You are very poor, go and earn some money, lazy b...ear ;)")
+
+        # --- printing any other things in backpack ---
+        cprint(f"You have these items in your backpack:\n", COLOR.YELLOW)
+        temp =[]
+        for item in self.backpack:
+            if item.item_type not in temp:
+                temp.append(item.item_type)
+                cprint(f"You have {self.how_many_items(item.item_type)} pieces of {item.item_type}", BG_COLOR.LIGHTGREY)
+
+        int_input("\nDo you want to put on you something from backpack?\n [1] YES, please!\n [2] NO, maybe next time\n",
+                  2)
+        if int_input == 1:
+            self.put_on_from_backpack()
+        else:
+            pass
+
+        cprint("\n\n If you want to resume game - press w, s, a or d", COLOR.PURPLE)
 
     def is_in_backpack(self, item_name):
+
         for item in self.backpack:
             if item.name == item_name:
                 return True
         return False
 
     def remove_from_backpack(self, item_name):
+
         for i, item in enumerate(self.backpack):
             if item.name == item_name:
                 del self.backpack[i]
 
     def remove_from_backpack_type(self, item_type):
+
         for i, item in enumerate(self.backpack):
             if item.item_type == item_type:
                 del self.backpack[i]
 
     def is_in_backpack_type(self, item_type):
+        """checking if item is in hero backpack"""
+
         for item in self.backpack:
             if item.item_type == item_type:
                 return True
         return False
 
     def use_hpotion(self, item_type="healing_potion"):
+        """using hp potion from backpack"""
 
-        if self.is_in_backpack_type(item_type):
-            self.add_power(Item.healing_potion())
-            self.remove_from_backpack_type(item_type)
+        while self.hp > 0 and self.hp < self.max_hp:
+            if self.is_in_backpack_type(item_type):
+                self.add_power(Item.healing_potion())
+                self.remove_from_backpack_type(item_type)
+            else:
+                cprint("You don't have any healing potion in your backpack!", COLOR.RED)
         else:
-            cprint("You don't have any healing potion in your backpack!", COLOR.RED)
+            self.add_to_message_box("Your HP is FULL!")
 
     def use_mana(self, item_type="mana"):
 
-        if self.is_in_backpack_type(item_type):
-            self.add_power(Item.mana())
-            self.remove_from_backpack(item_type)
-
+        while self.mana > 0 and self.mana < self.max_mana:
+            if self.is_in_backpack_type(item_type):
+                self.add_power(Item.mana())
+                self.remove_from_backpack(item_type)
+            else:
+                cprint("You don't have any mana potion in your backpack!", COLOR.RED)
         else:
-            cprint("You don't have any mana potion in your backpack!", COLOR.RED)
+            self.add_to_message_box("Your mana is FULL!")
 
     def add_to_backpack(self, loot):
+        """ Adding loots from Monsters and NPC to backpack and to inventory hero"""
+
         for k, v in loot.items():
             if k == "coins":
                 self.coins += v
             else:
-                if k in self.inventory.keys() and k != None:
+                if k in self.inventory.keys() and v is None:
                     self.inventory[k] = v
-                    self.backpack.append(v)
+            self.backpack.append(v)
+            self.add_power(loot)
+
 
     def add_power(self, item):
         self.strength += item.strength

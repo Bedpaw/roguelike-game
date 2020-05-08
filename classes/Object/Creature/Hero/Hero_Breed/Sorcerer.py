@@ -24,7 +24,8 @@ class Sorcerer(Hero):
                  exp=0,
                  exp_to_next_level=100,
                  breed='Sorcerer',
-                 spells = {}
+                 spells = {},
+                 coins=100
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility,
@@ -40,7 +41,7 @@ class Sorcerer(Hero):
         self.magic_dmg += (self.energy*3)
         self.mana += (self.energy*2)
         self.max_mana += (self.energy*2)
-
+        self.coins = coins
         self.breed = breed
 
         # extra_atributes per point

@@ -165,14 +165,12 @@ class Treasure(MyObject):
             return True
 
 
-    def which_item_in_chest(self, treasure):  # losuje item z dostępnych w grze
+    def which_item_in_chest(self, treasure):
+        """
+        function is choosing from available treasures
+        Returns: choosen lot in function
+        """
         loot = []
         loot.append(choice(treasure)())
         return loot
 
-
-# print(which_item_in_chest(self,treasure))
-#
-# chest = Treasure("chest", is_locked=True)  # tworze obiekt z wybranym parametrem
-# chest.open_treasure(hero) #wywoluje funkcje z obiektu z parametrem hero
-# print(Item().add_to_inventory(monster.loot, hero))
