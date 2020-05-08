@@ -36,7 +36,9 @@ class Board:
         self.monsters = []
         self.npc = []
         self.treasures = []
+        self.boss = '[___] o o   ^    -       '
         self.logo = "ANGRY TROLLS!"         # :TODO W -> delete?
+        self.counter = 0
 
 
     def special_ground_effect(self):
@@ -45,6 +47,7 @@ class Board:
     def update_board(self):
         self.make_empty_list()
         self.add_object_to_board(self.monsters)
+        # self.add_object_to_board(self.boss)
         self.add_object_to_board(self.npc)
         self.add_object_to_board(self.treasures)
         self.game_board_in_class[self.pos_x][self.pos_y] = self.hero
@@ -76,7 +79,11 @@ class Board:
 
     def add_object_to_board(self, object_items):
         for object_item in object_items:
-            self.game_board_in_class[object_item.position_x][object_item.position_y] = object_item
+            if object_item.name == "Belzedup":
+                for positions in self.boss_positons():
+                    self.game_board_in_class[positions[1]][positions[0]] = object_item
+            else:
+                self.game_board_in_class[object_item.position_x][object_item.position_y] = object_item
 
     def lava_detector(self):
         self.hero.hp -= 20
@@ -211,8 +218,13 @@ class Board:
 
             for j, field in enumerate(list_of_fields):
                 if field.symbol_on_map not in symbols_to_txt_draw.keys():
-                    middle_fileds += self.board_map[i - 1][
-                                         j].field_color + field.color_on_board + field.symbol_on_map + STYLES.RESET
+                    if field.symbol_on_map == "6":
+
+                        middle_fileds += BG_COLOR.RED + STYLES.BOLD + COLOR.WHITE + self.boss[self.counter] + STYLES.RESET
+                        self.counter += 1
+
+                    else:
+                        middle_fileds += self.board_map[i - 1][j].field_color + field.color_on_board + field.symbol_on_map + STYLES.RESET
                 else:
                     middle_fileds += field.field_color + field.color_on_board + field.symbol_on_map + STYLES.RESET
 
@@ -257,12 +269,12 @@ class Board:
         # GENERAL
         new_empty_line = f"\n{border_field}{' ' * (max_row_length - 4)}{border_field}"
         # TOP PRINT AND LOGIC
-        map_name = f"{border_field}{' ' * 2}Mapa: {self.name}{' ' * (max_row_length - len(self.name) - 12)}{border_field}"
+        map_name = f"{border_field}{' ' * 2} Map: {self.name}{' ' * (max_row_length - len(self.name) - 12)}{border_field}"
         top = f"{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}\n"
-        logo = f"{border_field}{' ' * 2}{self.logo}{STYLES.RESET}{' ' * (max_row_length - len(self.logo) - 6)}{border_field}\n"
-        top += logo + map_name + new_empty_line
+        # logo = f"{border_field}{' ' * 2}{self.logo}{STYLES.RESET}{' ' * (max_row_length - len(self.logo) - 6)}{border_field}\n"
+        top += map_name + new_empty_line
         print(top)
-
+        self.counter = 0
         # MIDDLE
         mid = []
         for i, item in enumerate(middle_border):
@@ -277,7 +289,7 @@ class Board:
                                      f"{self.hero.name}:I hear hudge creatures near here",
                                      f"{self.hero.name}:What was that?!",
                                      "Keep rolin' rolin'",
-                                     f"{self.hero.name}:Toss a coin to your f{self.hero.name}... nanana"
+                                     f"{self.hero.name}:Toss a coin to your {self.hero.name}... nanana"
                                      ]
         if not self.last_move_message:
             self.last_move_message.append(choice(nothing_happened_messages))
@@ -296,6 +308,16 @@ class Board:
         self.last_move_message = []
 
         print(f"{new_empty_line[1:]}\n{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}")
+
+
+    def boss_positons(self):
+        startX = self.width - 5
+        startY = self.height - 4
+        positions = []
+        for i in range(startX, self.width):
+            for j in range(startY, self.height+1):
+                positions.append([i, j])
+        return positions
 
 
     def random_free_position(self):
@@ -439,12 +461,14 @@ class Board:
             return board
 
         def demonic_maze():
+
             board.name = "Demonic maze"
             board.last_move_message.append(f"I feel odour of sulfur and death")
             board.monsters = [Monster.troll_warrior(1, 18, game.difficulty_level),
                               Monster.rat(3, 10, game.difficulty_level),
                               Monster.troll_warrior(7, 15, game.difficulty_level),
-                              Monster.troll_warrior(2, 2, game.difficulty_level)
+                              Monster.troll_warrior(2, 2, game.difficulty_level),
+                              Monster.finall_boss(board.boss_positons(), game.difficulty_level)
                               ]
             board.treasures = [Treasure(position_x=2, position_y=18, is_locked=True),
                                Treasure(position_x=8, position_y=20),

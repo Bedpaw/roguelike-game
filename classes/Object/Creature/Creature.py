@@ -57,14 +57,14 @@ class Creature(MyObject):
     def print_hp(self):
 
         hp_left_prec = (self.hp / self.max_hp) * 100
-        hp_message = f'{self.name}: {self.hp}/{self.max_hp} HP\n'
+        hp_message = f'{self.name}: {self.hp}/{self.max_hp} HP'
 
         if hp_left_prec >= 60:
             cprint(hp_message, COLOR.GREEN)
         elif 30 >= hp_left_prec > 0:
             cprint(hp_message, COLOR.RED, STYLES.BOLD)
         elif self.hp <= 0:
-            null_hp_message = f'{self.name}: 0/{self.max_hp} HP\n'
+            null_hp_message = f'{self.name}: 0/{self.max_hp} HP'
             cprint(null_hp_message, COLOR.YELLOW)
 
     def attack(self, target, dmg):

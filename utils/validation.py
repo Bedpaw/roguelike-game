@@ -9,7 +9,7 @@ def check_int(s):
     return False
 
 
-def int_input(text_input, number_of_options=None, options=None, ):
+def int_input(text_input, number_of_options=0, options=None, ):
     if options is None:
         options = []
     valid = False

@@ -1,5 +1,4 @@
 from classes.Object.Creature.Creature import Creature
-from utils.decorations import cprint
 from macros import OBJECT_TYPES, DIFFICULTY_LEVEL
 from macros.COLORS import *
 from macros import MOVES_TYPES
@@ -9,8 +8,7 @@ from classes.Object.Item.Item import Item
 class Monster(Creature):
     color_on_board = COLOR.RED
     color_in_battle = COLOR.RED
-    field_color = BG_COLOR.BLUE
-    type_of = OBJECT_TYPES.MONSTER  # probably to delete
+    # type_of = OBJECT_TYPES.MONSTER  # probably to delete
 
     def __init__(self, name="Set_me_name", symbol_on_map="M", position_x=-1, position_y=-1,
                  strength=10,
@@ -24,11 +22,15 @@ class Monster(Creature):
                  loot=None,
                  on_fight_message="You have no chance with me! ",
                  on_die_message="Argghr...",
-
+                 list_of_positions=None,
+                 field_color=BG_COLOR.BLUE
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility, luck)
 
+        if list_of_positions is None:
+            list_of_positions = []
+        self.field_color = field_color
         self.move_type = move_type
         self.exp = exp
         if loot is None:
@@ -139,4 +141,26 @@ class Monster(Creature):
                    },
                    on_fight_message="sssss",
                    on_die_message="sssss",
+                   )
+
+    @classmethod
+    def finall_boss(cls, list_of_positions, dif_lvl=DIFFICULTY_LEVEL.HARD):
+        dif_dep = cls.difficulty_depends
+        return cls(name="Belzedup",
+                   field_color=COLOR.RED,
+                   list_of_positions=list_of_positions,
+                   symbol_on_map='6',
+                   strength=dif_dep(100, dif_lvl),
+                   hp=dif_dep(1000, dif_lvl),
+                   max_hp=dif_dep(1000, dif_lvl),
+                   luck=10,
+                   agility=20,
+                   move_type=MOVES_TYPES.RANDOM_STRAIGHT,
+                   exp=10000,
+                   loot={
+                       'key': 1,
+                       "gloves": Item.gloves(6)
+                   },
+                   on_fight_message="You will burn in hell for ever!!",
+                   on_die_message="I will be back...",
                    )
