@@ -38,7 +38,7 @@ class Board:
         self.npc = []
         self.treasures = []
         self.logo = "ANGRY TROLLS!"         # :TODO W -> delete?
-
+        self.is_boss_on_map = False
 
     def special_ground_effect(self):
         pass
@@ -271,14 +271,22 @@ class Board:
         print(''.join(mid), new_empty_line)
 
         # LAST MESSAGE FROM HERO
-        nothing_happened_messages = ["Nothing happened... this time around",
-                                     f"{self.hero.name}: Did I hear something?",
-                                     "Angry trolls are watching you...",
-                                     "Such a strange place...",
-                                     f"{self.hero.name}: I hear hudge creatures near here",
-                                     f"{self.hero.name}: What was that?!",
-                                     "Keep rolin' rolin'",
-                                     f"{self.hero.name}: Toss a coin to your {self.hero.name}... nanana"
+        if not self.is_boss_on_map:
+            nothing_happened_messages = ["Nothing happened... this time around",
+                                         f"{self.hero.name}: Did I hear something?",
+                                         "Angry trolls are watching you...",
+                                         "Such a strange place...",
+                                         f"{self.hero.name}: I hear hudge creatures near here",
+                                         f"{self.hero.name}: What was that?!",
+                                         "Keep rolin' rolin'",
+                                         f"{self.hero.name}: Toss a coin to your {self.hero.name}... nanana"
+                                         ]
+        else:
+             nothing_happened_messages = ["Belzedup: Hahahaa, I will eat your brain",
+                                          "Belzdup: XXXDDD",
+                                          "Belzedup: 666! 666!",
+                                          "Belzedup: Come here, I'm waiting for you!"
+
                                      ]
         if not self.last_move_message:
             self.last_move_message.append(choice(nothing_happened_messages))
@@ -442,6 +450,7 @@ class Board:
         def demonic_maze():
             board.name = "Demonic maze"
             board.last_move_message.append(f"I feel odour of sulfur and death")
+            board.is_boss_on_map = True
             board.monsters = [Monster.troll_warrior(1, 18, game.difficulty_level),
                               Monster.rat(3, 10, game.difficulty_level),
                               Monster.troll_warrior(7, 15, game.difficulty_level),
