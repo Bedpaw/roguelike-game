@@ -15,6 +15,7 @@ from classes.Object.Item.Item import Treasure
 from utils.sounds import play_music, pause_music, unpause_music
 import time
 from utils.utils import clear_screen
+from menu.pause_menu import pause_game_menu
 
 
 class Board:
@@ -118,7 +119,7 @@ class Board:
                 if obj_in_pos.open_treasure(self.hero):  # return True if hero took treasure
                     self.treasures.remove(obj_in_pos)
                     return True
-                self.print_board()
+                # self.print_board()
                 return False
             elif isinstance(obj_in_pos, Monster):
                 battle(caller, obj_in_pos, self.game.battle_mode)
@@ -151,7 +152,7 @@ class Board:
                     self.pos_x = self.height
                     self.pos_y = self.width - 1
                 elif key_pressed == 'p':
-                    exit()
+                    pause_game_menu(self.game)
                 elif key_pressed == 'o':
                     self.game.save_game()
                 elif key_pressed == 'j':
