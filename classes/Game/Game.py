@@ -65,4 +65,3 @@ class Game:
             input()
         # send stats to highscores :TODO PATI
         del self
-

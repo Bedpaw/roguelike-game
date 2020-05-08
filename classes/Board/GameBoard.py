@@ -112,6 +112,7 @@ class Board:
             if isinstance(obj_in_pos, NPC):
                 if obj_in_pos.on_meet(self.hero):  # return True if hero start fight with NPC else False
                     self.npc.remove(obj_in_pos)
+                    self.print_board()
                     return True
                 self.print_board()
                 return False

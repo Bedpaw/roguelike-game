@@ -91,8 +91,9 @@ def battle(hero, monster, battle_mode, hero_start=True):
             while valid:
                 max_key, spell_name_print = print_skill_selection()
 
-                max_key_options = [item for item in range(1, max_key)]
+                max_key_options = [item for item in range(1, max_key - 1)]
                 max_key_options += [9]
+                print(max_key_options)
 
                 hero_attack = int_input(spell_name_print, options=max_key_options)
                 if hero_attack == 9:
