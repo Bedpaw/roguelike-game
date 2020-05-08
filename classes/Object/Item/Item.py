@@ -94,8 +94,8 @@ class Item:
         return cls(item_type="key", name="Golden key")
 
     @classmethod
-    def quest_item(cls, name="Flamethrower for really hard monsters"):
-        return cls(item_type="quest", name=name)
+    def quest_item(cls, name="Flamethrower for really hard monsters", strength=30):
+        return cls(strength=strength, item_type="quest", name=name)
 
 
 treasure = [
