@@ -94,7 +94,7 @@ class Item:
         return cls(item_type="key", name="Golden key")
 
     @classmethod
-    def quest_item(cls, name):
+    def quest_item(cls, name="Flamethrower for really hard monsters"):
         return cls(item_type="quest", name=name)
 
 
@@ -109,6 +109,7 @@ treasure = [
     Item.boots,
     Item.healing_potion,
     Item.mana,
+    Item.quest_item()
     # Item.key
 ]
 
@@ -117,11 +118,11 @@ class Treasure(MyObject):
     """Class with treasures, treasure is choosing item from items"""
 
     def __init__(self,
-                 name="Set_me_name",
+                 name="Wooden chest",
                  symbol_on_map="$",
                  position_x=-1, position_y=-1,
                  is_locked=False,
-                 message_in_field=""):
+                 message_in_field="Whooaa! What is this? A chest?"):
 
         super().__init__(name, symbol_on_map, position_x, position_y)
         self.message_in_field = message_in_field
@@ -135,7 +136,7 @@ class Treasure(MyObject):
         this return is giving info to board is field is empty or not
         if hero has already this item, he gets 100 coins instead
         """
-
+        print(self.message_in_field)
         if self.is_locked:
             clear_screen()
             cprint("You have found closed chest, do you want to look into? ", INFO)
