@@ -64,7 +64,7 @@ class Hero(Creature):
             }
         self.coins = coins
         self.backpack = [Item.healing_potion(200), Item.healing_potion(100),
-                         Item.healing_potion(100), Item.mana(100), Item.mana(150), Item.gloves(7)]
+                         Item.healing_potion(100), Item.mana(100), Item.mana(150), Item.gloves(7), Item.gloves(10)]
         self.spells ={}
         self.special_buff_iter = 0
         self.special_buff_flag = False
@@ -316,23 +316,55 @@ class Hero(Creature):
         return False
 
     # -------------------------- ITEMS -------------------------------------------
-    def put_on_from_backpack(self, item):
+    def put_on_from_backpack(self):
         """choosing by player what to wear"""
 
-        choosed_item = input("Which item you want to put on you? gloves/helmet/armor/shield/belt/boots\nYour choice:  ")
+        def print_item_type(type):
+            items = []
+            counter = 1
+            for i, item in enumerate(self.backpack):
+                if item.item_type == type:
+                    items.append(item)
+                    item_param_name, item_param_value = self.find_parameter(item)
+                    print(f'[{counter}] {item.name} --> {item_param_name} + {item_param_value}')
+                    counter += 1
+            item_choice = int_input("Choose item index to put on\n"
+                      "Your choice ", len(items))
+            return items[item_choice - 1]
 
-        for item.item_type in self.inventory:
-            if str(choosed_item) in item.item_type:
-                self.inventory[str(choosed_item)] = item.name
-                choosed_item.add_power(self)
-        self.print_stats()
+        choosed_item = int_input("Which item you want to put on you?\n"
+                                 "[1] gloves\n"
+                                 "[2] helmet\n"
+                                 "[3] armor\n"
+                                 "[4] shield\n"
+                                 "[5] belt\n"
+                                 "[6] boots\n"
+                                 "Your choice:  ", 6)
+        if choosed_item == 1:
+            item = print_item_type("gloves")
+            if self.inventory[item.item_type] is None:
+                self.inventory[item.item_type] = item
+                self.add_power(item)
+                self.remove_from_backpack(item.name)
+            else:
+                current_item_in_inventory = self.inventory[item.item_type]
+                self.backpack.append(current_item_in_inventory)
+                self.del_power(current_item_in_inventory)
+                self.inventory[item.item_type] = item
+                self.add_power(item)
+            self.show_stats_with_add_points()
+
+        # for item.item_type in self.inventory:
+        #     if str(choosed_item) in item.item_type:
+        #         self.inventory[str(choosed_item)] = item.name
+        #         choosed_item.add_power(self)
 
 #not finished
-    def how_many_items(self, item_type):
+    def how_many_items(self, item_name):
 
         counter = 0
         for item in self.backpack:
-            if item.item_type == item_type:
+            if item.name == item_name:
                 counter += 1
         return counter
 
@@ -343,7 +375,7 @@ class Hero(Creature):
         cprint(f"|----------------|| {self.name.upper()}'S INVENTORY ||-----------------|", COLOR.PURPLE)
         cprint("+---------------------------------------------------------+\n", COLOR.PURPLE)
         if all([v is None for k, v in self.inventory.items()]):
-            cprint("You are naked! Go and find something to put on you!", COLOR.YELLOW)
+            cprint("You are naked! Go and find something to put on you!", COLOR.YELLOW, STYLES.BOLD)
         else:
             for k, v in self.inventory.items():
                 if v is not None:
@@ -363,21 +395,21 @@ class Hero(Creature):
             print("You are very poor, go and earn some money, lazy b...ear ;)")
 
         # --- printing any other things in backpack ---
-        cprint(f"You have these items in your backpack:\n", COLOR.YELLOW)
+        cprint(f"You have these items in your backpack:\n", COLOR.YELLOW, STYLES.BOLD)
         temp =[]
         for item in self.backpack:
             if item.item_type not in temp:
                 temp.append(item.item_type)
-                cprint(f"You have {self.how_many_items(item.item_type)} pieces of {item.item_type}", BG_COLOR.LIGHTGREY)
+                cprint(f"You have {self.how_many_items(item.name)} {item.name} --> {item.item_type}", COLOR.YELLOW)
 
-        int_input("\nDo you want to put on you something from backpack?\n [1] YES, please!\n [2] NO, maybe next time\n",
+        choose_option = int_input("\nDo you want to put on you something from backpack?\n [1] YES, please!\n [2] NO, maybe next time\n",
                   2)
-        if int_input == 1:
+        if choose_option == 1:
             self.put_on_from_backpack()
         else:
             pass
-
-        cprint("\n\n If you want to resume game - press w, s, a or d", COLOR.PURPLE)
+        self.game.current_board().print_board()
+        # cprint("\n\n If you want to resume game - press w, s, a or d", COLOR.PURPLE)
 
     def is_in_backpack(self, item_name):
 
@@ -451,6 +483,20 @@ class Hero(Creature):
         self.stamina += item.stamina
         self.mana += item.mana
 
+    def find_parameter(self, item):
+        params = [item.strength, item.hp, item.max_hp, item.agility, item.energy, item.stamina, item.mana]
+        params_name = {
+            0: "strength",
+            1: "hp",
+            2: "max_hp",
+            3: "agility",
+            4: "energy",
+            5: "stamina",
+            6: "mana"
+        }
+        for i, param_value in enumerate(params):
+            if param_value != 0:
+                return params_name[i], param_value
     def del_power(self, item):
         self.strength -= item.strength
         self.hp -= item.hp
