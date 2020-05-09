@@ -75,7 +75,7 @@ class Hero(Creature):
 
     field_color = BG_COLOR.RED
     type_of = OBJECT_TYPES.HERO
-    color_on_board = STYLES.BOLD + COLOR.CBLACK
+    color_on_board = STYLES.BOLD + COLOR.BLUE
     on_fight_message = "Time to stop this creature!"
 
     def add_to_message_box(self, message):
@@ -135,6 +135,7 @@ class Hero(Creature):
 
 
     def print_add_points(self):
+        clear_screen()
         choice_possiblities = ['strength', 'agility', 'stamina', 'energy']
         for k, v in self.stats_info().items():
             if isinstance(v, list) and k == choice_possiblities[self.current_choice_index]:
@@ -195,6 +196,7 @@ class Hero(Creature):
 
             if ord(stats_key_pressed) == ENTER:
                 return True, self.current_choice_index
+
             if stats_key_pressed == 'j':
                 return False, self.current_choice_index
 
@@ -255,10 +257,12 @@ class Hero(Creature):
         temp_skill_add_points = self.points_for_level
         labled = True
         while labled:
+            clear_screen()
             val = True
             if labled:
                 labled, skill_choice = self.add_statistic()
-
+                if labled == False:
+                    break
             while val:
                 add_rmv = key_pressed()
                 if add_rmv == '+':

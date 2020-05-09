@@ -1,20 +1,20 @@
 from classes.Object.Creature.Hero.Hero import Hero
-from macros.COLORS import COLOR
+from macros.COLORS import *
 from macros import MOVES_TYPES, OBJECT_TYPES
 
 
 class Palladin(Hero):
     def __init__(self, name="Set_me_name", symbol_on_map="P", position_x=0, position_y=0,
                  strength=28,
-                 hp=500,
-                 max_hp=500,
+                 hp=220,
+                 max_hp=220,
                  agility=20,
                  phys_dmg=13,
                  luck=3,
                  dodge_chance=3,
                  defense=8,
                  stamina=20,
-                 energy=200,
+                 energy=20,
                  magic_dmg=2,
                  mana=60,
                  max_mana=60,
@@ -42,7 +42,7 @@ class Palladin(Hero):
         self.mana += (self.energy*0.5)
         self.max_mana += (self.energy*0.5)
         self.coins = coins
-
+        self.color_on_board = STYLES.BOLD + COLOR.PURPLE
         self.breed = breed
 
         # extra_atributes per point
