@@ -16,7 +16,7 @@ select_type = {
 }
 
 
-def create_new_hero():
+def create_new_hero(player_name):
     valid_key = False  # change to True if key is valid AND move is possible
     current_key = 4
     while not valid_key:
@@ -34,7 +34,7 @@ def create_new_hero():
         elif ord(key) == 119:
             current_key -= 1
         elif ord(key) == 13:
-            return select_type[str(current_key)][3]('Wojtek')
+            return select_type[str(current_key)][3](player_name)
         else:
             print("not [w] or [s] pressed")
             time.sleep(0.5)

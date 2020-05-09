@@ -1,23 +1,23 @@
 from classes.Object.Creature.Hero.Hero import Hero
-from macros.COLORS import COLOR
+from macros.COLORS import *
 from macros import MOVES_TYPES, OBJECT_TYPES
 
 
 class Sorcerer(Hero):
-    def __init__(self, name="Set_me_name", symbol_on_map="S", position_x=0, position_y=0,
+    def __init__(self, name="Set_me_name", symbol_on_map="\u03A8", position_x=0, position_y=0,
                  strength=28,
-                 hp=500,
-                 max_hp=500,
+                 hp=200,
+                 max_hp=200,
                  agility=20,
                  phys_dmg=13,
                  luck=3,
                  dodge_chance=3,
                  defense=18,
                  stamina=15,
-                 energy=128,
+                 energy=28,
                  magic_dmg=2,
                  mana=100,
-                 max_mana=50,
+                 max_mana=100,
                  color_in_battle=COLOR.GREEN,
                  move_type=MOVES_TYPES.MANUAL,
                  level=1,
@@ -43,7 +43,7 @@ class Sorcerer(Hero):
         self.max_mana += (self.energy*2)
         self.coins = coins
         self.breed = breed
-
+        self.color_on_board = STYLES.BOLD + COLOR.BLUE
         # extra_atributes per point
         self.stats_ratio = {
             0: 1,

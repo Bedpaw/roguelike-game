@@ -27,7 +27,7 @@ def create_new_game(player_name):
     elif choose_difficult == 4:
         difficulty_level = DIFFICULTY_LEVEL.IMPOSSIBLE
 
-    hero = create_new_hero()
+    hero = create_new_hero(player_name)
     game = Game(player_name=player_name,
                 game_name="RESUME_GAME",
                 difficulty_level=difficulty_level,

@@ -75,7 +75,7 @@ class Hero(Creature):
 
     field_color = BG_COLOR.RED
     type_of = OBJECT_TYPES.HERO
-    color_on_board = STYLES.BOLD + COLOR.CBLACK
+    color_on_board = STYLES.BOLD + COLOR.BLUE
     on_fight_message = "Time to stop this creature!"
 
     def add_to_message_box(self, message):
@@ -135,6 +135,7 @@ class Hero(Creature):
 
 
     def print_add_points(self):
+        clear_screen()
         choice_possiblities = ['strength', 'agility', 'stamina', 'energy']
         for k, v in self.stats_info().items():
             if isinstance(v, list) and k == choice_possiblities[self.current_choice_index]:
@@ -195,6 +196,7 @@ class Hero(Creature):
 
             if ord(stats_key_pressed) == ENTER:
                 return True, self.current_choice_index
+
             if stats_key_pressed == 'j':
                 return False, self.current_choice_index
 
@@ -255,10 +257,12 @@ class Hero(Creature):
         temp_skill_add_points = self.points_for_level
         labled = True
         while labled:
+            clear_screen()
             val = True
             if labled:
                 labled, skill_choice = self.add_statistic()
-
+                if labled == False:
+                    break
             while val:
                 add_rmv = key_pressed()
                 if add_rmv == '+':
@@ -289,16 +293,31 @@ class Hero(Creature):
 
     def show_stats_breed(self):
         clear_screen()
-        print(f"{' ' * 5}{self.breed} level: {self.level}")
         statistic = self.stats_info()
         label_len = 16
-        for k, v in statistic.items():
-            espace = int((label_len - len(k)) / 2)
-            if isinstance(v, list):
-                print(f"%s{COLOR.CBLACK}{STYLES.BOLD}{v[0]}{espace * ' '} {k} {v[1]}{espace * ' '}{v[2]}" % (' ' * 8))
+        valid = True
+
+        while valid:
+            clear_screen()
+            print(f"{' ' * 5}{self.breed} level: {self.level}")
+            for k, v in statistic.items():
+                espace = int((label_len - len(k)) / 2)
+                if isinstance(v, list):
+                    print(
+                        f"%s{COLOR.CBLACK}{STYLES.BOLD}{v[0]}{espace * ' '} {k} {v[1]}{espace * ' '}{v[2]}" % (' ' * 8))
+                else:
+                    print(f"%s   ({k}:{v})" % (' ' * 8))
+
+            keyx = key_pressed()
+            if keyx == 'j':
+                valid = False
+
             else:
-                print(f"%s   ({k}:{v})" % (' ' * 8))
+                print("Please eneter [j] to exit stats!")
+                time.sleep(1)
+                valid = True
         pass
+
 
     # -------- QUESTS ------------- #
 
@@ -481,6 +500,8 @@ class Hero(Creature):
         while self.hp > 0 and self.hp < self.max_hp:
             if self.is_in_backpack_type(item_type):
                 self.add_power(Item.healing_potion())
+                if self.hp > self.max_hp:
+                    self.hp = self.max_hp
                 self.remove_from_backpack_type(item_type)
             else:
                 cprint("You don't have any healing potion in your backpack!", COLOR.RED)
@@ -493,6 +514,8 @@ class Hero(Creature):
         while self.mana > 0 and self.mana < self.max_mana:
             if self.is_in_backpack_type(item_type):
                 self.add_power(Item.mana())
+                if self.mana > self.max_mana:
+                    self.mana = self.max_mana
                 self.remove_from_backpack_type(item_type)
             else:
                 cprint("You don't have any mana potion in your backpack!", COLOR.RED)

@@ -38,7 +38,7 @@ class Troll_king(NPC):
                              'coins': 500,
                              'quest': Item.quest_item('Troll brain')
                          },
-                         color_on_board=COLOR.CYAN,
+                         # color_on_board=COLOR.CYAN,
                          conversation_file_name='troll_king.txt',
                          on_fight_message="UGA HA!",
                          on_die_message='Ughh, yough bum bum troll kingo... yough ken eat his braaajn nowww'
