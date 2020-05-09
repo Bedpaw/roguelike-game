@@ -69,7 +69,7 @@ class Board:
                 if moves_counter == 50:
                     valid = True
                 if monster.name == 'Belzedup':
-                    if self.check_move_possibility(monster, x, y):
+                    if self.check_move_possibility(monster, y, x):
                         # if self.check_move_possibility(monster,x+5, y+5):
                         # input('cos')
                         self.startX = x
@@ -111,11 +111,7 @@ class Board:
         :return: True if move is possible, False if it isn't
         """
         # BOARD BORDERS
-
         if positionX < 1 or positionY < 0 or positionY > self.width - 1 or positionX > self.height:
-            # if caller.name == 'Belzedup':
-            #     print('nie powinnes tu wchodzic belzedupie')
-            #     time.sleep(1)
             if isinstance(caller, Hero):
                 self.last_move_message.append(f" You hit a wall! {self.hero.name}: AUU!")
                 self.print_board()
@@ -336,7 +332,6 @@ class Board:
         self.last_move_message = []
 
         print(f"{new_empty_line[1:]}\n{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}")
-        print(self.boss_positons())
 
     def boss_positons(self):
         positions = []
@@ -392,8 +387,6 @@ class Board:
                 Monster.troll(1, 3, game.difficulty_level),
                 Monster.rat(9, 7),
                 Monster.troll(7, 7, game.difficulty_level),
-                Monster.finall_boss(list_of_positions[0][0], list_of_positions[0][1],
-                                    list_of_positions, game.difficulty_level)
             ]
             board.treasures = [
                 Treasure(position_x=10, position_y=0),

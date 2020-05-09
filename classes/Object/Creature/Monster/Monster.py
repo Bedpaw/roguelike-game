@@ -64,7 +64,7 @@ class Monster(Creature):
                    strength=dif_dep(40, dif_lvl),
                    max_hp=dif_dep(200, dif_lvl),
                    hp=dif_dep(200, dif_lvl),
-                   move_type=MOVES_TYPES.RANDOM_STRAIGHT,
+                   move_type=MOVES_TYPES.RANDOM_DIAGONAL,
                    exp=100,
                    loot={
                        "gloves": Item.shield(12),
