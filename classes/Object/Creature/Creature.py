@@ -68,7 +68,7 @@ class Creature(MyObject):
             cprint(null_hp_message, COLOR.YELLOW)
 
     def attack(self, target, dmg):
-        cprint(f'{self.name} attack!', self.color_in_battle)
+        cprint(f'{self.name} attacks!', self.color_in_battle)
 
         # Check for dodge
         if random_true(target.agility):

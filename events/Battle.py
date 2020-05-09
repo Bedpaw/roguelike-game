@@ -45,10 +45,10 @@ def battle(hero, monster, battle_mode, hero_start=True):
         key_pressed = key_service.key_pressed()
         if key_pressed.lower() == 'h':
             hero.use_hpotion()
-            print("Whoooa! Feel better! Thanks!")
+
         elif key_pressed.lower() == 'm':
             hero.use_mana()
-            print("Yep, definitely needed this power!")
+
 
     def how_many_potions(kind_of_potion):
         counter = 0

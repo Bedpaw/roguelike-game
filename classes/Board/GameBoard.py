@@ -299,9 +299,9 @@ class Board:
                                          f"{self.hero.name}: Toss a coin to your {self.hero.name}... nanana"
                                          ]
         else:
-             nothing_happened_messages = ["Belzedup: Hahahaa, I will eat your brain",
-                                          "Belzedup: XXXDDD",
-                                          "Belzedup: 666! 666!",
+             nothing_happened_messages = ["Belzedup: MUAHAHAHA, I will eat your brain",
+                                          "Belzedup: I feel smell of your fear",
+                                          "Belzedup: Come to my room of pain, little kitty",
                                           "Belzedup: Come here, I'm waiting for you!"
 
                                      ]
@@ -382,7 +382,8 @@ class Board:
                 Monster.troll(7, 7, game.difficulty_level),
             ]
             board.treasures = [
-                Treasure(position_x=10, position_y=0)
+                Treasure(position_x=10, position_y=0),
+                Treasure(position_x=5, position_y=9)
             ]
             return board
 
@@ -436,6 +437,8 @@ class Board:
                 NPCS.fake_wall(6, 11, name="Hole in the wall"),
             ]
             board.monsters[0].move_type = MOVES_TYPES.STAY
+            board.treasures = [
+                Treasure(position_x=7, position_y=4)]
 
             return board
 
@@ -471,8 +474,8 @@ class Board:
                               Monster.troll_warrior(7, 15, game.difficulty_level),
                               Monster.rat(11, 8, game.difficulty_level)
                               ]
-            board.treasures = [Treasure(position_x=7, position_y=4, is_locked=True),
-                               Treasure(position_x=5, position_y=11)]
+            board.treasures = [Treasure(position_x=1, position_y=20, is_locked=True),
+                               Treasure(position_x=2, position_y=21)]
             return board
 
         def demonic_maze():
