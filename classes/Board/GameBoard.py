@@ -41,8 +41,8 @@ class Board:
         self.logo = "ANGRY TROLLS!"         # :TODO W -> delete?
         self.counter = 0
         self.is_boss_on_map = False
-        self.startX = self.width - 5
-        self.startY = self.height - 5
+        self.startX = self.width - 7
+        self.startY = self.height - 4
 
     def special_ground_effect(self):
         pass
@@ -69,12 +69,14 @@ class Board:
                 if moves_counter == 50:
                     valid = True
                 if monster.name == 'Belzedup':
-                    if self.check_move_possibility(monster, x, y) :
-
+                    if self.check_move_possibility(monster, x, y):
+                        # if self.check_move_possibility(monster,x+5, y+5):
+                        # input('cos')
                         self.startX = x
                         self.startY = y
                         self.boss_positons()
                         self.update_board()
+                        break
 
                 elif self.check_move_possibility(monster, x, y):
                     monster.position_x = x
@@ -109,7 +111,11 @@ class Board:
         :return: True if move is possible, False if it isn't
         """
         # BOARD BORDERS
+
         if positionX < 1 or positionY < 0 or positionY > self.width - 1 or positionX > self.height:
+            # if caller.name == 'Belzedup':
+            #     print('nie powinnes tu wchodzic belzedupie')
+            #     time.sleep(1)
             if isinstance(caller, Hero):
                 self.last_move_message.append(f" You hit a wall! {self.hero.name}: AUU!")
                 self.print_board()
@@ -328,8 +334,6 @@ class Board:
 
         print(f"{new_empty_line[1:]}\n{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}")
         print(self.boss_positons())
-        # time.sleep(2)
-
 
     def boss_positons(self):
         positions = []
@@ -398,6 +402,7 @@ class Board:
             board.npc = [
                 NPC("Guard", "G", 4, 8),
                 NPC('Guard', 'G', 4, 10)
+
             ]
             board.treasures = [
                 Treasure(position_x=5, position_y=8, is_locked=True),
@@ -485,7 +490,7 @@ class Board:
 
             board.name = "Demonic maze"
             board.last_move_message.append(f"I feel odour of sulfur and death")
-            board.is_boss_on_map = True
+            # board.is_boss_on_map = True
             list_of_positions = board.boss_positons()
             board.monsters = [Monster.troll_warrior(1, 18, game.difficulty_level),
                               Monster.rat(3, 10, game.difficulty_level),
