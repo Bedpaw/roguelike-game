@@ -500,6 +500,8 @@ class Hero(Creature):
         while self.hp > 0 and self.hp < self.max_hp:
             if self.is_in_backpack_type(item_type):
                 self.add_power(Item.healing_potion())
+                if self.hp > self.max_hp:
+                    self.hp = self.max_hp
                 self.remove_from_backpack_type(item_type)
             else:
                 cprint("You don't have any healing potion in your backpack!", COLOR.RED)
@@ -512,6 +514,8 @@ class Hero(Creature):
         while self.mana > 0 and self.mana < self.max_mana:
             if self.is_in_backpack_type(item_type):
                 self.add_power(Item.mana())
+                if self.mana > self.max_mana:
+                    self.mana = self.max_mana
                 self.remove_from_backpack_type(item_type)
             else:
                 cprint("You don't have any mana potion in your backpack!", COLOR.RED)
