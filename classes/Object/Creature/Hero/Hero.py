@@ -530,10 +530,14 @@ class Hero(Creature):
             if k == "coins":
                 self.coins += v
             else:
-                if k in self.inventory.keys() and v is None:
-                    self.inventory[k] = v
-            self.backpack.append(v)
-            self.add_power(loot)
+                if k in self.inventory.keys():
+                    if self.inventory[k] is None:
+                        self.inventory[k] = v
+                        self.add_power(v)
+                    else:
+                        self.backpack.append(v)
+                else:
+                    self.backpack.append(v)
 
 
     def add_power(self, item):
@@ -571,3 +575,10 @@ class Hero(Creature):
         self.stamina -= item.stamina
         self.mana -= item.mana
 
+    def print_loot(self, loot):
+        cprint("You have found: ", SUCCESS)
+        for k, v in loot.items():
+            if k == "coins":
+                cprint(f'{v} {k}', SUCCESS)
+            else:
+                cprint(v.name, SUCCESS)

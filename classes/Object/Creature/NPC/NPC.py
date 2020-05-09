@@ -80,7 +80,7 @@ class NPC(Monster):
             battle(hero, self, hero.game.battle_mode)
             return True
         if func == "TRADE":
-            self.__trade(hero)
+            self.trade(hero)
         if func == "END":
             clear_screen()
         if func.startswith("QUEST"):
@@ -88,8 +88,9 @@ class NPC(Monster):
             self.quest_func[int(quest_index)](hero)
         return False
 
-    def __trade(self, hero):
+    def trade(self, hero):
         cprint(f'{self.name} that\'s my best items', COLOR.WHITE, BG_COLOR.GREEN)
+
         # To implement
 
     def __conversation(self, indentation_store, hero):

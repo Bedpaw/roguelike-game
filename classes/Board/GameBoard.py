@@ -119,6 +119,7 @@ class Board:
             if isinstance(obj_in_pos, NPC):
                 if obj_in_pos.on_meet(self.hero):  # return True if hero start fight with NPC else False
                     self.npc.remove(obj_in_pos)
+                    self.print_board()
                     return True
                 self.print_board()
                 return False
@@ -202,7 +203,6 @@ class Board:
 
     def print_board(self):
         self.update_board()
-        clear_screen()
         border_field = f"{BG_COLOR.BLUE}  {STYLES.RESET}"
         # MIDDLE LOGIC
         middle_border = []
@@ -272,8 +272,11 @@ class Board:
         # TOP PRINT AND LOGIC
         map_name = f"{border_field}{' ' * 2} Map: {self.name}{' ' * (max_row_length - len(self.name) - 12)}{border_field}"
         top = f"{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}\n"
+
         # logo = f"{border_field}{' ' * 2}{self.logo}{STYLES.RESET}{' ' * (max_row_length - len(self.logo) - 6)}{border_field}\n"
         top += map_name + new_empty_line
+        clear_screen()
+
         print(top)
         self.counter = 0
         # MIDDLE
@@ -290,7 +293,7 @@ class Board:
                                          f"{self.hero.name}: Did I hear something?",
                                          "Angry trolls are watching you...",
                                          "Such a strange place...",
-                                         f"{self.hero.name}: I hear hudge creatures near here",
+                                         f"{self.hero.name}: I hear huge creatures near here",
                                          f"{self.hero.name}: What was that?!",
                                          "Keep rolin' rolin'",
                                          f"{self.hero.name}: Toss a coin to your {self.hero.name}... nanana"
@@ -489,4 +492,3 @@ class Board:
             return board
 
         return switcher(board_id)
-
