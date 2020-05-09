@@ -347,10 +347,7 @@ class Hero(Creature):
                 self.del_power(current_item_in_inventory)
                 self.inventory[item.item_type] = item
                 self.add_power(item)
-        self.show_stats_with_add_points()
-        else:
-            pass
-
+            self.show_stats_with_add_points()
 
     def put_on_from_backpack(self):
         """choosing by player what to wear"""
