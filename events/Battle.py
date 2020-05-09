@@ -93,7 +93,6 @@ def battle(hero, monster, battle_mode, hero_start=True):
 
                 max_key_options = [item for item in range(1, max_key - 1)]
                 max_key_options += [9]
-                print(max_key_options)
 
                 hero_attack = int_input(spell_name_print, options=max_key_options)
                 if hero_attack == 9:
@@ -193,20 +192,15 @@ def battle(hero, monster, battle_mode, hero_start=True):
 
         if not hero.is_alive():
             hero.print_hp()
-            print("FUNCTION ENDING GAME")
+            input("You die!")
             return True
 
     # Battle end
     cprint(f'You have got {monster.exp} exp.', SUCCESS)
-    # music.load('db/sounds/battle/win_battle.mp3')
-    # music.play()
-    input("\nPress enter to exit fight report...\n")
-    # music.stop()
-    # music.unpause()
     hero.get_exp(monster.exp)
+    hero.add_to_backpack(monster.loot)
+    hero.print_loot(monster.loot)
+    input("\nPress enter to exit fight report...\n")
     hero.add_to_message_box(f"Glorious victory! {monster.name} has been vanquished!")
 
-    # hero.add_items(monster.loot) TODO: to implement
-    # return play_music("db/sounds/main_menu_start.mp3", infinite=True)
-    # Item.add_to_inventory(hero, monster)
     pass

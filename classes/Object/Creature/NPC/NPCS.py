@@ -66,7 +66,7 @@ class Fake_wall(NPC):
         self.quest_func = [quest0]
 
     @staticmethod
-    def quest0(cls, hero):
+    def quest0(hero):
         for quest in hero.quests:
             if quest['name'] == "GOLDEN RING":
                 quest['COMPLETED'] = True
@@ -166,7 +166,7 @@ class King(NPC):
     def change_dialog_path_and_quests(self, quest0, quest1):
         self.dialogs_path = [
             f'{self.conversation_folder_path}king/king_before_quest.txt',
-            f'{self.conversation_folder_path}king/king_get_ring.txt',
+            f'{self.conversation_folder_path}king/king_get_rin0g.txt',
             f'{self.conversation_folder_path}king/king_get_troll_brain.txt',
             f'{self.conversation_folder_path}king/king_before_golden_ring_quest.txt',
             f'{self.conversation_folder_path}king/king_before_troll_king_quest.txt',

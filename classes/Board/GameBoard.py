@@ -196,7 +196,6 @@ class Board:
 
     def print_board(self):
         self.update_board()
-        clear_screen()
         border_field = f"{BG_COLOR.BLUE}  {STYLES.RESET}"
         # MIDDLE LOGIC
         middle_border = []
@@ -263,6 +262,7 @@ class Board:
         top = f"{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}\n"
         logo = f"{border_field}{' ' * 2}{self.logo}{STYLES.RESET}{' ' * (max_row_length - len(self.logo) - 6)}{border_field}\n"
         top += logo + map_name + new_empty_line
+        clear_screen()
         print(top)
 
         # MIDDLE
@@ -277,7 +277,7 @@ class Board:
                                          f"{self.hero.name}: Did I hear something?",
                                          "Angry trolls are watching you...",
                                          "Such a strange place...",
-                                         f"{self.hero.name}: I hear hudge creatures near here",
+                                         f"{self.hero.name}: I hear huge creatures near here",
                                          f"{self.hero.name}: What was that?!",
                                          "Keep rolin' rolin'",
                                          f"{self.hero.name}: Toss a coin to your {self.hero.name}... nanana"

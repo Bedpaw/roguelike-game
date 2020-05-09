@@ -20,8 +20,8 @@ class Monster(Creature):
                  luck=10,
                  move_type=MOVES_TYPES.RANDOM,
                  move_param=None,
-                 exp=50,
                  loot=None,
+                 exp=50,
                  on_fight_message="You have no chance with me! ",
                  on_die_message="Argghr...",
 
@@ -29,10 +29,16 @@ class Monster(Creature):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility, luck)
 
+        if loot is None:
+            loot = {
+                "coins": 50
+            }
         self.move_type = move_type
         self.exp = exp
         if loot is None:
             self.loot = {}
+        else:
+            self.loot = loot
         self.on_fight_message = on_fight_message
         self.on_die_message = on_die_message
         self.move_param = move_param
