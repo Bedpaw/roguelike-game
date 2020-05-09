@@ -336,18 +336,20 @@ class Hero(Creature):
 
     # -------------------------- ITEMS -------------------------------------------
     def add_to_inventory_from_backpack(self, item):
-        if self.inventory[item.item_type] is None:
-            self.inventory[item.item_type] = item
-            self.add_power(item)
-            self.remove_from_backpack(item.name)
-        else:
-            current_item_in_inventory = self.inventory[item.item_type]
-            self.backpack.append(current_item_in_inventory)
-            self.del_power(current_item_in_inventory)
-            self.inventory[item.item_type] = item
-            self.add_power(item)
-
+        if item:
+            if self.inventory[item.item_type] is None:
+                self.inventory[item.item_type] = item
+                self.add_power(item)
+                self.remove_from_backpack(item.name)
+            else:
+                current_item_in_inventory = self.inventory[item.item_type]
+                self.backpack.append(current_item_in_inventory)
+                self.del_power(current_item_in_inventory)
+                self.inventory[item.item_type] = item
+                self.add_power(item)
         self.show_stats_with_add_points()
+        else:
+            pass
 
 
     def put_on_from_backpack(self):
@@ -384,14 +386,14 @@ class Hero(Creature):
                                  "      [5] belt\n"
                                  "      [6] boots\n"
                                  "Your choice:  ", 6)
+
         if choosed_item == 1:
             item = print_item_type("gloves")
-            if item:
-                self.add_to_inventory_from_backpack(item)
+
+            self.add_to_inventory_from_backpack(item)
         if choosed_item == 2:
             item = print_item_type("helmet")
-            if item:
-                self.add_to_inventory_from_backpack(item)
+            self.add_to_inventory_from_backpack(item)
         if choosed_item == 3:
             item = print_item_type("armor")
             self.add_to_inventory_from_backpack(item)
@@ -404,14 +406,6 @@ class Hero(Creature):
         if choosed_item == 6:
             item = print_item_type("boots")
             self.add_to_inventory_from_backpack(item)
-
-
-
-
-        # for item.item_type in self.inventory:
-        #     if str(choosed_item) in item.item_type:
-        #         self.inventory[str(choosed_item)] = item.name
-        #         choosed_item.add_power(self)
 
 
     def how_many_items(self, item_name):
