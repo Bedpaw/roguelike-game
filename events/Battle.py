@@ -45,8 +45,10 @@ def battle(hero, monster, battle_mode, hero_start=True):
         key_pressed = key_service.key_pressed()
         if key_pressed.lower() == 'h':
             hero.use_hpotion()
+            print("Whoooa! Feel better! Thanks!")
         elif key_pressed.lower() == 'm':
             hero.use_mana()
+            print("Yep, definitely needed this power!")
 
     def how_many_potions(kind_of_potion):
         counter = 0
@@ -73,7 +75,7 @@ def battle(hero, monster, battle_mode, hero_start=True):
                         skill = calculate_dmg(v[2], v[3])
                         spell_name_print += f"{' ' * 8}[{k}] {v[0]} [dmg:{int(skill)}] (mana cost:{v[1]})\n"
                     max_key += 1
-        spell_name_print += '\nWhat should I do master?: '
+        spell_name_print += '\nYour choice how to fight: '
         return max_key, spell_name_print
 
 
@@ -92,6 +94,7 @@ def battle(hero, monster, battle_mode, hero_start=True):
                     print("Press [h] to use hp potion or [m] to use mana potion")
                     time.sleep(0.5)
                     use_potions()
+
                     continue
                 else:
                     spell_mana_cost = hero.spells[hero_attack][1]
