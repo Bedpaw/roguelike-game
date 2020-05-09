@@ -168,6 +168,7 @@ class Board:
                     elif self.hero.points_for_level > 0:
                         self.hero.show_stats_with_add_points()
                         self.print_board()
+                    self.print_board()
                 elif key_pressed == "h":
                     self.hero.use_hpotion("healing_potion")
                     self.print_board()

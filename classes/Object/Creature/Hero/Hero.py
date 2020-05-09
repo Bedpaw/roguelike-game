@@ -289,16 +289,31 @@ class Hero(Creature):
 
     def show_stats_breed(self):
         clear_screen()
-        print(f"{' ' * 5}{self.breed} level: {self.level}")
         statistic = self.stats_info()
         label_len = 16
-        for k, v in statistic.items():
-            espace = int((label_len - len(k)) / 2)
-            if isinstance(v, list):
-                print(f"%s{COLOR.CBLACK}{STYLES.BOLD}{v[0]}{espace * ' '} {k} {v[1]}{espace * ' '}{v[2]}" % (' ' * 8))
+        valid = True
+
+        while valid:
+            clear_screen()
+            print(f"{' ' * 5}{self.breed} level: {self.level}")
+            for k, v in statistic.items():
+                espace = int((label_len - len(k)) / 2)
+                if isinstance(v, list):
+                    print(
+                        f"%s{COLOR.CBLACK}{STYLES.BOLD}{v[0]}{espace * ' '} {k} {v[1]}{espace * ' '}{v[2]}" % (' ' * 8))
+                else:
+                    print(f"%s   ({k}:{v})" % (' ' * 8))
+
+            keyx = key_pressed()
+            if keyx == 'j':
+                valid = False
+
             else:
-                print(f"%s   ({k}:{v})" % (' ' * 8))
+                print("Please eneter [j] to exit stats!")
+                time.sleep(1)
+                valid = True
         pass
+
 
     # -------- QUESTS ------------- #
 
