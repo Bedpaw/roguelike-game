@@ -60,11 +60,12 @@ class Hero(Creature):
             "gloves": None,
             "armor": None,
             "belt": None,
+            "trousers": None,
             "boots": None
             }
         self.coins = coins
-        self.backpack = [Item.healing_potion(200), Item.healing_potion(100),
-                         Item.healing_potion(100), Item.mana(100), Item.mana(150), Item.gloves(7), Item.gloves(10)]
+        self.backpack = [Item.healing_potion(70), Item.healing_potion(70),
+                         Item.healing_potion(30), Item.mana(10), Item.mana(10), Item.gloves(7), Item.gloves(10)]
         self.spells ={}
         self.special_buff_iter = 0
         self.special_buff_flag = False
@@ -347,9 +348,9 @@ class Hero(Creature):
                 self.del_power(current_item_in_inventory)
                 self.inventory[item.item_type] = item
                 self.add_power(item)
-        self.show_stats_with_add_points()
-        else:
-            pass
+
+            self.show_stats_with_add_points()
+
 
 
     def put_on_from_backpack(self):
@@ -385,6 +386,7 @@ class Hero(Creature):
                                  "      [4] shield\n"
                                  "      [5] belt\n"
                                  "      [6] boots\n"
+                                 "      [7] trousers\n"
                                  "Your choice:  ", 6)
 
         if choosed_item == 1:
@@ -405,6 +407,9 @@ class Hero(Creature):
             self.add_to_inventory_from_backpack(item)
         if choosed_item == 6:
             item = print_item_type("boots")
+            self.add_to_inventory_from_backpack(item)
+        if choosed_item == 7:
+            item = print_item_type("trousers")
             self.add_to_inventory_from_backpack(item)
 
 
@@ -498,6 +503,7 @@ class Hero(Creature):
                 if self.hp > self.max_hp:
                     self.hp = self.max_hp
                 self.remove_from_backpack_type(item_type)
+                print("Whoooa! Feel better! Thanks!")
             else:
                 cprint("You don't have any healing potion in your backpack!", COLOR.RED)
                 break
@@ -513,6 +519,7 @@ class Hero(Creature):
                 if self.mana > self.max_mana:
                     self.mana = self.max_mana
                 self.remove_from_backpack_type(item_type)
+                print("Yep, definitely needed this power!")
             else:
                 cprint("You don't have any mana potion in your backpack!", COLOR.RED)
                 break
