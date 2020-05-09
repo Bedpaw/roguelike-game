@@ -11,7 +11,7 @@ class Gate():
 
 
 class Field():
-    symbol_on_map = '0'
+    symbol_on_map = '.'
     color_on_board = ''
     field_color = COLORS.BG_COLOR.GREEN
     field_move_possible = True
@@ -56,7 +56,7 @@ class Fire():
     on_move_message = "You have step on lava -20 hp!"
 
 class Lava_pavement():
-    symbol_on_map = "#"
+    symbol_on_map = "_"
     field_color = COLORS.BG_COLOR.LIGHTGREY
     color_on_board = COLORS.COLOR.RED
     field_move_possible = True
@@ -77,14 +77,14 @@ class Tree_Right():
 map_file = 'classes/Board/Map_drawing/level1_map.txt' # :TODO REMOVE?
 
 symbols_to_txt_draw = {
-    '0': Field(),
-    '-': Wall_Vertical(),
+    '.': Field(),
+    '|': Wall_Vertical(),
     '~': River(),
     '=': Bridge(),
     ' ': Gate(),
-    '|': Wall_Horizontal(),
+    '-': Wall_Horizontal(),
     'v': Fire(),
-    "#": Lava_pavement(),
+    "_": Lava_pavement(),
     "]": Tree_Left(),
     "[": Tree_Right(),
 }

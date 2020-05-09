@@ -34,7 +34,12 @@ def create_new_hero(player_name):
         elif ord(key) == 119:
             current_key -= 1
         elif ord(key) == 13:
-            return select_type[str(current_key)][3](player_name)
+            if current_key == 4:
+                print("Please press [w or s] and then press enter")
+                time.sleep(0.5)
+                continue
+            else:
+                return select_type[str(current_key)][3](player_name)
         else:
             print("not [w] or [s] pressed")
             time.sleep(0.5)
