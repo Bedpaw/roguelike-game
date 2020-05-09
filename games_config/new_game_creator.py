@@ -7,13 +7,11 @@ from utils.utils import clear_screen
 
 
 def create_new_game(player_name):
-    # GAME HISTORY?
     clear_screen()
-    print('Welcome in our game!')
     create_new_folder(f'db/saves/{player_name}')
 
-    print('Please choose difficulty level: ')
-    choose_difficult = int_input('[1] EASY\n'
+    choose_difficult = int_input('Please choose difficulty level:\n'
+                                 '[1] EASY\n'
                                  '[2] NORMAL\n'
                                  '[3] HARD\n'
                                  '[4] IMPOSSIBLE\n\n'

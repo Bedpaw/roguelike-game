@@ -25,8 +25,8 @@ class NPC(Monster):
                  move_type=MOVES_TYPES.STAY,
                  move_param=None,
                  conversation_file_name='example1.txt',
-                 exp=300,
                  loot=None,
+                 exp=300,
                  dialog_index=0,
                  on_die_message="Stop, you won, you can pass...",
                  on_fight_message="I warned you...",
@@ -35,8 +35,8 @@ class NPC(Monster):
                  quest_func=None
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
-                         strength, hp, max_hp, agility, luck, move_type, move_param, exp,
-                         loot, on_fight_message, on_die_message)
+                         strength, hp, max_hp, agility, luck, move_type, move_param,
+                         loot, exp, on_fight_message, on_die_message)
 
         if quest_func is None:
             quest_func = []

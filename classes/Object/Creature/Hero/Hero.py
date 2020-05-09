@@ -383,27 +383,9 @@ class Hero(Creature):
                                  "      [5] belt\n"
                                  "      [6] boots\n"
                                  "Your choice:  ", 6)
-
-        if choosed_item == 1:
-            item = print_item_type("gloves")
-
-            self.add_to_inventory_from_backpack(item)
-        if choosed_item == 2:
-            item = print_item_type("helmet")
-            self.add_to_inventory_from_backpack(item)
-        if choosed_item == 3:
-            item = print_item_type("armor")
-            self.add_to_inventory_from_backpack(item)
-        if choosed_item == 4:
-            item = print_item_type("shield")
-            self.add_to_inventory_from_backpack(item)
-        if choosed_item == 5:
-            item = print_item_type("belt")
-            self.add_to_inventory_from_backpack(item)
-        if choosed_item == 6:
-            item = print_item_type("boots")
-            self.add_to_inventory_from_backpack(item)
-
+        item_type = Item.item_types()[choosed_item]
+        item = print_item_type(item_type)
+        self.add_to_inventory_from_backpack(item)
 
     def how_many_items(self, item_name):
 

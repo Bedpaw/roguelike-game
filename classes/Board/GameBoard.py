@@ -127,7 +127,7 @@ class Board:
                 if obj_in_pos.open_treasure(self.hero):  # return True if hero took treasure
                     self.treasures.remove(obj_in_pos)
                     return True
-                # self.print_board()
+                self.print_board()
                 return False
             elif isinstance(obj_in_pos, Monster):
                 battle(caller, obj_in_pos, self.game.battle_mode)
@@ -351,10 +351,10 @@ class Board:
                 self.monsters.append(obj)
 
     @classmethod
-    def board_switcher(cls, board_id, game, board_map, width, height, hero, loading):
+    def board_switcher(cls, board_index, game, board_map, width, height, hero):
         board = cls(game, board_map, width, height, hero)
 
-        def switcher(board_id):
+        def switcher(board_index):
             boards = {
                 "0": labyrinth,
                 "1": plain,
@@ -365,11 +365,12 @@ class Board:
                 "6": highway_to_hell,
                 "7": demonic_maze
             }
-            if loading:
-                board.name = boards[str(board_id)].__name__ # :TODO useless probably
-                return board
-            else:
-                return boards[str(board_id)]()
+            # if loading:
+            #     pass
+            #     # board.name = boards[str(board_index)].__name__ # :TODO useless probably
+            #     # return board
+            # else:
+            return boards[str(board_index)]()
 
         def labyrinth():
             board.name = "Labyrinth"
@@ -491,4 +492,4 @@ class Board:
                                ]
             return board
 
-        return switcher(board_id)
+        return switcher(board_index)

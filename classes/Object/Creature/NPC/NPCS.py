@@ -8,7 +8,6 @@ class Troll_king(NPC):
     def dialog_path(self, hero):
         if hero.quest_taken_by_name("TROLL KING"):
             self.dialog_index = 1
-            hero.backpack.append(Item.quest_item('Troll brain'))  # MOCK
         else:
             self.dialog_index = 0
 
@@ -89,9 +88,9 @@ class Fake_wall(NPC):
 
 def trade(hero):
     if hero.is_in_backpack("King's store patent"):
-        hero.add_to_message_box("Sorry, I don't have items for sell in this game version")
+        hero.add_to_message_box("King: Sorry, I don't have items for sell in this game version")
     else:
-        hero.add_to_message_box("You need store patent if you want to trade with me")
+        hero.add_to_message_box("King: You need store patent if you want to trade with me")
     print(hero.game.current_board().last_move_message)
 
 
@@ -166,7 +165,7 @@ class King(NPC):
     def change_dialog_path_and_quests(self, quest0, quest1):
         self.dialogs_path = [
             f'{self.conversation_folder_path}king/king_before_quest.txt',
-            f'{self.conversation_folder_path}king/king_get_rin0g.txt',
+            f'{self.conversation_folder_path}king/king_get_ring.txt',
             f'{self.conversation_folder_path}king/king_get_troll_brain.txt',
             f'{self.conversation_folder_path}king/king_before_golden_ring_quest.txt',
             f'{self.conversation_folder_path}king/king_before_troll_king_quest.txt',

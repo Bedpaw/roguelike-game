@@ -97,6 +97,16 @@ class Item:
     def quest_item(cls, name="Flamethrower for really hard monsters", strength=30):
         return cls(strength=strength, item_type="quest", name=name)
 
+    @staticmethod
+    def item_types():
+        return {
+            1: "gloves",
+            2: "helmet",
+            3: "armor",
+            4: "shield",
+            5: "belt",
+            6: "boots"
+        }
 
 treasure = [
     Item.gloves,
