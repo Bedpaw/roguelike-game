@@ -506,6 +506,7 @@ class Hero(Creature):
                 self.remove_from_backpack_type(item_type)
             else:
                 cprint("You don't have any healing potion in your backpack!", COLOR.RED)
+                break
         else:
             self.add_to_message_box("Your HP is FULL!")
 
@@ -520,6 +521,7 @@ class Hero(Creature):
                 self.remove_from_backpack_type(item_type)
             else:
                 cprint("You don't have any mana potion in your backpack!", COLOR.RED)
+                break
         else:
             self.add_to_message_box("Your mana is FULL!")
 
