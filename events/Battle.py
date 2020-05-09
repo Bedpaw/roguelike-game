@@ -191,4 +191,6 @@ def battle(hero, monster, battle_mode, hero_start=True):
     input("\nPress enter to exit fight report...\n")
     hero.add_to_message_box(f"Glorious victory! {monster.name} has been vanquished!")
 
+    if monster.name == "Belzedup":
+        hero.game.endgame = True
     pass

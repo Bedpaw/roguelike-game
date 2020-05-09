@@ -18,9 +18,8 @@ class Game:
         self.boards = []
         self.turn_counter = 0
         self.difficulty_level = difficulty_level
-        self.endgame = False    # to toogle, when hero/final boss dead
+        self.endgame = False
         self.board_changed = False
-        self.true_player_position = []  # for loading data
         self.battle_mode = BATTLE_MODES.MANUAL_FIGHT
 
     def next_board(self):
