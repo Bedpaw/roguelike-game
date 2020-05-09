@@ -485,6 +485,7 @@ class Hero(Creature):
         for i, item in enumerate(self.backpack):
             if item.item_type == item_type:
                 del self.backpack[i]
+                break
 
     def is_in_backpack_type(self, item_type):
         """checking if item is in hero backpack"""
