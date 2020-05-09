@@ -163,7 +163,7 @@ class Monster(Creature):
                    max_hp=dif_dep(1000, dif_lvl),
                    luck=10,
                    agility=20,
-                   move_type=MOVES_TYPES.RANDOM_STRAIGHT,
+                   move_type=MOVES_TYPES.RANDOM_DIAGONAL,
                    exp=10000,
                    loot={
                        'key': 1,

@@ -234,10 +234,8 @@ class Board:
             for j, field in enumerate(list_of_fields):
                 if field.symbol_on_map not in symbols_to_txt_draw.keys():
                     if field.symbol_on_map == "6":
-
                         middle_fileds += BG_COLOR.RED + STYLES.BOLD + COLOR.WHITE + self.boss[self.counter] + STYLES.RESET
                         self.counter += 1
-
                     else:
                         middle_fileds += self.board_map[i - 1][j].field_color + field.color_on_board + field.symbol_on_map + STYLES.RESET
                 else:
