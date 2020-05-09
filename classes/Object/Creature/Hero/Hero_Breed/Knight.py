@@ -15,7 +15,7 @@ class Knight(Hero):
                  dodge_chance=3,
                  defense=8,
                  stamina=25,
-                 energy=50,
+                 energy=10,
                  magic_dmg=2,
                  mana=50,
                  max_mana=50,
@@ -70,7 +70,7 @@ class Knight(Hero):
         self.dodge_chance += 1
         self.defense += 3
         self.hp += 5
-        self.max_hp +=5
+        self.max_hp += 5
         self.magic_dmg += 0.1
         self.mana += 1
         self.max_mana += 1

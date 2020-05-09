@@ -92,6 +92,7 @@ def battle(hero, monster, battle_mode, hero_start=True):
                     print("Press [h] to use hp potion or [m] to use mana potion")
                     time.sleep(0.5)
                     use_potions()
+
                     continue
                 else:
                     spell_mana_cost = hero.spells[hero_attack][1]
