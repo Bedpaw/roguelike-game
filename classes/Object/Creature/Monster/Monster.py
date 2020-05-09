@@ -64,7 +64,7 @@ class Monster(Creature):
                    strength=dif_dep(40, dif_lvl),
                    max_hp=dif_dep(200, dif_lvl),
                    hp=dif_dep(200, dif_lvl),
-                   move_type=MOVES_TYPES.RANDOM_DIAGONAL,
+                   move_type=MOVES_TYPES.RANDOM,
                    exp=100,
                    loot={
                        "gloves": Item.shield(12),
@@ -106,7 +106,6 @@ class Monster(Creature):
                    move_type=MOVES_TYPES.RANDOM_STRAIGHT,
                    exp=1000,
                    loot={
-                       'key': 1,
                        "gloves": Item.gloves(6)
                    },
                    on_fight_message="YOU LITTLE RAT!",

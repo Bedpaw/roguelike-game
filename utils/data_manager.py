@@ -1,7 +1,6 @@
 from utils.validation import int_input
 import os
 import pickle
-import os.path
 from utils.utils import clear_screen
 
 

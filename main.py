@@ -7,9 +7,9 @@ from macros.COLORS import *
 def main():
     clear_screen()
     cprint("WELCOME IN ANGRY TROLLS!\n", COLOR.BLUE)
-    # player_name = log_in()
-    # run_main_menu(player_name)
-    run_main_menu("PATI")
+    player_name = log_in()
+    run_main_menu(player_name)
+    # run_main_menu("PATI")
 
 
 if __name__ == '__main__':
