@@ -6,6 +6,7 @@ from utils import key_service
 from utils.utils import clear_screen
 
 
+
 def battle(hero, monster, battle_mode, hero_start=True):
     """
     :param hero:[object]
@@ -96,11 +97,11 @@ def battle(hero, monster, battle_mode, hero_start=True):
                     continue
                 else:
                     spell_mana_cost = hero.spells[hero_attack][1]
-                    wait(1)
+                    wait(0.5)
 
                     if spell_mana_cost >= hero.mana:
                         print(f"You dont have enough mana ({hero.mana}) to use this spell.")
-                        time.sleep(1)
+                        time.sleep(0.5)
                         valid = True
                     else:
                         hero.mana -= spell_mana_cost
@@ -110,7 +111,7 @@ def battle(hero, monster, battle_mode, hero_start=True):
 
                     if hero.special_buff_iter > 0 and hero.special_buff_iter <= 6:
                         print('You have already this buff on')
-                        time.sleep(2)
+                        time.sleep(1)
                         continue
                     else:
                         hero.special_buff_flag = True

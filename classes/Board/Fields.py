@@ -49,8 +49,7 @@ class Wall_Vertical():
 
 
 class Fire():
-    # symbol_on_map = "\u03A8"
-    symbol_on_map = "^"
+    symbol_on_map = "v"
     color_on_board = COLORS.COLOR.RED
     field_color = COLORS.BG_COLOR.ORANGE
     field_move_possible = True
@@ -74,12 +73,6 @@ class Tree_Right():
     color_on_board = COLORS.COLOR.DARKGREEN
     field_move_possible = True
 
-# class Boss:
-#     symbol_on_map = "6"
-#     field_color = COLORS.BG_COLOR.RED
-#     color_on_board = COLORS.COLOR.ORANGE
-#     field_move_possible = True
-
 
 map_file = 'classes/Board/Map_drawing/level1_map.txt' # :TODO REMOVE?
 
@@ -94,7 +87,6 @@ symbols_to_txt_draw = {
     "#": Lava_pavement(),
     "]": Tree_Left(),
     "[": Tree_Right(),
-    # "6": Boss()
 }
 
 def get_map(map_file_name=map_file):

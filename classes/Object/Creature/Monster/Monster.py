@@ -29,7 +29,7 @@ class Monster(Creature):
                          strength, hp, max_hp, agility, luck)
 
         if list_of_positions is None:
-            list_of_positions = []
+            self.list_of_positions = []
         self.field_color = field_color
         self.move_type = move_type
         self.exp = exp
@@ -148,10 +148,12 @@ class Monster(Creature):
                    )
 
     @classmethod
-    def finall_boss(cls, list_of_positions, dif_lvl=DIFFICULTY_LEVEL.HARD):
+    def finall_boss(cls, pos_x, pos_y, list_of_positions, dif_lvl=DIFFICULTY_LEVEL.HARD):
         dif_dep = cls.difficulty_depends
         return cls(name="Belzedup",
                    field_color=COLOR.RED,
+                   position_x=pos_x,
+                   position_y=pos_y,
                    list_of_positions=list_of_positions,
                    symbol_on_map='6',
                    strength=dif_dep(100, dif_lvl),

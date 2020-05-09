@@ -41,7 +41,8 @@ class Board:
         self.logo = "ANGRY TROLLS!"         # :TODO W -> delete?
         self.counter = 0
         self.is_boss_on_map = False
-
+        self.startX = self.width - 5
+        self.startY = self.height - 5
 
     def special_ground_effect(self):
         pass
@@ -67,8 +68,15 @@ class Board:
                 moves_counter += 1
                 if moves_counter == 50:
                     valid = True
-                if self.check_move_possibility(monster, x, y):
+                if monster.name == 'Belzedup':
+                    if self.check_move_possibility(monster, x, y) :
 
+                        self.startX = x
+                        self.startY = y
+                        self.boss_positons()
+                        self.update_board()
+
+                elif self.check_move_possibility(monster, x, y):
                     monster.position_x = x
                     monster.position_y = y
                     self.update_board()
@@ -319,14 +327,14 @@ class Board:
         self.last_move_message = []
 
         print(f"{new_empty_line[1:]}\n{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}")
+        print(self.boss_positons())
+        # time.sleep(2)
 
 
     def boss_positons(self):
-        startX = self.width - 5
-        startY = self.height - 4
         positions = []
-        for i in range(startX, self.width):
-            for j in range(startY, self.height+1):
+        for i in range(self.startX, self.startX+5):
+            for j in range(self.startY, self.startY+4):
                 positions.append([i, j])
         return positions
 
@@ -369,13 +377,15 @@ class Board:
                 return boards[str(board_id)]()
 
         def labyrinth():
+            list_of_positions = board.boss_positons()
             board.name = "Labyrinth"
             board.last_move_message.append(f"Hm... very nice place")
-
             board.monsters = [
                 Monster.troll(1, 3, game.difficulty_level),
                 Monster.rat(9, 7),
                 Monster.troll(7, 7, game.difficulty_level),
+                Monster.finall_boss(list_of_positions[0][0], list_of_positions[0][1],
+                                    list_of_positions, game.difficulty_level)
             ]
             board.treasures = [
                 Treasure(position_x=10, position_y=0)
@@ -476,11 +486,13 @@ class Board:
             board.name = "Demonic maze"
             board.last_move_message.append(f"I feel odour of sulfur and death")
             board.is_boss_on_map = True
+            list_of_positions = board.boss_positons()
             board.monsters = [Monster.troll_warrior(1, 18, game.difficulty_level),
                               Monster.rat(3, 10, game.difficulty_level),
                               Monster.troll_warrior(7, 15, game.difficulty_level),
                               Monster.troll_warrior(2, 2, game.difficulty_level),
-                              Monster.finall_boss(board.boss_positons(), game.difficulty_level)
+                              Monster.finall_boss(list_of_positions[0][0], list_of_positions[0][1],
+                                                  list_of_positions, game.difficulty_level)
                               ]
             board.treasures = [Treasure(position_x=2, position_y=18, is_locked=True),
                                Treasure(position_x=8, position_y=20),
