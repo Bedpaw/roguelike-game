@@ -1,9 +1,11 @@
-from macros import DIFFICULTY_LEVEL
-from utils.data_manager import create_new_folder, int_input
+from classes.Game.Game import Game
 from games_config.new_hero_creator import create_new_hero
 from games_config.board_factory import create_new_board
-from classes.Game.Game import Game
+
 from utils.utils import clear_screen
+from utils.validation import int_input
+from utils.data_manager import create_new_folder
+from macros import DIFFICULTY_LEVEL
 
 
 def create_new_game(player_name):

@@ -134,7 +134,7 @@ class King(NPC):
                            "Andrei",
             'COMPLETED': False,
             'reward': {
-                'quest': "King's store patent",
+                'quest': Item.quest_item("King's store patent"),
                 'gold': 1000
             }
         })
@@ -145,10 +145,10 @@ class King(NPC):
             hero.coins += 1000
             hero.remove_from_backpack('Troll brain')
             hero.backpack.append(Item.quest_item("King's brave patent"))
+            hero.backpack.append(Item.armor(25))
             for quest in hero.quests:
                 if quest['name'] == "TROLL KING":
                     quest["COMPLETED"] = True
-            cprint(hero.backpack, wait_after=1)
             return
         hero.quests.append({
             'name': "TROLL KING",

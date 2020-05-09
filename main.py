@@ -9,7 +9,7 @@ def main():
     cprint("WELCOME IN ANGRY TROLLS!\n", COLOR.BLUE)
     player_name = log_in()
     run_main_menu(player_name)
-    # run_main_menu("PATI")
+    # run_main_menu("PATI") MOCK
 
 
 if __name__ == '__main__':

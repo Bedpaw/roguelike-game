@@ -1,7 +1,5 @@
 from classes.Board.GameBoard import Board
 from classes.Board.Fields import get_map
-from classes.Object.Creature.NPC.NPC import NPC
-import time
 
 
 def create_new_board(game, board_index):

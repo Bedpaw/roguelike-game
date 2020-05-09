@@ -1,5 +1,3 @@
-
-from classes.Object.Object import MyObject
 from macros import COLORS
 
 
@@ -55,17 +53,20 @@ class Fire():
     field_move_possible = True
     on_move_message = "You have step on lava -20 hp!"
 
+
 class Lava_pavement():
     symbol_on_map = "#"
     field_color = COLORS.BG_COLOR.LIGHTGREY
     color_on_board = COLORS.COLOR.RED
     field_move_possible = True
 
+
 class Tree_Left():
     symbol_on_map = "]"
     field_color = COLORS.BG_COLOR.GREEN
     color_on_board = COLORS.COLOR.DARKGREEN
     field_move_possible = True
+
 
 class Tree_Right():
     symbol_on_map = "["
@@ -74,7 +75,7 @@ class Tree_Right():
     field_move_possible = True
 
 
-map_file = 'classes/Board/Map_drawing/level1_map.txt' # :TODO REMOVE?
+map_file = 'classes/Board/Map_drawing/level1_map.txt'  # :TODO REMOVE?
 
 symbols_to_txt_draw = {
     '0': Field(),
@@ -88,6 +89,7 @@ symbols_to_txt_draw = {
     "]": Tree_Left(),
     "[": Tree_Right(),
 }
+
 
 def get_map(map_file_name=map_file):
     with open(map_file_name, 'r') as f:

@@ -1,5 +1,5 @@
 from classes.Object.Creature.Creature import Creature
-from macros import OBJECT_TYPES, DIFFICULTY_LEVEL
+from macros import DIFFICULTY_LEVEL
 from macros.COLORS import *
 from macros import MOVES_TYPES
 from classes.Object.Item.Item import Item
@@ -8,7 +8,6 @@ from classes.Object.Item.Item import Item
 class Monster(Creature):
     color_on_board = COLOR.RED
     color_in_battle = COLOR.RED
-    # type_of = OBJECT_TYPES.MONSTER  # probably to delete
 
     def __init__(self, name="Set_me_name", symbol_on_map="M", position_x=-1, position_y=-1,
                  strength=10,

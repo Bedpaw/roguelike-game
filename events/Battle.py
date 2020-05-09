@@ -6,9 +6,9 @@ from utils import key_service
 from utils.utils import clear_screen
 
 
-
 def battle(hero, monster, battle_mode, hero_start=True):
     """
+    :param hero_start:[bool] True if hero start fight, False if monster, npc
     :param hero:[object]
     :param monster:[object]
     :param battle_mode:[string]:[IMMEDIATE_FIGHT, AUTOMATE_FIGHT, MANUAL_FIGHT]
@@ -23,7 +23,6 @@ def battle(hero, monster, battle_mode, hero_start=True):
         if battle_mode == BATTLE_MODES.MANUAL_FIGHT:
             time.sleep(wait_time)
 
-
     def battle_image():
         with open("events/battle.txt", "r") as f:
             for row in f:
@@ -37,7 +36,7 @@ def battle(hero, monster, battle_mode, hero_start=True):
         elif v2 == 'magic_and_physical':
             return hero.magic_dmg * hero.phys_dmg * v3
         elif v2 == 'energy_and_stamina':
-            return (hero.energy * hero.stamina)/2
+            return (hero.energy * hero.stamina) / 2
 
     def block_skill_counter():
         pass
@@ -50,13 +49,13 @@ def battle(hero, monster, battle_mode, hero_start=True):
         elif key_pressed.lower() == 'm':
             hero.use_mana()
 
-
     def how_many_potions(kind_of_potion):
         counter = 0
         for potion in hero.backpack:
             if potion.item_type == kind_of_potion:
                 counter += 1
         return counter
+
     def print_skill_selection():
         spell_name_print = ''
         max_key = 2
@@ -79,14 +78,12 @@ def battle(hero, monster, battle_mode, hero_start=True):
         spell_name_print += '\nYour choice how to fight: '
         return max_key, spell_name_print
 
-
     def hero_move():
 
         if battle_mode == BATTLE_MODES.MANUAL_FIGHT:
             valid = True
             while valid:
                 max_key, spell_name_print = print_skill_selection()
-
 
                 max_key_options = [item for item in range(1, max_key - 1)]
 
@@ -113,7 +110,7 @@ def battle(hero, monster, battle_mode, hero_start=True):
 
                 if hero.spells[hero_attack][2] == 'energy_and_stamina':
 
-                    if hero.special_buff_iter > 0 and hero.special_buff_iter <= 6:
+                    if 0 < hero.special_buff_iter <= 6:
                         print('You have already this buff on')
                         time.sleep(1)
                         continue
@@ -139,7 +136,6 @@ def battle(hero, monster, battle_mode, hero_start=True):
         time.sleep(1)
         clear_screen()
         cprint(f'{hero.name} has been attacked by {monster.name}!', ERROR, start_enter=1, wait_after=1)
-
 
     cprint(f"Battle start! {hero.name} vs {monster.name}", COLOR.PURPLE, start_enter=1, end_enter=1)
     hero.start_fight_message()
@@ -186,8 +182,10 @@ def battle(hero, monster, battle_mode, hero_start=True):
     # Battle end
     cprint(f'You have got {monster.exp} exp.', SUCCESS)
     hero.get_exp(monster.exp)
+
     hero.add_to_backpack(monster.loot)
     hero.print_loot(monster.loot)
+
     input("\nPress enter to exit fight report...\n")
     hero.add_to_message_box(f"Glorious victory! {monster.name} has been vanquished!")
 

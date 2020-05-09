@@ -1,7 +1,6 @@
 from classes.Object.Creature.Hero.Hero import Hero
 from macros.COLORS import *
-from macros import MOVES_TYPES, OBJECT_TYPES
-
+from macros import MOVES_TYPES
 
 
 class Knight(Hero):
@@ -30,23 +29,23 @@ class Knight(Hero):
                  ):
         super().__init__(name, symbol_on_map, position_x, position_y,
                          strength, hp, max_hp, agility,
-                         color_in_battle, move_type, level, exp, exp_to_next_level,phys_dmg,
-                         luck,dodge_chance,defense,stamina,energy,magic_dmg,mana,max_mana,spells)
+                         color_in_battle, move_type, level, exp, exp_to_next_level, phys_dmg,
+                         luck, dodge_chance, defense, stamina, energy, magic_dmg, mana, max_mana, spells)
 
-        self.phys_dmg += (self.strength*1)
-        self.luck += (self.agility*0.2)
-        self.dodge_chance += (self.agility*0.2)
-        self.defense += (self.agility*0.5)
-        self.hp += (self.stamina*3)
-        self.max_hp += (self.stamina*3)
-        self.magic_dmg += (self.energy*0.1)
-        self.mana += (self.energy*0.2)
-        self.max_mana += (self.energy*0.2)
+        self.phys_dmg += (self.strength * 1)
+        self.luck += (self.agility * 0.2)
+        self.dodge_chance += (self.agility * 0.2)
+        self.defense += (self.agility * 0.5)
+        self.hp += (self.stamina * 3)
+        self.max_hp += (self.stamina * 3)
+        self.magic_dmg += (self.energy * 0.1)
+        self.mana += (self.energy * 0.2)
+        self.max_mana += (self.energy * 0.2)
         self.coins = coins
         self.breed = breed
         self.color_on_board = STYLES.BOLD + COLOR.RED
 
-        # extra_atributes per point
+        # extra_attributes per point
         self.stats_ratio = {
             0: 2,
             1: [1, 0.1, 3],
@@ -57,13 +56,14 @@ class Knight(Hero):
             1: ['Physical damage', 0, 'physical', 1.5, 1],
             2: ['Cyclon Cutting', 7, 'physical', 2, 10],
             3: ['Twisting Slash', 12, 'physical', 2.5, 15],
-            4: ['Regular Blow',  15, 'physical', 3, 20],
-            5: ['Death Stab',  20, 'physical', 8, 40],
+            4: ['Regular Blow', 15, 'physical', 3, 20],
+            5: ['Death Stab', 20, 'physical', 8, 40],
             6: ['Barrier (+100 defense)', 50, 'energy_and_stamina', 2, 50],
             9: ['HP potion: ', self.hp, 'MANA potion: ', self.mana]
         }
 
         # level up attributes
+
     def level_up_attributes(self):
         self.phys_dmg += 3
         self.luck += 1
@@ -74,8 +74,3 @@ class Knight(Hero):
         self.magic_dmg += 0.1
         self.mana += 1
         self.max_mana += 1
-
-
-
-
-
