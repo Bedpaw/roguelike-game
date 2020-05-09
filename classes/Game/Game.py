@@ -61,14 +61,11 @@ class Game:
     def show_end_game_scenario(self):
         clear_screen()
         if self.hero.is_alive():
-
             print_image("classes/Game/crown.txt")
-            time.sleep(2)
+            input('Press any key to continue...')
         else:
 
             print_image("classes/Game/skull.txt")
-            time.sleep(2)
-
+            input('Press any key to continue...')
         # send stats to highscores :TODO
         del self
-

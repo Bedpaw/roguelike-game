@@ -8,7 +8,6 @@ class Troll_king(NPC):
     def dialog_path(self, hero):
         if hero.quest_taken_by_name("TROLL KING"):
             self.dialog_index = 1
-            hero.backpack.append(Item.quest_item('Troll brain'))  # MOCK
         else:
             self.dialog_index = 0
 
@@ -65,13 +64,13 @@ class Fake_wall(NPC):
         ]
         self.quest_func = [quest0]
 
-    @classmethod
-    def quest0(self, hero):
+    @staticmethod
+    def quest0(hero):
         for quest in hero.quests:
             if quest['name'] == "GOLDEN RING":
                 quest['COMPLETED'] = True
                 hero.backpack.append(Item.quest_item("Golden ring"))
-                print(f'That was disgusting, but you have found golden ring')
+                hero.add_to_message_box(f'That was disgusting, but you have found golden ring')
 
     @classmethod
     def fake_wall(cls, pos_x, pos_y, name):
@@ -85,6 +84,14 @@ class Fake_wall(NPC):
         fake_wall.change_dialog_path_and_quests(cls.quest0)
 
         return fake_wall
+
+
+def trade(hero):
+    if hero.is_in_backpack("King's store patent"):
+        hero.add_to_message_box("King: Sorry, I don't have items for sell in this game version")
+    else:
+        hero.add_to_message_box("King: You need store patent if you want to trade with me")
+    print(hero.game.current_board().last_move_message)
 
 
 class King(NPC):
@@ -135,7 +142,6 @@ class King(NPC):
     @staticmethod
     def quest1(hero):
         if hero.quest_taken_by_name("TROLL KING") and not hero.quest_done_by_name("TROLL KING"):
-            print('im here')
             hero.coins += 1000
             hero.remove_from_backpack('Troll brain')
             hero.backpack.append(Item.quest_item("King's brave patent"))
@@ -151,16 +157,10 @@ class King(NPC):
             'COMPLETED': False,
             'reward': {
                 'quest': "King's brave patent",
-                'sword': 'Trolls slayer',  # TODO add item
+                'sword': Item.sword(50),  # TODO add item
                 'gold': 1000
             }
         })
-
-    def __trade(static, hero):
-        if hero.is_in_backpack("King's store patent"):
-            print("trade")
-        else:
-            print("You need store patent if you want to trade with me")
 
     def change_dialog_path_and_quests(self, quest0, quest1):
         self.dialogs_path = [
@@ -174,6 +174,7 @@ class King(NPC):
             f'{self.conversation_folder_path}king/king_after_quests.txt',
         ]
         self.quest_func = [quest0, quest1]
+        self.trade = trade
 
     @classmethod
     def king(cls, pos_x, pos_y):

@@ -18,8 +18,8 @@ class Monster(Creature):
                  luck=10,
                  move_type=MOVES_TYPES.RANDOM,
                  move_param=None,
-                 exp=50,
                  loot=None,
+                 exp=50,
                  on_fight_message="You have no chance with me! ",
                  on_die_message="Argghr...",
                  list_of_positions=None,
@@ -35,6 +35,8 @@ class Monster(Creature):
         self.exp = exp
         if loot is None:
             self.loot = {}
+        else:
+            self.loot = loot
         self.on_fight_message = on_fight_message
         self.on_die_message = on_die_message
         self.move_param = move_param

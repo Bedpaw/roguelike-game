@@ -3,7 +3,7 @@ from game_engine import game_engine
 from mock.new_game_creator_mock import create_new_game_mock
 from games_config.new_game_creator import create_new_game
 from utils.validation import int_input
-from utils.data_manager import load_game
+from utils.data_manager import load_game, load_exist
 from utils.utils import clear_screen
 
 
@@ -25,7 +25,6 @@ def run_main_menu(player_name):
         clear_screen()
         cprint("CHOOSE ONE OF BELOW OPTIONS\n", COLOR.YELLOW)
         user_choice = int_input("[1] PLAY NEW GAME\n"
-
                                 "[2] RESUME GAME\n"  # TODO only for players who already played once
                                 "[3] LOAD GAME\n"  # TODO only for players who already played once
                                 "[4] ABOUT US\n"
@@ -39,11 +38,13 @@ def run_main_menu(player_name):
             # game = create_new_game_mock()  # !!! <-- Comment for full version
             game_engine(game)
         elif user_choice == 2:
-            game = load_game(player_name, resume_game=True)
-            game_engine(game)
+            if load_exist(player_name):
+                game = load_game(player_name, resume_game=True)
+                game_engine(game)
         elif user_choice == 3:
-            game = load_game(player_name)
-            game_engine(game)
+            if load_exist(player_name):
+                game = load_game(player_name)
+                game_engine(game)
         elif user_choice == 4:
             about_us()
         elif user_choice == 5:

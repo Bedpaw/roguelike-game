@@ -133,6 +133,7 @@ class Board:
             if isinstance(obj_in_pos, NPC):
                 if obj_in_pos.on_meet(self.hero):  # return True if hero start fight with NPC else False
                     self.npc.remove(obj_in_pos)
+                    self.print_board()
                     return True
                 self.print_board()
                 return False
@@ -140,7 +141,7 @@ class Board:
                 if obj_in_pos.open_treasure(self.hero):  # return True if hero took treasure
                     self.treasures.remove(obj_in_pos)
                     return True
-                # self.print_board()
+                self.print_board()
                 return False
             elif isinstance(obj_in_pos, Monster):
                 battle(caller, obj_in_pos, self.game.battle_mode)
@@ -216,7 +217,6 @@ class Board:
 
     def print_board(self):
         self.update_board()
-        clear_screen()
         border_field = f"{BG_COLOR.BLUE}  {STYLES.RESET}"
         # MIDDLE LOGIC
         middle_border = []
@@ -286,8 +286,11 @@ class Board:
         # TOP PRINT AND LOGIC
         map_name = f"{border_field}{' ' * 2} Map: {self.name}{' ' * (max_row_length - len(self.name) - 12)}{border_field}"
         top = f"{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}\n"
+
         # logo = f"{border_field}{' ' * 2}{self.logo}{STYLES.RESET}{' ' * (max_row_length - len(self.logo) - 6)}{border_field}\n"
         top += map_name + new_empty_line
+        clear_screen()
+
         print(top)
         self.counter = 0
         # MIDDLE
@@ -304,15 +307,15 @@ class Board:
                                          f"{self.hero.name}: Did I hear something?",
                                          "Angry trolls are watching you...",
                                          "Such a strange place...",
-                                         f"{self.hero.name}: I hear hudge creatures near here",
+                                         f"{self.hero.name}: I hear huge creatures near here",
                                          f"{self.hero.name}: What was that?!",
                                          "Keep rolin' rolin'",
                                          f"{self.hero.name}: Toss a coin to your {self.hero.name}... nanana"
                                          ]
         else:
-             nothing_happened_messages = ["Belzedup: Hahahaa, I will eat your brain",
-                                          "Belzedup: XXXDDD",
-                                          "Belzedup: 666! 666!",
+             nothing_happened_messages = ["Belzedup: MUAHAHAHA, I will eat your brain",
+                                          "Belzedup: I feel smell of your fear",
+                                          "Belzedup: Come to my room of pain, little kitty",
                                           "Belzedup: Come here, I'm waiting for you!"
 
                                      ]
@@ -360,10 +363,10 @@ class Board:
                 self.monsters.append(obj)
 
     @classmethod
-    def board_switcher(cls, board_id, game, board_map, width, height, hero, loading):
+    def board_switcher(cls, board_index, game, board_map, width, height, hero):
         board = cls(game, board_map, width, height, hero)
 
-        def switcher(board_id):
+        def switcher(board_index):
             boards = {
                 "0": labyrinth,
                 "1": plain,
@@ -374,11 +377,12 @@ class Board:
                 "6": highway_to_hell,
                 "7": demonic_maze
             }
-            if loading:
-                board.name = boards[str(board_id)].__name__ # :TODO useless probably
-                return board
-            else:
-                return boards[str(board_id)]()
+            # if loading:
+            #     pass
+            #     # board.name = boards[str(board_index)].__name__ # :TODO useless probably
+            #     # return board
+            # else:
+            return boards[str(board_index)]()
 
         def labyrinth():
             list_of_positions = board.boss_positons()
@@ -392,7 +396,8 @@ class Board:
                                     list_of_positions, game.difficulty_level)
             ]
             board.treasures = [
-                Treasure(position_x=10, position_y=0)
+                Treasure(position_x=10, position_y=0),
+                Treasure(position_x=5, position_y=9)
             ]
             return board
 
@@ -447,6 +452,8 @@ class Board:
                 NPCS.fake_wall(6, 11, name="Hole in the wall"),
             ]
             board.monsters[0].move_type = MOVES_TYPES.STAY
+            board.treasures = [
+                Treasure(position_x=7, position_y=4)]
 
             return board
 
@@ -482,8 +489,8 @@ class Board:
                               Monster.troll_warrior(7, 15, game.difficulty_level),
                               Monster.rat(11, 8, game.difficulty_level)
                               ]
-            board.treasures = [Treasure(position_x=7, position_y=4, is_locked=True),
-                               Treasure(position_x=5, position_y=11)]
+            board.treasures = [Treasure(position_x=1, position_y=20, is_locked=True),
+                               Treasure(position_x=2, position_y=21)]
             return board
 
         def demonic_maze():
@@ -505,5 +512,4 @@ class Board:
                                ]
             return board
 
-        return switcher(board_id)
-
+        return switcher(board_index)

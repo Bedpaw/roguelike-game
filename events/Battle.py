@@ -46,8 +46,10 @@ def battle(hero, monster, battle_mode, hero_start=True):
         key_pressed = key_service.key_pressed()
         if key_pressed.lower() == 'h':
             hero.use_hpotion()
+
         elif key_pressed.lower() == 'm':
             hero.use_mana()
+
 
     def how_many_potions(kind_of_potion):
         counter = 0
@@ -74,7 +76,7 @@ def battle(hero, monster, battle_mode, hero_start=True):
                         skill = calculate_dmg(v[2], v[3])
                         spell_name_print += f"{' ' * 8}[{k}] {v[0]} [dmg:{int(skill)}] (mana cost:{v[1]})\n"
                     max_key += 1
-        spell_name_print += '\nWhat should I do master?: '
+        spell_name_print += '\nYour choice how to fight: '
         return max_key, spell_name_print
 
 
@@ -85,7 +87,9 @@ def battle(hero, monster, battle_mode, hero_start=True):
             while valid:
                 max_key, spell_name_print = print_skill_selection()
 
-                max_key_options = [item for item in range(1, max_key-1)]
+
+                max_key_options = [item for item in range(1, max_key - 1)]
+
                 max_key_options += [9]
 
                 hero_attack = int_input(spell_name_print, options=max_key_options)
@@ -125,14 +129,14 @@ def battle(hero, monster, battle_mode, hero_start=True):
     if hero_start:
         clear_screen()
         battle_image()
-        time.sleep(1.5)
+        time.sleep(1)
         clear_screen()
         cprint(f"You attacked {monster.name}!", ERROR, start_enter=1, wait_after=1)
 
     else:
         clear_screen()
         battle_image()
-        time.sleep(1.5)
+        time.sleep(1)
         clear_screen()
         cprint(f'{hero.name} has been attacked by {monster.name}!', ERROR, start_enter=1, wait_after=1)
 
@@ -176,15 +180,15 @@ def battle(hero, monster, battle_mode, hero_start=True):
 
         if not hero.is_alive():
             hero.print_hp()
-            print("FUNCTION ENDING GAME")
+            input("You die!")
             return True
-
-
 
     # Battle end
     cprint(f'You have got {monster.exp} exp.', SUCCESS)
-    input("\nPress enter to exit fight report...\n")
     hero.get_exp(monster.exp)
+    hero.add_to_backpack(monster.loot)
+    hero.print_loot(monster.loot)
+    input("\nPress enter to exit fight report...\n")
     hero.add_to_message_box(f"Glorious victory! {monster.name} has been vanquished!")
 
     pass

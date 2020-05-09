@@ -60,11 +60,12 @@ class Hero(Creature):
             "gloves": None,
             "armor": None,
             "belt": None,
+            "trousers": None,
             "boots": None
             }
         self.coins = coins
-        self.backpack = [Item.healing_potion(200), Item.healing_potion(100),
-                         Item.healing_potion(100), Item.mana(100), Item.mana(150), Item.gloves(7), Item.gloves(10)]
+        self.backpack = [Item.healing_potion(70), Item.healing_potion(70),
+                         Item.healing_potion(30), Item.mana(10), Item.mana(10), Item.gloves(7), Item.gloves(10)]
         self.spells ={}
         self.special_buff_iter = 0
         self.special_buff_flag = False
@@ -336,18 +337,19 @@ class Hero(Creature):
 
     # -------------------------- ITEMS -------------------------------------------
     def add_to_inventory_from_backpack(self, item):
-        if self.inventory[item.item_type] is None:
-            self.inventory[item.item_type] = item
-            self.add_power(item)
-            self.remove_from_backpack(item.name)
-        else:
-            current_item_in_inventory = self.inventory[item.item_type]
-            self.backpack.append(current_item_in_inventory)
-            self.del_power(current_item_in_inventory)
-            self.inventory[item.item_type] = item
-            self.add_power(item)
+        if item:
+            if self.inventory[item.item_type] is None:
+                self.inventory[item.item_type] = item
+                self.add_power(item)
+                self.remove_from_backpack(item.name)
+            else:
+                current_item_in_inventory = self.inventory[item.item_type]
+                self.backpack.append(current_item_in_inventory)
+                self.del_power(current_item_in_inventory)
+                self.inventory[item.item_type] = item
+                self.add_power(item)
 
-        self.show_stats_with_add_points()
+            self.show_stats_with_add_points()
 
 
     def put_on_from_backpack(self):
@@ -383,36 +385,12 @@ class Hero(Creature):
                                  "      [4] shield\n"
                                  "      [5] belt\n"
                                  "      [6] boots\n"
+                                 "      [7] trousers\n"
                                  "Your choice:  ", 6)
-        if choosed_item == 1:
-            item = print_item_type("gloves")
-            if item:
-                self.add_to_inventory_from_backpack(item)
-        if choosed_item == 2:
-            item = print_item_type("helmet")
-            if item:
-                self.add_to_inventory_from_backpack(item)
-        if choosed_item == 3:
-            item = print_item_type("armor")
-            self.add_to_inventory_from_backpack(item)
-        if choosed_item == 4:
-            item = print_item_type("shield")
-            self.add_to_inventory_from_backpack(item)
-        if choosed_item == 5:
-            item = print_item_type("belt")
-            self.add_to_inventory_from_backpack(item)
-        if choosed_item == 6:
-            item = print_item_type("boots")
-            self.add_to_inventory_from_backpack(item)
 
-
-
-
-        # for item.item_type in self.inventory:
-        #     if str(choosed_item) in item.item_type:
-        #         self.inventory[str(choosed_item)] = item.name
-        #         choosed_item.add_power(self)
-
+        item_type = Item.item_types()[choosed_item]
+        item = print_item_type(item_type)
+        self.add_to_inventory_from_backpack(item)
 
     def how_many_items(self, item_name):
 
@@ -485,6 +463,7 @@ class Hero(Creature):
         for i, item in enumerate(self.backpack):
             if item.item_type == item_type:
                 del self.backpack[i]
+                break
 
     def is_in_backpack_type(self, item_type):
         """checking if item is in hero backpack"""
@@ -503,8 +482,10 @@ class Hero(Creature):
                 if self.hp > self.max_hp:
                     self.hp = self.max_hp
                 self.remove_from_backpack_type(item_type)
+                print("Whoooa! Feel better! Thanks!")
             else:
                 cprint("You don't have any healing potion in your backpack!", COLOR.RED)
+                break
         else:
             self.add_to_message_box("Your HP is FULL!")
 
@@ -517,8 +498,10 @@ class Hero(Creature):
                 if self.mana > self.max_mana:
                     self.mana = self.max_mana
                 self.remove_from_backpack_type(item_type)
+                print("Yep, definitely needed this power!")
             else:
                 cprint("You don't have any mana potion in your backpack!", COLOR.RED)
+                break
         else:
             self.add_to_message_box("Your mana is FULL!")
 
@@ -529,10 +512,14 @@ class Hero(Creature):
             if k == "coins":
                 self.coins += v
             else:
-                if k in self.inventory.keys() and v is None:
-                    self.inventory[k] = v
-            self.backpack.append(v)
-            self.add_power(loot)
+                if k in self.inventory.keys():
+                    if self.inventory[k] is None:
+                        self.inventory[k] = v
+                        self.add_power(v)
+                    else:
+                        self.backpack.append(v)
+                else:
+                    self.backpack.append(v)
 
 
     def add_power(self, item):
@@ -570,3 +557,10 @@ class Hero(Creature):
         self.stamina -= item.stamina
         self.mana -= item.mana
 
+    def print_loot(self, loot):
+        cprint("You have found: ", SUCCESS)
+        for k, v in loot.items():
+            if k == "coins":
+                cprint(f'{v} {k}', SUCCESS)
+            else:
+                cprint(v.name, SUCCESS)

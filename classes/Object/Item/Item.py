@@ -62,22 +62,22 @@ class Item:
     @classmethod
     def shield(cls, agility=15):
         names = ["Captain America shield", "Stainless steel shield"]
-        return cls(agility=agility, item_type="gloves", name=choice(names))
+        return cls(agility=agility, item_type="shield", name=choice(names))
 
     @classmethod
     def trousers(cls, agility=5):
         names = ["Alligator skin pants", "Leather pants"]
-        return cls(agility=agility, item_type="gloves", name=choice(names))
+        return cls(agility=agility, item_type="trousers", name=choice(names))
 
     @classmethod
     def boots(cls, agility=8):  # strength, agility, stamina, energy
         names = ["Light leather boots", "Steel boots"]
-        return cls(agility=agility, item_type="gloves", name=choice(names))
+        return cls(agility=agility, item_type="boots", name=choice(names))
 
     @classmethod
     def wand(cls, energy=20):
         names = ["Wooden wand", "Wand of Fire"]
-        return cls(energy=energy, item_type="gloves", name=choice(names))
+        return cls(energy=energy, item_type="wand", name=choice(names))
 
     @classmethod
     def healing_potion(cls, hp=150):
@@ -97,19 +97,30 @@ class Item:
     def quest_item(cls, name="Flamethrower for really hard monsters", strength=30):
         return cls(strength=strength, item_type="quest", name=name)
 
+    @staticmethod
+    def item_types():
+        return {
+            1: "gloves",
+            2: "helmet",
+            3: "armor",
+            4: "shield",
+            5: "belt",
+            6: "boots",
+            7: "trousers"
+        }
 
 treasure = [
     Item.gloves,
     Item.helmet,
     Item.sword,
     Item.armor,
-    Item.wand,
+    # Item.wand,
     Item.belt,
     Item.trousers,
     Item.boots,
     Item.healing_potion,
     Item.mana,
-    Item.quest_item()
+    Item.quest_item
     # Item.key
 ]
 
@@ -159,8 +170,8 @@ class Treasure(MyObject):
                 hero.add_to_message_box("You left closed chest on it\'s place")
                 return False
         else:
-            loot = self.which_item_in_chest(treasure)
             hero.add_to_message_box("You have found a chest and you've opened it")
+            loot = self.which_item_in_chest(treasure)
             hero.add_to_message_box(f'You took from chest {loot[0].name}')
             hero.backpack.append(loot[0])
             return True
