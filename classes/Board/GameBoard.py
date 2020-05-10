@@ -58,31 +58,30 @@ class Board:
 
     def move_monsters(self):
         for monster in self.monsters:
-            if not self.hero.is_alive():
-                break
-            valid = False
-            moves_counter = 0
-            while not valid:
-                x, y = monster.move(params=monster.move_param)
-                # Skip move if no valid option in 10 trys
-                moves_counter += 1
-                if moves_counter == 50:
-                    valid = True
-                if monster.name == 'Belzedup':
-                    if self.check_move_possibility(monster, y, x):
-                        # if self.check_move_possibility(monster,x+5, y+5):
-                        # input('cos')
-                        self.startX = x
-                        self.startY = y
-                        self.boss_positons()
-                        self.update_board()
-                        break
+            if not self.game.endgame:
+                valid = False
+                moves_counter = 0
+                while not valid:
+                    x, y = monster.move(params=monster.move_param)
+                    # Skip move if no valid option in 10 trys
+                    moves_counter += 1
+                    if moves_counter == 50:
+                        valid = True
+                    if monster.name == 'Belzedup':
+                        if self.check_move_possibility(monster, y, x):
+                            # if self.check_move_possibility(monster,x+5, y+5):
+                            # input('cos')
+                            self.startX = x
+                            self.startY = y
+                            self.boss_positons()
+                            self.update_board()
+                            break
 
-                elif self.check_move_possibility(monster, x, y):
-                    monster.position_x = x
-                    monster.position_y = y
-                    self.update_board()
-                    valid = True
+                    elif self.check_move_possibility(monster, x, y):
+                        monster.position_x = x
+                        monster.position_y = y
+                        self.update_board()
+                        valid = True
 
     def make_empty_list(self):
         clear_list = copy.deepcopy(self.board_map)

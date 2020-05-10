@@ -166,8 +166,7 @@ class Monster(Creature):
                    move_type=MOVES_TYPES.RANDOM_DIAGONAL,
                    exp=10000,
                    loot={
-                       'key': 1,
-                       "gloves": Item.gloves(6)
+                       "quest_items": Item.quest_item("Order zajebistości")
                    },
                    on_fight_message="You will burn in hell for ever!!",
                    on_die_message="I will be back...",

@@ -44,7 +44,7 @@ class Knight(Hero):
         self.max_mana += (self.energy*0.2)
         self.coins = coins
         self.breed = breed
-        self.color_on_board = STYLES.BOLD + COLOR.RED
+        self.color_on_board = STYLES.BOLD + COLOR.CBLACK
 
         # extra_atributes per point
         self.stats_ratio = {
