@@ -1,6 +1,6 @@
 from classes.Object.Creature.Hero.Hero import Hero
 from macros.COLORS import *
-from macros import MOVES_TYPES, OBJECT_TYPES
+from macros import MOVES_TYPES
 
 
 class Sorcerer(Hero):

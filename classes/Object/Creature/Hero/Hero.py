@@ -1,19 +1,17 @@
+import operator
+import time
 from classes.Object.Creature.Creature import Creature
 from classes.Object.Item.Item import Item
-from macros.COLORS import *
-from utils.decorations import cprint, ctext
-from macros import MOVES_TYPES, OBJECT_TYPES
-from utils.key_service import *
-from utils.utils import clear_screen
 
+from utils.key_service import key_pressed
+from utils.utils import clear_screen
 from utils.validation import int_input
-import time
-import operator
+from macros import MOVES_TYPES
+from macros.COLORS import *
 
 
 class Hero(Creature):
     def __init__(self, name="Set_me_name", symbol_on_map="@", position_x=-1, position_y=-1,
-
                  strength=0,
                  hp=200,
                  max_hp=0,
@@ -54,7 +52,7 @@ class Hero(Creature):
         self.breed = ''
         self.current_choice_index = - 1
         self.quests = []
-        self.inventory = { #rzeczy noszone dodaja statsy
+        self.inventory = {
             "shield": None,
             "helmet": None,
             "gloves": None,
@@ -62,20 +60,17 @@ class Hero(Creature):
             "belt": None,
             "trousers": None,
             "boots": None
-            }
+        }
         self.coins = coins
         self.backpack = [Item.healing_potion(70), Item.healing_potion(70),
-                         Item.healing_potion(30), Item.mana(10), Item.mana(10), Item.gloves(7), Item.gloves(10)]
-        self.spells ={}
+                         Item.healing_potion(30), Item.mana(10), Item.mana(10)]
+        self.spells = {}
         self.special_buff_iter = 0
         self.special_buff_flag = False
         self.special_buff_dmg = 100
-        self.game = None  #mock
-
-
+        self.game = None
 
     field_color = BG_COLOR.RED
-    type_of = OBJECT_TYPES.HERO
     color_on_board = STYLES.BOLD + COLOR.BLUE
     on_fight_message = "Time to stop this creature!"
 
@@ -98,7 +93,7 @@ class Hero(Creature):
             cprint(mana_message, COLOR.YELLOW)
 
     def level_up_attributes(self):
-        #DON'T TOUCH IT
+        # DON'T TOUCH IT
         pass
 
     def calculate_extra_attributes(self, skill_choice, stats_ratio, add_rmv):
@@ -120,7 +115,6 @@ class Hero(Creature):
             self.mana = operator_choice[add_rmv](self.mana, stats_ratio[skill_choice][1])
             self.max_mana = operator_choice[add_rmv](self.max_mana, stats_ratio[skill_choice][1])
 
-
     def level_up(self):
         """
         1) Add level
@@ -134,7 +128,6 @@ class Hero(Creature):
         cprint(f"You have received {self.level} level!", SUCCESS)
         self.points_for_level += 10
 
-
     def print_add_points(self):
         clear_screen()
         choice_possiblities = ['strength', 'agility', 'stamina', 'energy']
@@ -145,7 +138,6 @@ class Hero(Creature):
                 print(f"%s{COLOR.CBLACK}{STYLES.BOLD}{v[0]}{k} {int(v[1])}{v[3]}{v[2]}" % (' ' * 8))
             else:
                 print(f"%s   ({k}:{v})" % (' ' * 8))
-
 
     def add_rmv_points(self, skill_choice, add_rmv):
         operator_choice = {
@@ -160,7 +152,6 @@ class Hero(Creature):
             self.stamina = operator_choice[add_rmv](self.stamina, 1)
         elif skill_choice == 3:
             self.energy = operator_choice[add_rmv](self.energy, 1)
-
 
     def add_statistic(self):
 
@@ -238,20 +229,20 @@ class Hero(Creature):
     def stats_info(self):
         plus_minus = ' [+]|[-]'
 
-        return{
-                "Skill points": self.points_for_level,
-                "strength":  [BG_COLOR.RED, self.strength, STYLES.RESET, plus_minus],
-                "physical dmg": self.phys_dmg,
-                "agility": [BG_COLOR.GREEN, self.agility, STYLES.RESET, plus_minus],
-                "crit_chance": self.luck,
-                "dodge chance": self.dodge_chance,
-                "defense": self.defense,
-                "stamina": [BG_COLOR.ORANGE, self.stamina, STYLES.RESET, plus_minus],
-                "hp": f"{self.hp}/{self.max_hp}",
-                "energy": [BG_COLOR.BLUE, self.energy, STYLES.RESET, plus_minus],
-                "magic dmg": int(self.magic_dmg),
-                "max_mana": int(self.max_mana)
-                }
+        return {
+            "Skill points": self.points_for_level,
+            "strength": [BG_COLOR.RED, self.strength, STYLES.RESET, plus_minus],
+            "physical dmg": self.phys_dmg,
+            "agility": [BG_COLOR.GREEN, self.agility, STYLES.RESET, plus_minus],
+            "crit_chance": self.luck,
+            "dodge chance": self.dodge_chance,
+            "defense": self.defense,
+            "stamina": [BG_COLOR.ORANGE, self.stamina, STYLES.RESET, plus_minus],
+            "hp": f"{self.hp}/{self.max_hp}",
+            "energy": [BG_COLOR.BLUE, self.energy, STYLES.RESET, plus_minus],
+            "magic dmg": int(self.magic_dmg),
+            "max_mana": int(self.max_mana)
+        }
 
     def show_stats_with_add_points(self):
 
@@ -319,7 +310,6 @@ class Hero(Creature):
                 valid = True
         pass
 
-
     # -------- QUESTS ------------- #
 
     def quest_taken_by_name(self, name):
@@ -350,7 +340,6 @@ class Hero(Creature):
                 self.add_power(item)
 
             self.show_stats_with_add_points()
-
 
     def put_on_from_backpack(self):
         """choosing by player what to wear"""
@@ -400,12 +389,12 @@ class Hero(Creature):
                 counter += 1
         return counter
 
-#--------- PRINTING INVENTORY --------
+    # --------- PRINTING INVENTORY --------
 
     def print_inventory(self):
 
         clear_screen()
-        cprint("+---------------------------------------------------------+", COLOR.PINK,  STYLES.BOLD)
+        cprint("+---------------------------------------------------------+", COLOR.PINK, STYLES.BOLD)
         cprint(f"|----------------|| {self.name.upper()}'S INVENTORY ||-----------------|", COLOR.PURPLE, STYLES.BOLD)
         cprint("+---------------------------------------------------------+\n", COLOR.PINK, STYLES.BOLD)
         if all([v is None for k, v in self.inventory.items()]):
@@ -430,20 +419,17 @@ class Hero(Creature):
 
         # --- printing any other things in backpack ---
         cprint(f"You have these items in your backpack:\n", COLOR.YELLOW, STYLES.BOLD)
-        temp =[]
         for item in self.backpack:
-            if item.item_type not in temp:
-                temp.append(item.item_type)
-                cprint(f"You have {self.how_many_items(item.name)} {item.name} --> {item.item_type}", COLOR.YELLOW)
+            cprint(f"You have {self.how_many_items(item.name)} {item.name} --> {item.item_type}", COLOR.YELLOW)
 
-        choose_option = int_input("\n Do you want to put on you something from backpack?\n [1] YES, please!\n [2] NO, maybe next time\n",
-                  2)
+        choose_option = int_input(
+            "\n Do you want to put on you something from backpack?\n [1] YES, please!\n [2] NO, maybe next time\n",
+            2)
         if choose_option == 1:
             self.put_on_from_backpack()
         else:
             pass
         self.game.current_board().print_board()
-        # cprint("\n\n If you want to resume game - press w, s, a or d", COLOR.PURPLE)
 
     def is_in_backpack(self, item_name):
 
@@ -489,7 +475,6 @@ class Hero(Creature):
         else:
             self.add_to_message_box("Your HP is FULL!")
 
-
     def use_mana(self, item_type="mana"):
 
         while self.mana > 0 and self.mana < self.max_mana:
@@ -521,7 +506,6 @@ class Hero(Creature):
                 else:
                     self.backpack.append(v)
 
-
     def add_power(self, item):
         self.strength += item.strength
         self.hp += item.hp
@@ -531,8 +515,8 @@ class Hero(Creature):
         self.stamina += item.stamina
         self.mana += item.mana
 
-
-    def find_parameter(self, item):
+    @staticmethod
+    def find_parameter(item):
         params = [item.strength, item.hp, item.max_hp, item.agility, item.energy, item.stamina, item.mana]
         params_name = {
             0: "strength",
@@ -546,7 +530,6 @@ class Hero(Creature):
         for i, param_value in enumerate(params):
             if param_value != 0:
                 return params_name[i], param_value
-
 
     def del_power(self, item):
         self.strength -= item.strength

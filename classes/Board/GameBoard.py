@@ -1,19 +1,16 @@
-from classes.Board.Fields import *
 from random import randint, choice
 import copy
 import math
-from macros import OBJECT_TYPES, BATTLE_MODES, MOVES_TYPES
+from macros import MOVES_TYPES
 from utils import key_service
 from macros.COLORS import *
 from events.Battle import battle
-from classes.Board.Fields import Field
+from classes.Board.Fields import Field, Fire, symbols_to_txt_draw
 from classes.Object.Creature.Hero.Hero import Hero
 from classes.Object.Creature.NPC.NPC import NPC
 from classes.Object.Creature.NPC.NPCS import NPCS
 from classes.Object.Creature.Monster.Monster import Monster
 from classes.Object.Item.Item import Treasure
-from utils.sounds import play_music, pause_music, unpause_music
-import time
 from utils.utils import clear_screen
 from menu.pause_menu import pause_game_menu
 
@@ -37,15 +34,13 @@ class Board:
         self.monsters = []
         self.npc = []
         self.treasures = []
+
+        # boss
         self.boss = '[___] o o   ^    -       '
-        self.logo = "ANGRY TROLLS!"         # :TODO W -> delete?
         self.counter = 0
         self.is_boss_on_map = False
         self.startX = self.width - 7
         self.startY = self.height - 4
-
-    def special_ground_effect(self):
-        pass
 
     def update_board(self):
         self.make_empty_list()
@@ -63,20 +58,16 @@ class Board:
                 moves_counter = 0
                 while not valid:
                     x, y = monster.move(params=monster.move_param)
-                    # Skip move if no valid option in 10 trys
                     moves_counter += 1
-                    if moves_counter == 50:
+                    if moves_counter == 10:
                         valid = True
                     if monster.name == 'Belzedup':
                         if self.check_move_possibility(monster, y, x):
-                            # if self.check_move_possibility(monster,x+5, y+5):
-                            # input('cos')
                             self.startX = x
                             self.startY = y
                             self.boss_positons()
                             self.update_board()
-                            break
-
+                            valid = True
                     elif self.check_move_possibility(monster, x, y):
                         monster.position_x = x
                         monster.position_y = y
@@ -157,7 +148,6 @@ class Board:
     def get_user_choice(self):
         valid_key = False  # change to True if key is valid AND move is possible
         while not valid_key:
-            # self.print_last_message()
             key_pressed = key_service.key_pressed()
 
             if key_pressed in ['w', 's', 'a', 'd', 'p', 'm', 'o', 'x', 'z', 'j', 'h', 'i']:
@@ -232,7 +222,8 @@ class Board:
                         middle_fileds += BG_COLOR.RED + STYLES.BOLD + COLOR.WHITE + self.boss[self.counter] + STYLES.RESET
                         self.counter += 1
                     else:
-                        middle_fileds += self.board_map[i - 1][j].field_color + field.color_on_board + field.symbol_on_map + STYLES.RESET
+                        middle_fileds += self.board_map[i - 1][
+                                             j].field_color + field.color_on_board + field.symbol_on_map + STYLES.RESET
                 else:
                     middle_fileds += field.field_color + field.color_on_board + field.symbol_on_map + STYLES.RESET
 
@@ -294,7 +285,6 @@ class Board:
 
         # LAST MESSAGE FROM HERO
 
-
         if not self.is_boss_on_map:
             nothing_happened_messages = ["Nothing happened... this time around",
                                          f"{self.hero.name}: Did I hear something?",
@@ -306,23 +296,23 @@ class Board:
                                          f"{self.hero.name}: Toss a coin to your {self.hero.name}... nanana"
                                          ]
         else:
-             nothing_happened_messages = ["Belzedup: MUAHAHAHA, I will eat your brain",
-                                          "Belzedup: I feel smell of your fear",
-                                          "Belzedup: Come to my room of pain, little kitty",
-                                          "Belzedup: Come here, I'm waiting for you!"
+            nothing_happened_messages = ["Belzedup: MUAHAHAHA, I will eat your brain",
+                                         "Belzedup: I feel smell of your fear",
+                                         "Belzedup: Come to my room of pain, little kitty",
+                                         "Belzedup: Come here, I'm waiting for you!"
 
-                                     ]
+                                         ]
         if not self.last_move_message:
             self.last_move_message.append(choice(nothing_happened_messages))
         for last_message in self.last_move_message:
-            number_of_lines = math.ceil(len(last_message)/(max_row_length-6))
-            one_line_len = int(len(last_message)/number_of_lines)
+            number_of_lines = math.ceil(len(last_message) / (max_row_length - 6))
+            one_line_len = int(len(last_message) / number_of_lines)
 
             last_message_chunks = [last_message[i: i + one_line_len]
                                    for i in range(0, len(last_message), one_line_len)]
 
-            last_message_chunks = [f"{border_field}{' '* int((max_row_length - 4 - math.ceil(len(item)))/2)}{item}" \
-                                   f"{' '* int((max_row_length - 3 - math.floor(len(item)))/2)}{border_field}"
+            last_message_chunks = [f"{border_field}{' ' * int((max_row_length - 4 - math.ceil(len(item))) / 2)}{item}" \
+                                   f"{' ' * int((max_row_length - 3 - math.floor(len(item))) / 2)}{border_field}"
                                    for item in last_message_chunks]
         last_message_chunks = [f"{BG_COLOR.BLUE}{' ' * max_row_length}{STYLES.RESET}"] + last_message_chunks
         print('\n'.join(last_message_chunks))
@@ -332,11 +322,10 @@ class Board:
 
     def boss_positons(self):
         positions = []
-        for i in range(self.startX, self.startX+5):
-            for j in range(self.startY, self.startY+4):
+        for i in range(self.startX, self.startX + 5):
+            for j in range(self.startY, self.startY + 4):
                 positions.append([i, j])
         return positions
-
 
     def random_free_position(self):
         free_position = False
@@ -369,22 +358,15 @@ class Board:
                 "6": highway_to_hell,
                 "7": demonic_maze
             }
-            # if loading:
-            #     pass
-            #     # board.name = boards[str(board_index)].__name__ # :TODO useless probably
-            #     # return board
-            # else:
             return boards[str(board_index)]()
 
         def labyrinth():
-            list_of_positions = board.boss_positons()
             board.name = "Labyrinth"
             board.last_move_message.append(f"Hm... very nice place")
             board.monsters = [
-                Monster.troll(1, 3, game.difficulty_level),
                 Monster.rat(9, 7),
-                Monster.troll(7, 7, game.difficulty_level),
             ]
+            board.add_object_in_random_pos(Monster.troll, count=2)
             board.treasures = [
                 Treasure(position_x=10, position_y=0),
                 Treasure(position_x=5, position_y=9)
@@ -484,10 +466,9 @@ class Board:
             return board
 
         def demonic_maze():
-
             board.name = "Demonic maze"
             board.last_move_message.append(f"I feel odour of sulfur and death")
-            # board.is_boss_on_map = True
+            board.is_boss_on_map = True
             list_of_positions = board.boss_positons()
             board.monsters = [Monster.troll_warrior(1, 18, game.difficulty_level),
                               Monster.rat(3, 10, game.difficulty_level),

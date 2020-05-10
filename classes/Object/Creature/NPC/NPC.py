@@ -1,13 +1,9 @@
 from classes.Object.Creature.Monster.Monster import Monster
 from events.Battle import battle
 from macros.COLORS import *
-from macros import OBJECT_TYPES
 from macros import MOVES_TYPES
-from utils.decorations import cprint
 from utils.validation import int_input
-from macros import DIFFICULTY_LEVEL
 from utils.utils import clear_screen
-from classes.Object.Item.Item import Item
 
 
 class NPC(Monster):
@@ -138,15 +134,11 @@ class NPC(Monster):
                         cprint(option, color)
             # HEADERS
             elif i % 2 == 0:
-                # print("ENDS", ends_index)
-                # print("OPTIONS", next_header_options)
                 number_of_options = len(next_header_options)  # input validation
                 user_choice = int_input(f'{hero.color_on_board}{STYLES.BOLD}{hero.name}: {STYLES.RESET}',
                                         number_of_options)
                 if i == 2:
-                    # check if user pick function ending conversation
                     if user_choice - 1 in ends_index:
-                        #   print(functions_to_output[ends_index.index(user_choice - 1)])
                         return functions_to_output[ends_index.index(user_choice - 1)]
 
                     move_index = 1
@@ -165,7 +157,6 @@ class NPC(Monster):
                 else:
                     # check if user pick function ending conversation
                     if next_header_options[user_choice - 1] in ends_index:
-                        #   print(functions_to_output[ends_index.index(next_header_options[user_choice - 1])])
                         return functions_to_output[ends_index.index(next_header_options[user_choice - 1])]
 
                     move_index = 0

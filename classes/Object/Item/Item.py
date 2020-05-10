@@ -1,12 +1,9 @@
-from random import *
-# from classes.Object.Creature.Hero.Hero import Hero
-# from classes.Object.Creature.Monster.Monster import Monster
+from random import choice
 from classes.Object.Object import MyObject
-from macros.COLORS import *
+
 from utils.validation import int_input
 from utils.utils import clear_screen
-# hero = Hero(name="Franek")
-# monster = Monster(name="Goblin")
+from macros.COLORS import *
 
 
 class Item:

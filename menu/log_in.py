@@ -1,5 +1,4 @@
 def log_in():
-
     with open("db/saves/players.txt", "r+") as file:
         reader = file.readlines()[1:]
         player_name = input("Please enter your name before you start game.\nYour name:").upper()

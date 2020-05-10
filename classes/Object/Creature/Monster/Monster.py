@@ -1,5 +1,5 @@
 from classes.Object.Creature.Creature import Creature
-from macros import OBJECT_TYPES, DIFFICULTY_LEVEL
+from macros import DIFFICULTY_LEVEL
 from macros.COLORS import *
 from macros import MOVES_TYPES
 from classes.Object.Item.Item import Item
@@ -8,7 +8,6 @@ from classes.Object.Item.Item import Item
 class Monster(Creature):
     color_on_board = COLOR.RED
     color_in_battle = COLOR.RED
-    # type_of = OBJECT_TYPES.MONSTER  # probably to delete
 
     def __init__(self, name="Set_me_name", symbol_on_map="M", position_x=-1, position_y=-1,
                  strength=10,
@@ -64,7 +63,7 @@ class Monster(Creature):
                    strength=dif_dep(40, dif_lvl),
                    max_hp=dif_dep(200, dif_lvl),
                    hp=dif_dep(200, dif_lvl),
-                   move_type=MOVES_TYPES.RANDOM_DIAGONAL,
+                   move_type=MOVES_TYPES.RANDOM,
                    exp=100,
                    loot={
                        "gloves": Item.shield(12),
@@ -106,7 +105,6 @@ class Monster(Creature):
                    move_type=MOVES_TYPES.RANDOM_STRAIGHT,
                    exp=1000,
                    loot={
-                       'key': 1,
                        "gloves": Item.gloves(6)
                    },
                    on_fight_message="YOU LITTLE RAT!",
