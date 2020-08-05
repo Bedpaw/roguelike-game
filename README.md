@@ -1,3 +1,6 @@
+# This is final project from Codecool python module.
+# Description below
+
 # Roguelike game
 
 ## Story
