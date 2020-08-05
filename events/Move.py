@@ -15,6 +15,7 @@ def run_move_function(move_type, params):
         'RANDOM_DIAGONAL': random_diagonal,  # (1, 1) or (-1, -1) or (-1, 1) or (1, -1)
         "STAY": stay,  # (0, 0)
         'RANDOM': random_move,  # STRAIGHT + DIAGONAL + STAY
+        'GUARD_HORIZONTAL': guard_horizontal,
     }
     if params is not None:
         return move_functions[move_type](params)
@@ -64,6 +65,8 @@ def random_move():
     return position_change_x, position_change_y
 
 
+def guard_horizontal(move_details):
+    return random_straight()    # :TODO
 # print(run_move_function("RANDOM"))
 
 

@@ -4,13 +4,14 @@ from utils.decorations import cprint
 from events import Move
 from macros import MOVES_TYPES
 from macros.COLORS import *
+from classes.Object.Creature.Hero import Hero
 
 
 class Creature(MyObject):
     def __init__(self, name="Set_me_name", symbol_on_map="M", position_x=-1, position_y=-1,
                  strength=5, hp=100, max_hp=100, agility=10, luck=10,
-                 color_in_battle=STYLES.RESET,
-                 move_type=MOVES_TYPES.RANDOM):
+                 color_in_battle=COLOR.RED,
+                 move_type=MOVES_TYPES.RANDOM, defense = 1):
 
         super().__init__(name, symbol_on_map, position_x, position_y)
         self.strength = strength
@@ -20,6 +21,8 @@ class Creature(MyObject):
         self.luck = luck
         self.move_type = move_type
         self.color_in_battle = color_in_battle
+        self.defense = defense
+    field_move_possible = True
 
     def move(self, params=None):
         """
@@ -46,24 +49,26 @@ class Creature(MyObject):
         if self.hp > 0:
             return True
         else:
-            self.delete_from_board()
+            self.delete_from_board()    # :TODO delete?
+            if isinstance(self, Hero.Hero): # TODO fix imports
+                self.game.endgame = True
             return False
 
     def print_hp(self):
-        if self.hp < 0:
-            self.hp = 0
 
         hp_left_prec = (self.hp / self.max_hp) * 100
-        hp_message = f'{self.name}: {self.hp}/{self.max_hp} HP\n'
+        hp_message = f'{self.name}: {self.hp}/{self.max_hp} HP'
+
         if hp_left_prec >= 60:
             cprint(hp_message, COLOR.GREEN)
-        elif hp_left_prec <= 30:
+        elif 30 >= hp_left_prec > 0:
             cprint(hp_message, COLOR.RED, STYLES.BOLD)
-        else:
-            cprint(hp_message, COLOR.YELLOW)
+        elif self.hp <= 0:
+            null_hp_message = f'{self.name}: 0/{self.max_hp} HP'
+            cprint(null_hp_message, COLOR.YELLOW)
 
-    def attack(self, target):
-        cprint(f'{self.name} attack!', self.color_in_battle)
+    def attack(self, target, dmg):
+        cprint(f'{self.name} attacks!', self.color_in_battle)
 
         # Check for dodge
         if random_true(target.agility):
@@ -72,9 +77,15 @@ class Creature(MyObject):
         # Check for critical attack
         elif random_true(self.luck):
             cprint(f'{self.name} critical strike with double damage!', COLOR.RED, STYLES.BOLD)
-            target.hp -= 2 * self.strength
+            if dmg >= target.defense:
+                target.hp -= 2 * (dmg - target.defense)
+            else:
+                target.hp -= 5
 
         # Normal attack
         else:
-            target.hp -= self.strength
+            if dmg >= target.defense:
+                target.hp -= (dmg - target.defense)
+            else:
+                target.hp -= 5
         pass

@@ -7,7 +7,7 @@ def cprint(string, *args, start_enter=0, end_enter=0, wait_after=0):
     pass
 
 
-def ctext(string, *args):   # doesnt work well yet alone :TODO repair it to work with inputs
+def ctext(string, *args):
     """
     :param string:[string] string to add styles
     :param args:[string with ansi]:[tuple strings with ansi] ALWAYS USE MACROS.COLORS WHERE ANSI IS DECODED

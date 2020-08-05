@@ -1,5 +1,4 @@
 import sys
-import os
 
 
 def key_pressed():

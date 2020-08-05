@@ -1,72 +1,41 @@
-from classes.Object.Creature.Hero.Hero import *
-from classes.Object.Creature.Monster.Monster import *
-from classes.Object.Creature.Monster.Monsters import *
-from classes.Object.Creature.NPC.NPC import NPC
+from utils.validation import int_input
 import os
-import json
+import pickle
+from utils.utils import clear_screen
 
 
-# utils for reading/writing to files
+def get_game_name(player_name):
+    games_names = os.listdir(f'db/saves/{player_name}')[::-1]   # reverse, because of os.listdir is strange
+    games_as_string = ''
+    for i, game_name in enumerate(games_names):
+        games_as_string += f'{i + 1}. {game_name[:-7]}\n'  # -7 to remove ".pickle"
+
+    game_choice = int_input(f'Please choose game to load:\n{games_as_string}> ', len(games_names))
+    return games_names[game_choice - 1]
 
 
-def load_object_from_file(file_path, object_class):
-    """
-    :param file_path:file with object in JSON format
-    :param object_class: type(object) -> his class
-    :return:object
-    """
-    with open(file_path) as f:
-        object_dict = json.load(f)
-        obj = object_class()
-        for k, v in object_dict.items():
-            obj.__setattr__(k, v)
-        return obj
+def load_game(player_name, resume_game=False):
+    if resume_game:
+        game_name = "RESUME_GAME.pickle"
+    else:
+        game_name = get_game_name(player_name)
+    path_with_game_data = f'db/saves/{player_name}/{game_name}'
+    pickle_in = open(path_with_game_data, "rb")
+    game = pickle.load(pickle_in)
+    pickle_in.close()
+    return game
 
 
-def save_object_to_file(file_path, obj):
-    """
-    :param file_path:string: file with object in JSON format
-    :param obj:obj: obj to save
-    :return: pass
-    """
-    json_obj = json.dumps(obj.__dict__)
-    with open(file_path, 'w+') as f:
-        f.write(json_obj)
-    pass
+def create_new_folder(path):
+    if not os.path.exists(path):
+        os.mkdir(path)
 
 
-def load_objects_to_board(folder_path, board):
-    for filename in os.listdir(folder_path):
-        if filename.startswith("MONSTER"):
-            class_name = get_string_between_symbol("$", filename)
-            obj = load_object_from_file(folder_path + "/" + filename, eval(class_name))
-            board.monsters.append(obj)
-        if filename.startswith("NPC"):
-            obj = load_object_from_file(folder_path + "/" + filename, NPC)
-            board.npc.append(obj)
-
-
-def save_objects_from_board(file_path, board):
-    for monster in board.monsters:
-        save_object_to_file(f'{file_path}MONSTER${monster.__class__.__name__}${monster.id}.txt', monster)
-    for npc in board.npc:
-        save_object_to_file(f'{file_path}NPC${npc.__class__.__name__}${npc.id}.txt', npc)
-
-
-def get_string_between_symbol(symbol, text):
-    """
-    Example if  text = dasfsaf$MONSTER$csddsadssd
-    symbol = $
-    return MONSTER
-    :param symbol:string:single char
-    :param text:string
-    :return:string
-    """
-    take_letter = False
-    string_to_return = ""
-    for char in text:
-        if take_letter:
-            string_to_return += char
-        if char == symbol:
-            take_letter = not take_letter
-    return string_to_return[:-1]     # Remove symbol at end
+def load_exist(player_name):
+    if os.path.isfile(f'db/saves/{player_name}/RESUME_GAME.pickle'):
+        return True
+    else:
+        clear_screen()
+        print("There is no game to load")
+        input("Press any key to continue...")
+        return False

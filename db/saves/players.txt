@@ -1,0 +1,8 @@
+name,password
+PATI,1111
+MAMA,2222
+TATA,3333
+KAMIL,4444
+PAWEL,PAWEL
+WOJTEK,qwerty
+1,Wojtek

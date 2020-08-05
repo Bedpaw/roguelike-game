@@ -1,33 +1,22 @@
 def log_in():
-    password_correct = False
-    player_name = None
-    while not password_correct:
-        player_name = input("Please provide your name: ").upper()
+    with open("db/saves/players.txt", "r+") as file:
+        reader = file.readlines()[1:]
+        player_name = input("Please enter your name before you start game.\nYour name:").upper()
 
-        # Search in saves/players.csv if player name exist:
-        is_in_database = True    # MOCK
+        for row in reader:
 
-        # If player is in database store his password here:
-        password = "XXX"    # MOCK
+            db_name, db_password = row.strip().split(",")
 
-        if is_in_database:
-            # existing player
-            user_password = input("Hello again!\n"
-                                  "Please provide your password\n"
-                                  "Password: ")
+            while player_name == db_name:
+                password = input(f"Hello again {player_name}! :)\nPlease enter your password: ")
+                if password == db_password:
+                    print("Entered password is correct!\n")
+                    return player_name
+                else:
+                    print("Entered password is not correct!\n")
 
-            if user_password == password:
-                password_correct = True
-                # saves/$player_name$ already exist
-            else:
-                print("Your password is incorrect")
-        else:
-            # new player
-            user_password = input("Hello!\n"
-                                  "Please provide your password\n"
-                                  "Password: ")
-            # write players name and password to saves/players.csv
-            # create folder with player name in saves
-            password_correct = True
+        with open("db/saves/players.txt", "a+") as f:
+            password_new = input(f"Hello {player_name}!\nPlease set your new password: ")
+            f.write("\n" + player_name + "," + password_new)
 
-    return player_name
+            return player_name

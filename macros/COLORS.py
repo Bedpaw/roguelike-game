@@ -1,4 +1,5 @@
-# import rhinoscriptsytnax as rs
+from utils.decorations import cprint    # DON'T REMOVE
+
 
 class STYLES:
     RESET = '\033[0m'
@@ -12,7 +13,8 @@ class STYLES:
 
 class COLOR:
     WHITE = '\033[30m'
-    # WHITE = rs.CreateColor(255, 255, 255)
+    CBLACK = '\33[30m'
+    CWHITE = '\33[37m'
     RED = '\033[31m'
     GREEN = '\033[32m'
     ORANGE = '\033[33m'
@@ -27,6 +29,8 @@ class COLOR:
     LIGHTBLUE = '\033[94m'
     PINK = '\033[95m'
     LIGHTCYAN = '\033[96m'
+    BROWN = ""
+    DARKGREEN = ''
 
 
 class BG_COLOR:
